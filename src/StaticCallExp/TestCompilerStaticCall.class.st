@@ -15,6 +15,12 @@ TestCompilerStaticCall >> testMethodContainsStaticCall [
 	
 ]
 
+{ #category : 'tests' }
+TestCompilerStaticCall >> testStaticInvokeMethodWithArgs [
+
+	self assert: (( Integer>>#factorial )  invokeWithReceiver:  6 withArgs: {} ) equals: ( 6 factorial)
+]
+
 { #category : 'tests - compiler' }
 TestCompilerStaticCall >> testStaticMessageCompilerEmitCorrectBytecode [
 
