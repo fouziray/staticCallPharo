@@ -16,6 +16,12 @@ TestCompilerStaticCall >> testMethodContainsStaticCall [
 ]
 
 { #category : 'tests' }
+TestCompilerStaticCall >> testStaticCallRunOnNewVM [
+
+	self assert: 13 _asFloat equals: 13 asFloat
+]
+
+{ #category : 'tests' }
 TestCompilerStaticCall >> testStaticInvokeMethodWithArgs [
 
 	self assert: (( Integer>>#factorial )  invokeWithReceiver:  6 withArgs: {} ) equals: ( 6 factorial)
