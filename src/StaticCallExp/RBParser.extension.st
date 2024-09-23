@@ -61,7 +61,7 @@ RBParser >> parseKeywordMessageWith: node [
 { #category : '*StaticCallExp' }
 RBParser >> parseUnaryMessageWith: aNode [
 
-	| selector |
+	| selector classTagDelimiter staticClassToCall |
 	selector := self selectorNodeClass
 		            value: currentToken value
 		            keywordPositions: { currentToken start }.
@@ -74,11 +74,26 @@ RBParser >> parseUnaryMessageWith: aNode [
 				  keywordsPositions: selector keywordPositions
 				  arguments: #(  ) ]
 		  ifTrue: [
-			  self staticMessageNodeClass
-				  receiver: aNode
-				  selector: selector
-				  keywordsPositions: selector keywordPositions
-				  arguments: #(  ) ]
+			  classTagDelimiter := selector value allButFirst indexOf: $_ ifAbsent: [ 0 ].
+			  1 haltIf: (selector value endsWith: '_').
+			  classTagDelimiter > 1
+				  ifTrue: [
+					 
+					  staticClassToCall := selector value
+						                       copyFrom: 2
+						                       to: (selector value allButFirst indexOf: $_).
+					  self staticMessageNodeClass						  receiver: aNode
+						  selector: (selector value: (selector value
+									    copyFrom: (selector value allButFirst indexOf: $_) + 1
+									    to: selector value size))
+						  keywordsPositions: selector keywordPositions
+						  arguments: #(  ) ]
+				  ifFalse: [
+					  self staticMessageNodeClass
+						  receiver: aNode
+						  selector: selector
+						  keywordsPositions: selector keywordPositions
+						  arguments: #(  ) ] ]
 ]
 
 { #category : '*StaticCallExp' }
