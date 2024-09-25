@@ -4,13 +4,22 @@ Extension { #name : 'OCASTTranslator' }
 OCASTTranslator >> emitStaticMessageNode: aStaticMessageNode [
 
 	aStaticMessageNode isCascaded ifFalse: [
-		self visitNode: aStaticMessageNode receiver].
-	aStaticMessageNode arguments do: [:each |
-		self visitNode: each].
+		self visitNode: aStaticMessageNode receiver ].
+	aStaticMessageNode arguments do: [ :each | self visitNode: each ].
 	"aStaticMessageNode isSuperSend
 		ifTrue: [methodBuilder send: aStaticMessageNode selector toSuperOf: aStaticMessageNode superOf ]
 		ifFalse: ["
-	methodBuilder sendStatic: (aStaticMessageNode receiver value class compiledMethodAt: aStaticMessageNode selector asSymbol)
+	aStaticMessageNode staticClass
+		ifNotNil: [
+			(Smalltalk globals classNamed: aStaticMessageNode staticClass)
+				ifNotNil: [ 
+					methodBuilder sendStatic:
+						((Smalltalk globals classNamed: aStaticMessageNode staticClass)
+							 compiledMethodAt: aStaticMessageNode selector asSymbol) ] ]
+		ifNil: [
+			methodBuilder sendStatic:
+				(aStaticMessageNode receiver value class compiledMethodAt:
+					 aStaticMessageNode selector asSymbol) ]
 ]
 
 { #category : '*StaticCallExp' }

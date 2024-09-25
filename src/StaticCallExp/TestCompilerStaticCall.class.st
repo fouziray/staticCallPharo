@@ -22,6 +22,12 @@ TestCompilerStaticCall >> testStaticCallRunOnNewVM [
 ]
 
 { #category : 'tests' }
+TestCompilerStaticCall >> testStaticCallWithClassTag [
+
+	self assert: (4 _Integer_factorial) equals: (4 factorial)
+]
+
+{ #category : 'tests' }
 TestCompilerStaticCall >> testStaticInvokeMethodWithArgs [
 
 	self assert: (( Integer>>#factorial )  invokeWithReceiver:  6 withArgs: {} ) equals: ( 6 factorial)
