@@ -16,6 +16,14 @@ TestCompilerStaticCall >> testMethodContainsStaticCall [
 ]
 
 { #category : 'tests' }
+TestCompilerStaticCall >> testStaticCallOnVariableWithClassTag [
+
+	| aVariable |
+	aVariable := 4.
+	self assert: aVariable _Integer_factorial equals: 4 factorial
+]
+
+{ #category : 'tests' }
 TestCompilerStaticCall >> testStaticCallRunOnNewVM [
 
 	self assert: 13 _asFloat equals: 13 asFloat
@@ -40,6 +48,13 @@ TestCompilerStaticCall >> testStaticMessageCompilerEmitCorrectBytecode [
 	compiledMethod := OpalCompiler new compile: 'foo ^ 13 _myFactorial'.
 	compiledMethod ast.
 	self assert: (compiledMethod bytecodes at: 2) equals: 246
+]
+
+{ #category : 'tests - compiler' }
+TestCompilerStaticCall >> testStaticMessageFalseReceiver [
+
+self deny: true _SmallInteger_asFloat
+
 ]
 
 { #category : 'tests - parsing' }
