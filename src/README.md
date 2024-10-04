@@ -5,7 +5,7 @@ You can load it using this baseline:
 ```
 Metacello new
 baseline: 'StaticCallExp';
-repository: 'gitlab://gitlab.inria.fr:fmokhefi/faouzi:master/src';
+repository: 'gitlab://gitlab.com:fouziray/StaticCallPharo:master/src';
 load
 ```
 To apply the changes we have to compile the vm as described in the chapter.
