@@ -14,6 +14,6 @@ BaselineOfStaticCallExp >> baseline: spec [
 			baseline: 'VMMaker' with: [
 				spec repository:
 						'github://pharo-project/pharo-vm:pharo-10/smalltalksrc' ];
-			package: 'StaticCallExp' with: [ spec requires: #( 'VMMaker' 'StaticCallExp-Tests') ];
+			package: 'StaticCallExp' with: [ spec requires: #( 'VMMaker') ];
 		package: 'StaticCallExp-Tests' with: [ spec requires: #( 'StaticCallExp') ] ].
 ]
