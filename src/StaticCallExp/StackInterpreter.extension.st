@@ -132,3 +132,30 @@ StackInterpreter class >> initializeBytecodeTableForSistaV1 [
 		(254 255	unknownBytecode)
 	)
 ]
+
+{ #category : '*StaticCallExp' }
+StackInterpreter >> sendStaticLiteralMethodBytecode [
+	"2 Byte Bytecode
+ 		1st Byte: opcode
+ 		2nd Byte: literal offset of the method"
+
+ 	| methodLiteralOffset primitiveIndex |
+ 	methodLiteralOffset := self fetchByte.
+ 	newMethod := self literal: methodLiteralOffset.
+
+ 	"argumentCount is used by primitives to
+ 	   - check how to access the stack and
+ 	   - know how many elements to pop,
+ 	and generally to check that the stack gets balanced after execution"
+ 	argumentCount := self argumentCountOf: newMethod.
+
+ 	"primitiveFunctionPointer needs to be loaded for each method interpreted.
+ 	executeNewMethod: assumes that this is set during lookup
+ 	Thus, if we don't set it, the value will be the one of the last method/primitive called"
+ 	primitiveIndex := self primitiveIndexOf: newMethod.
+ 	primitiveFunctionPointer := self functionPointerFor: primitiveIndex inClass: nil.
+
+ 	self executeNewMethod: true.
+ 	self fetchNextBytecode
+ 
+]
