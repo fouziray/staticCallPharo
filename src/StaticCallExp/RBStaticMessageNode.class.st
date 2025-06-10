@@ -11,6 +11,20 @@ Class {
 	#package : 'StaticCallExp'
 }
 
+{ #category : 'instance creation' }
+RBStaticMessageNode class >> fromMessageNode: aMessageNode [
+
+	| newStaticMessageNode |
+	newStaticMessageNode := self new.
+
+	"Copy all instance variables from superclass"
+	RBMessageNode allInstVarNames do: [ :varName |
+		newStaticMessageNode
+			instVarNamed: varName
+			put: (aMessageNode instVarNamed: varName) ].
+	^ newStaticMessageNode
+]
+
 { #category : 'accessing' }
 RBStaticMessageNode >> acceptVisitor: aProgramNodeVisitor [
 

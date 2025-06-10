@@ -10,8 +10,9 @@ Class {
 		'confidence',
 		'benefit'
 	],
-	#category : 'StaticCallsFinder',
-	#package : 'StaticCallsFinder'
+	#category : 'StaticCallsFinder-core',
+	#package : 'StaticCallsFinder',
+	#tag : 'core'
 }
 
 { #category : 'accessing' }
@@ -73,10 +74,7 @@ aStream
 		nextPutAll: ' -> ';
 		nextPutAll: selector asString;
 		nextPutAll: ' (';
-		nextPutAll: receiverType asString;
-		nextPutAll: ', conf: ';
-		nextPutAll: (confidence * 100) rounded asString;
-		nextPutAll: '%)'
+		nextPutAll: receiverType asString.
 ]
 
 { #category : 'accessing' }

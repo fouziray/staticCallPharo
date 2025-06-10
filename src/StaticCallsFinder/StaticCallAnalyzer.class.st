@@ -7,8 +7,9 @@ Class {
 		'callFrequencies',
 		'typeInferences'
 	],
-	#category : 'StaticCallsFinder',
-	#package : 'StaticCallsFinder'
+	#category : 'StaticCallsFinder-core',
+	#package : 'StaticCallsFinder',
+	#tag : 'core'
 }
 
 { #category : 'testing' }
