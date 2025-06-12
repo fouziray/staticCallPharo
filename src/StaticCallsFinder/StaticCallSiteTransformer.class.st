@@ -24,13 +24,12 @@ aMethod ast acceptVisitor: visitor. "" ^ aStaticCallCandidate callSite replaceWi
 		  ((RBStaticMessageNode fromMessageNode:
 			    aStaticCallCandidate callSite) staticClass:
 			   aStaticCallCandidate receiverType)"
-	aStaticCallCandidate callSite isBinary not ifTrue: [
-		1 halt.
-		newNode := (RBStaticMessageNode fromMessageNode:
-				            aStaticCallCandidate callSite)
-			           staticClass: aStaticCallCandidate receiverType;
-			           selector:
-				           '_' , aStaticCallCandidate receiverType asString , '_'
-				           , aStaticCallCandidate callSite selector.
-		aStaticCallCandidate callSite replaceWith: newNode ]
+	^ (aStaticCallCandidate callSite isBinary not and:[ aStaticCallCandidate receiverType ~= 'temp' ])
+		  ifTrue: [
+			  newNode := (RBStaticMessageNode fromMessageNode:
+				              aStaticCallCandidate callSite) staticClass:
+				             aStaticCallCandidate receiverType.
+			  aStaticCallCandidate callSite replaceWith: newNode.
+			  newNode methodNode ]
+		  ifFalse: [ aStaticCallCandidate callSite methodNode ]
 ]

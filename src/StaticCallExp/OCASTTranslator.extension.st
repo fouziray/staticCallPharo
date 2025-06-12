@@ -9,13 +9,14 @@ OCASTTranslator >> emitStaticMessageNode: aStaticMessageNode [
 	"aStaticMessageNode isSuperSend
 		ifTrue: [methodBuilder send: aStaticMessageNode selector toSuperOf: aStaticMessageNode superOf ]
 		ifFalse: ["
-	aStaticMessageNode staticClass
+	aStaticMessageNode staticClass 
 		ifNotNil: [
-			(Smalltalk globals classNamed: aStaticMessageNode staticClass)
+			aStaticMessageNode staticClass isClass ifTrue: [ 
+				(Smalltalk globals classNamed: aStaticMessageNode staticClass className)
 				ifNotNil: [ 
-					methodBuilder sendStatic:
-						((Smalltalk globals classNamed: aStaticMessageNode staticClass)
-							 compiledMethodAt: aStaticMessageNode selector asSymbol) ] ]
+					methodBuilder sendStatic: (aStaticMessageNode staticClass lookupSelector: aStaticMessageNode selector asSymbol ) ]
+				 ].
+			 ]
 		ifNil: [
 			methodBuilder sendStatic:
 				(aStaticMessageNode receiver value class compiledMethodAt:

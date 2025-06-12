@@ -76,41 +76,39 @@ MicrodownWithStaticCallBenchmarkSuite >> appendTopCandidates: aStream [
 		aStream 
 			nextPutAll: '- **', candidate method methodClass name, 
 			           '>>', candidate method selector, '** -> `', 
-			           candidate selector asString, '` (confidence: ',
-			           (candidate confidence * 100) rounded asString, '%)'; cr.
+			           candidate selector asString.
 	].
 
 ]
 
 { #category : 'as yet unclassified' }
-MicrodownWithStaticCallBenchmarkSuite >> applyOptimizations [ 
+MicrodownWithStaticCallBenchmarkSuite >> applyOptimizations [
 	"Simulate applying static call optimizations"
-	| hotSpots backupMethods transformer |
+
+	| hotSpots backupMethods transformer newMethod |
 	hotSpots := results at: #candidates.
 	backupMethods := Dictionary new.
 	transformer := StaticCallSiteTransformer new.
 
-	Transcript show: 'Applying optimizations to ', hotSpots size asString, ' hot spots...'; cr.
-	
-	
+
 	hotSpots do: [ :candidate |
-| method originalSource newAst newSource |
-method := candidate method.
-originalSource := method sourceCode.
-backupMethods at: method put: originalSource.
-		
-newAst := transformer transformMethod: method forCandidate: candidate.
-			newSource := method ast formattedCode.
+		| method originalSource newAst newSource |
+		method := candidate method.
+		originalSource := method sourceCode.
+		backupMethods at: method put: originalSource.
 
-		method methodClass compile: newSource classified: method protocol.
-		optimizedMethods add: candidate method.
-		Transcript show: '  Optimized: ', candidate method methodClass name, 
-		                 '>>', candidate method selector, ' (', candidate selector, ')'; cr.
-	].
-	results at: #backupMethods put: backupMethods .
-	results at: #optimizedMethodCount put: optimizedMethods size.
+		newAst := transformer
+			          transformMethod: method
+			          forCandidate: candidate.
+		newMethod := newAst generateMethod.
 
+		method methodClass
+			addSelectorSilently: newMethod selector
+			withMethod: newMethod.
 
+		optimizedMethods add: candidate method ].
+	results at: #backupMethods put: backupMethods.
+	results at: #optimizedMethodCount put: optimizedMethods size
 ]
 
 { #category : 'as yet unclassified' }
@@ -258,8 +256,8 @@ MicrodownWithStaticCallBenchmarkSuite >> generateBenchmarkReport [
 		s nextPutAll: '# Microdown Static Call Optimization Benchmark Report'; cr; cr.
 		
 		s nextPutAll: '## Analysis Summary'; cr.
-		s nextPutAll: '- Total static call candidates: ', (results at: #totalCandidates) asString; cr.
-		s nextPutAll: '- High-impact candidates: ', (results at: #hotSpots) size asString; cr.
+		s nextPutAll: '- Total static call candidates: ', (results at: #candidates) size asString; cr.
+		
 		s nextPutAll: '- Methods optimized: ', (results at: #optimizedMethodCount ifAbsent: [ 0 ]) asString; cr; cr.
 		
 		s nextPutAll: '## Performance Results'; cr; cr.
@@ -277,16 +275,16 @@ MicrodownWithStaticCallBenchmarkSuite >> generateBenchmarkReport [
 			improvement := ((baseTime - optTime) / baseTime * 100.0) rounded.
 			
 			s nextPutAll: '| ', size asString capitalized, ' | ', 
-			             baseTime rounded asString, ' | ',
-			             optTime rounded asString, ' | ',
+			             baseTime asString, ' | ',
+			             optTime asString, ' | ',
 			             improvement asString, '% |'; cr.
 		].
 		
 		s cr.
 		s nextPutAll: '## Book Loading Impact'; cr.
 		s nextPutAll: 'For a typical book-sized document (~1MB):'; cr.
-		s nextPutAll: '- Baseline loading time: ', (baselineTime ifNil: [ 'N/A' ] ifNotNil: [ baselineTime rounded asString, 'ms' ]); cr.
-		s nextPutAll: '- Optimized loading time: ', (optimizedTime ifNil: [ 'N/A' ] ifNotNil: [ optimizedTime rounded asString, 'ms' ]); cr.
+		s nextPutAll: '- Baseline loading time: ', (baselineTime ifNil: [ 'N/A' ] ifNotNil: [ baselineTime  asString, 'ms' ]); cr.
+		s nextPutAll: '- Optimized loading time: ', (optimizedTime ifNil: [ 'N/A' ] ifNotNil: [ optimizedTime  asString, 'ms' ]); cr.
 		
 		baselineTime ifNotNil: [ optimizedTime ifNotNil: [
 			| totalImprovement |
