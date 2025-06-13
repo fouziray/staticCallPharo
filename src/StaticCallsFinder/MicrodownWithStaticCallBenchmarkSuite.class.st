@@ -29,11 +29,6 @@ MicrodownWithStaticCallBenchmarkSuite class >> runFullBenchmark [
 MicrodownWithStaticCallBenchmarkSuite >> analyzeMicrodownPackage [
 
 	| candidates |
-	Transcript
-		show: 'Analyzing Microdown package...';
-		cr.
-
-	"Analyze main Microdown classes"
 	candidates := OrderedCollection new.
 
 	((PackageOrganizer default packageNamed: #MicroDown)

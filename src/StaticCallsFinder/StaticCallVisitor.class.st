@@ -21,6 +21,7 @@ StaticCallVisitor >> analyzeReceiver: aReceiverNode [
 		aReceiverNode name = 'self' ifTrue: [ ^ #self ].
 		aReceiverNode name = 'super' ifTrue: [ ^ #super ].
 		(aReceiverNode name endsWith: 'class') ifTrue: [ ^ #class ].
+		(aReceiverNode isGlobalVariable ) ifTrue: [ 1 halt.^ #global ] .
 		^ #temp ].
 	aReceiverNode isMessage ifTrue: [ ^ #message ].
 	^ #unknown
