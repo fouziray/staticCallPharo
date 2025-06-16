@@ -102,8 +102,17 @@ StaticCallCandidate >> receiverType: aSymbol [
 		ifFalse: [ 
 			receiverType := aSymbol.
 			aSymbol = #self ifTrue:[ receiverType := self receiver methodNode methodClass. ].
-			aSymbol = #super ifTrue:[ receiverType := self receiver methodNode methodClass superclass ].
-			  ]
+			aSymbol = #super ifTrue:[ receiverType := self receiver methodNode methodClass superclass ].  
+			aSymbol = #global ifTrue: [ 
+				
+				|classSideMethods instSideMethods|
+				1 halt.
+				instSideMethods := self receiver binding value lookupSelector:self receiver parent selector.
+				classSideMethods := self receiver binding value class lookupSelector:self receiver parent selector .
+				(instSideMethods or:[classSideMethods]) ifNotNil: [  ].
+				receiverType := self receiver binding lookupSelector:
+ #readFrom: ].
+			]
 ]
 
 { #category : 'accessing' }

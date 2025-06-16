@@ -15,13 +15,13 @@ Class {
 StaticCallVisitor >> analyzeReceiver: aReceiverNode [
 	"Determine the type of receiver"
 
-	aReceiverNode isLiteralNode ifTrue: [
+	(aReceiverNode isLiteralNode) ifTrue: [
 		^ #literal ].
+	aReceiverNode isGlobalVariable ifTrue: [ ^ #global ].
 	aReceiverNode isVariableNode ifTrue: [
 		aReceiverNode name = 'self' ifTrue: [ ^ #self ].
 		aReceiverNode name = 'super' ifTrue: [ ^ #super ].
 		(aReceiverNode name endsWith: 'class') ifTrue: [ ^ #class ].
-		(aReceiverNode isGlobalVariable ) ifTrue: [ 1 halt.^ #global ] .
 		^ #temp ].
 	aReceiverNode isMessage ifTrue: [ ^ #message ].
 	^ #unknown
@@ -71,12 +71,10 @@ StaticCallVisitor >> visitMessageNode: aMessageNode [
 	receiverType := self analyzeReceiver: aMessageNode receiver.
 	
 	"Create candidate if it looks promising"
-	((receiverType = #self) or: [
-	 (receiverType = #super) or: [
-	 (receiverType = #class) or: [
-	 (receiverType = #literal) or: [
-	 (receiverType = #temp and: [ self hasStableType: aMessageNode receiver ])]]]]) 
+(	({ #self. #super . #class . #global. #literal } includes: receiverType) or: [
+	 (receiverType = #temp and: [ self hasStableType: aMessageNode receiver ])]) 
 		ifTrue: [
+
 			candidate := StaticCallCandidate new
 				callSite: aMessageNode;
 				selector: aMessageNode selector;
