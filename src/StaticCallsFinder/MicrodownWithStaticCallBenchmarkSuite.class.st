@@ -6,7 +6,8 @@ Class {
 		'results',
 		'optimizedMethods',
 		'baselineTime',
-		'optimizedTime'
+		'optimizedTime',
+		'profiler'
 	],
 	#category : 'StaticCallsFinder-Benchmarks',
 	#package : 'StaticCallsFinder',
@@ -23,6 +24,13 @@ MicrodownWithStaticCallBenchmarkSuite class >> quickTest [
 MicrodownWithStaticCallBenchmarkSuite class >> runFullBenchmark [ 
 
 	^ self new runFullBenchmarkSuite
+]
+
+{ #category : 'as yet unclassified' }
+MicrodownWithStaticCallBenchmarkSuite >> analyzeAllMicroDownPackages [
+
+	profiler addLinkToNodes: profiler selectMicrodownPackages.
+	 
 ]
 
 { #category : 'initialization' }
@@ -325,14 +333,13 @@ MicrodownWithStaticCallBenchmarkSuite >> measureBaselinePerformance [
 	documents := results at: #testDocuments.
 	times := Dictionary new.
 	
-	Transcript show: 'Measuring baseline performance...'; cr.
 	
 	documents keysAndValuesDo: [ :size :content |
 		| time parser |
-		parser := MicrodownParser new.
+		parser := MicrodownParser.
 		
 		"Warm up"
-		3 timesRepeat: [ parser parse: content ].
+		3 timesRepeat: [ MicrodownParser parse: content ].
 		
 		"Measure"
 		time := [ 10 timesRepeat: [ parser parse: content ] ] timeToRun.
@@ -391,6 +398,41 @@ MicrodownWithStaticCallBenchmarkSuite >> measureQuickPerformance [
 
 ]
 
+{ #category : 'initialization' }
+MicrodownWithStaticCallBenchmarkSuite >> profileToGetStaticCallSites [
+
+	|report|
+
+	self analyzeAllMicroDownPackages.
+	
+	self setupTestDocuments.
+	
+	self measureBaselinePerformance.
+	self measureTestCasesPerformance.
+	self applyOptimizations.
+	
+	self measureOptimizedPerformance.
+	self measureOptimizedTestCasesPerformance.
+
+	self removeMetaLinks.
+	
+	report := self generateBenchmarkReport.
+
+	^ report
+]
+
+{ #category : 'accessing' }
+MicrodownWithStaticCallBenchmarkSuite >> profiler [
+
+	^ profiler
+]
+
+{ #category : 'accessing' }
+MicrodownWithStaticCallBenchmarkSuite >> profiler: aProfiler [
+
+	profiler:= aProfiler 
+]
+
 { #category : 'as yet unclassified' }
 MicrodownWithStaticCallBenchmarkSuite >> rollbackOptimizations [ 
 
@@ -420,7 +462,6 @@ MicrodownWithStaticCallBenchmarkSuite >> rollbackOptimizations [
 MicrodownWithStaticCallBenchmarkSuite >> runFullBenchmarkSuite [
 
 	| report |
-	"look  for static call opportunities in Microdown"
 	self analyzeMicrodownPackage.
 
 	"Phase 2: Create test documents of various sizes"
@@ -472,22 +513,16 @@ MicrodownWithStaticCallBenchmarkSuite >> setupTestDocuments [
 	| documents |
 	documents := Dictionary new.
 
-	"Small document (1KB)"
 	documents at: #small put: self createSmallDocument.
 
-	"Medium document (10KB)"
+	
 	documents at: #medium put: self createMediumDocument.
 
-	"Large document (100KB)"
 	documents at: #large put: self createLargeDocument.
 
-	"Book-sized document (1MB)"
+	
 	documents at: #book put: self createBookDocument.
 
 	results at: #testDocuments put: documents.
 
-	Transcript
-		show:
-			'Test documents created: ' , documents size asString , ' sizes';
-		cr
 ]

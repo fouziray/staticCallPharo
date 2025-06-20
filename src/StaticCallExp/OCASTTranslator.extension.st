@@ -3,24 +3,31 @@ Extension { #name : 'OCASTTranslator' }
 { #category : '*StaticCallExp' }
 OCASTTranslator >> emitStaticMessageNode: aStaticMessageNode [
 
+	| target |
 	aStaticMessageNode isCascaded ifFalse: [
 		self visitNode: aStaticMessageNode receiver ].
 	aStaticMessageNode arguments do: [ :each | self visitNode: each ].
 	"aStaticMessageNode isSuperSend
 		ifTrue: [methodBuilder send: aStaticMessageNode selector toSuperOf: aStaticMessageNode superOf ]
 		ifFalse: ["
-	aStaticMessageNode staticClass 
+	aStaticMessageNode staticClass
 		ifNotNil: [
-			aStaticMessageNode staticClass isClass ifTrue: [ 
-				(Smalltalk globals classNamed: aStaticMessageNode staticClass className)
-				ifNotNil: [ 
-					methodBuilder sendStatic: (aStaticMessageNode staticClass lookupSelector: aStaticMessageNode selector asSymbol ) ]
-				 ].
-			 ]
+			aStaticMessageNode staticClass isClass ifTrue: [
+				(Smalltalk globals classNamed:
+					 aStaticMessageNode staticClass className) ifNotNil: [
+					methodBuilder sendStatic:
+						(aStaticMessageNode staticClass lookupSelector:
+							 aStaticMessageNode selector asSymbol) ] ] ]
 		ifNil: [
-			methodBuilder sendStatic:
-				(aStaticMessageNode receiver value class compiledMethodAt:
-					 aStaticMessageNode selector asSymbol) ]
+			aStaticMessageNode receiver value isGlobalVariable
+				ifTrue: [
+					target := ((aStaticMessageNode receiver methodNode scope
+						           lookupVar: aStaticMessageNode receiver name) value 
+						          class) lookupSelector: aStaticMessageNode selector asSymbol ]
+				ifFalse: [
+					target := aStaticMessageNode receiver value class
+						          lookupSelector: aStaticMessageNode selector asSymbol ].
+			methodBuilder sendStatic: target ]
 ]
 
 { #category : '*StaticCallExp' }
