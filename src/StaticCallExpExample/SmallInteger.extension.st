@@ -1,6 +1,6 @@
 Extension { #name : 'SmallInteger' }
 
-{ #category : '*StaticCallExp' }
+{ #category : '*StaticCallExpExample' }
 SmallInteger >> myFactorial [
 
 	self > 0 ifTrue: [ ^ self * (self - 1) myFactorial ].
