@@ -23,10 +23,21 @@ OCASTTranslator >> emitStaticMessageNode: aStaticMessageNode [
 				ifTrue: [
 					target := ((aStaticMessageNode receiver methodNode scope
 						           lookupVar: aStaticMessageNode receiver name) value 
-						          class) lookupSelector: aStaticMessageNode selector asSymbol ]
+						          class) lookupSelector: aStaticMessageNode selector asSymbol.
+						
+						 ]
 				ifFalse: [
+					aStaticMessageNode receiver value isPseudoVariable ifTrue:[
+						|currentClass |
+						currentClass := aStaticMessageNode receiver methodNode scope targetClass.
+						currentClass = UndefinedObject ifTrue:[ currentClass :=self compilationContext semanticScope targetClass  ]. 
+						aStaticMessageNode receiver value name  = #self ifTrue: [  target := currentClass  lookupSelector: (aStaticMessageNode selector substrings: '_') last.   ].
+						 1 halt.
+						  ].
 					target := aStaticMessageNode receiver value class
 						          lookupSelector: aStaticMessageNode selector asSymbol ].
+ 
+			target ifNil:[1 halt.].		
 			methodBuilder sendStatic: target ]
 ]
 
