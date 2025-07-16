@@ -50,6 +50,10 @@ RBStaticMessageNode >> staticClass [
 
 { #category : 'accessing' }
 RBStaticMessageNode >> staticClass: aStaticClass [
+	aStaticClass isString ifTrue:[ 
 
+			staticClass := Smalltalk globals classNamed: aStaticClass .
+		] ifFalse:[	
 	staticClass := aStaticClass
+	].
 ]

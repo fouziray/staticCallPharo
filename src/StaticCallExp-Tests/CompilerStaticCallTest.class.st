@@ -31,15 +31,13 @@ CompilerStaticCallTest >> testStaticCallIrStaticNode [
 CompilerStaticCallTest >> testStaticCallIrStaticNodeKeyword [
 
 	| compiledMethod irMethod |
-	1 halt.
 	compiledMethod := CompilerStaticCallTest compile: 'foo 
 	|aCol|
 	aCol := OrderedCollection new.
 	^ self _Object_as: CompilerStaticCallTest'.
 	
-	irMethod := compiledMethod ast generateIR.
-	1 halt.
-	self assert: irMethod allSequences first sequence second calledMethod equals: SmallInteger >>#myFactorial
+	irMethod := (CompilerStaticCallTest>>#foo) ast generateIR.
+	self assert: (irMethod allSequences first sequence at: 7)  calledMethod equals: (Object >>#as:)
 	
 ]
 
@@ -74,7 +72,7 @@ CompilerStaticCallTest >> testStaticMessageCompilerEmitCorrectBytecode [
 
 	| compiledMethod |
 	compiledMethod := OpalCompiler new compile: 'foo ^ 13 _myFactorial'.
-	compiledMethod ast.
+
 	self assert: (compiledMethod bytecodes at: 2) equals: 246
 ]
 
@@ -95,8 +93,7 @@ CompilerStaticCallTest >> testStaticMessageKeyword [
 	aCol := OrderedCollection new.
 	^ self _Object_appendTo: aCol'.
 
-	compiledMethod ast.
-	self assert: (compiledMethod bytecodes at: 2) equals: 246
+	self assert: (compiledMethod bytecodes at: 6) equals: 246
 ]
 
 { #category : 'tests - parsing' }

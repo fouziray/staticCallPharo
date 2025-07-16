@@ -15,10 +15,15 @@ OCASTTranslator >> emitStaticMessageNode: aStaticMessageNode [
 			aStaticMessageNode staticClass isClass ifTrue: [
 				(Smalltalk globals classNamed:
 					 aStaticMessageNode staticClass className) ifNotNil: [
+				
 					methodBuilder sendStatic:
 						(aStaticMessageNode staticClass lookupSelector:
-							 aStaticMessageNode selector asSymbol) ] ] ]
+							 (aStaticMessageNode selector substrings: '_') last asSymbol) ] ] ]
 		ifNil: [
+			|targetResolver|
+			targetResolver := TargetResolver resolveSelector: aStaticMessageNode selector.
+			targetResolver visitNode: aStaticMessageNode receiver.
+			 
 			aStaticMessageNode receiver value isGlobalVariable
 				ifTrue: [
 					target := ((aStaticMessageNode receiver methodNode scope
@@ -27,13 +32,14 @@ OCASTTranslator >> emitStaticMessageNode: aStaticMessageNode [
 						
 						 ]
 				ifFalse: [
+					aStaticMessageNode receiver value isLiteral ifFalse:[
 					aStaticMessageNode receiver value isPseudoVariable ifTrue:[
 						|currentClass |
 						currentClass := aStaticMessageNode receiver methodNode scope targetClass.
 						currentClass = UndefinedObject ifTrue:[ currentClass :=self compilationContext semanticScope targetClass  ]. 
 						aStaticMessageNode receiver value name  = #self ifTrue: [  target := currentClass  lookupSelector: (aStaticMessageNode selector substrings: '_') last.   ].
 						 1 halt.
-						  ].
+						  ].].
 					target := aStaticMessageNode receiver value class
 						          lookupSelector: aStaticMessageNode selector asSymbol ].
  

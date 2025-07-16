@@ -50,11 +50,12 @@ RBParser >> parseKeywordMessageWith: node [
 						  keywordsPositions: keywordsStartPositions
 						  arguments: args ]
 				  ifTrue: [
-					  self staticMessageNodeClass
+					  (self staticMessageNodeClass
 						  receiver: node
 						  selector: selector
 						  keywordsPositions: keywordsStartPositions
-						  arguments: args ] ]
+						  arguments: args)
+						staticClass: (selector value substrings: '_') first  ] ]
 		  ifFalse: [ node ]
 ]
 
