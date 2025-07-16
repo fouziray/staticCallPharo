@@ -31,13 +31,14 @@ CompilerStaticCallTest >> testStaticCallIrStaticNode [
 CompilerStaticCallTest >> testStaticCallIrStaticNodeKeyword [
 
 	| compiledMethod irMethod |
+
 	compiledMethod := CompilerStaticCallTest compile: 'foo 
 	|aCol|
 	aCol := OrderedCollection new.
 	^ self _Object_as: CompilerStaticCallTest'.
 	
-	irMethod := (CompilerStaticCallTest>>#foo) ast generateIR.
-	self assert: (irMethod allSequences first sequence at: 7)  calledMethod equals: (Object >>#as:)
+	irMethod :=  (CompilerStaticCallTest>>#foo) ast generateIR.
+	self assert: irMethod allSequences first sequence seventh calledMethod equals: Object >>#as:
 	
 ]
 

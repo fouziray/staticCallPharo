@@ -4,6 +4,7 @@ Extension { #name : 'OCASTTranslator' }
 OCASTTranslator >> emitStaticMessageNode: aStaticMessageNode [
 
 	| target |
+
 	aStaticMessageNode isCascaded ifFalse: [
 		self visitNode: aStaticMessageNode receiver ].
 	aStaticMessageNode arguments do: [ :each | self visitNode: each ].
@@ -20,9 +21,9 @@ OCASTTranslator >> emitStaticMessageNode: aStaticMessageNode [
 						(aStaticMessageNode staticClass lookupSelector:
 							 (aStaticMessageNode selector substrings: '_') last asSymbol) ] ] ]
 		ifNil: [
-			|targetResolver|
+			"|targetResolver|
 			targetResolver := TargetResolver resolveSelector: aStaticMessageNode selector.
-			targetResolver visitNode: aStaticMessageNode receiver.
+			targetResolver visitNode: aStaticMessageNode receiver."
 			 
 			aStaticMessageNode receiver value isGlobalVariable
 				ifTrue: [
