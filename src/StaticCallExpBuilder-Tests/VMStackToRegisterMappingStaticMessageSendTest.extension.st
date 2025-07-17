@@ -1,6 +1,6 @@
 Extension { #name : 'VMStackToRegisterMappingStaticMessageSendTest' }
 
-{ #category : '*StaticCallExpBuilder' }
+{ #category : '*StaticCallExpBuilder-Tests' }
 VMStackToRegisterMappingStaticMessageSendTest >> initStack [
 
 	self createBaseFrame.
@@ -15,7 +15,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> initStack [
 
 ]
 
-{ #category : '*StaticCallExpBuilder' }
+{ #category : '*StaticCallExpBuilder-Tests' }
 VMStackToRegisterMappingStaticMessageSendTest >> setUp [ 
 
 	super setUp.
@@ -31,7 +31,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> setUp [
 
 ]
 
-{ #category : '*StaticCallExpBuilder' }
+{ #category : '*StaticCallExpBuilder-Tests' }
 VMStackToRegisterMappingStaticMessageSendTest >> setUpTrampolines [
 
 	super setUpTrampolines.
@@ -57,7 +57,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> setUpTrampolines [
 	cogit objectRepresentation setAllStoreTrampolinesWith: (self compileTrampoline: [ cogit RetN: 0 ] named: #ceStoreTrampoline).
 ]
 
-{ #category : '*StaticCallExpBuilder' }
+{ #category : '*StaticCallExpBuilder-Tests' }
 VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCeStaticMethod [
 
 	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod builder |
@@ -102,7 +102,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCeStaticMethod 
 
 ]
 
-{ #category : '*StaticCallExpBuilder' }
+{ #category : '*StaticCallExpBuilder-Tests' }
 VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCoggedMethodCallMethodDirectly [
 
 	| selector calledCompiledMethod calledCogMethod staticCallerCompiledMethod staticCallerCogMethod |
@@ -136,7 +136,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCoggedMethodCal
 	self assert: machineSimulator pc equals: calledCogMethod address + cogit noCheckEntryOffset
 ]
 
-{ #category : '*StaticCallExpBuilder' }
+{ #category : '*StaticCallExpBuilder-Tests' }
 VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfNonCoggedMethodActivatesCorrectMethod [
 
 	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod |
@@ -170,7 +170,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfNonCoggedMethod
 	self assert: machineSimulator receiverRegisterValue equals: (memory integerObjectOf: 13)
 ]
 
-{ #category : '*StaticCallExpBuilder' }
+{ #category : '*StaticCallExpBuilder-Tests' }
 VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfNonCoggedMethodCallsTrampoline [
 
 	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod |
