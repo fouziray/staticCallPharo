@@ -18,7 +18,7 @@ StaticCallVisitor >> analyzeReceiver: aReceiverNode [
 	(aReceiverNode isLiteralNode) ifTrue: [
 		^ #literal ].
 	aReceiverNode isGlobalVariable ifTrue: [ ^ #global ].
-	aReceiverNode isVariableNode ifTrue: [
+	aReceiverNode isVariable ifTrue: [
 		aReceiverNode name = 'self' ifTrue: [ ^ #self ].
 		aReceiverNode name = 'super' ifTrue: [ ^ #super ].
 		(aReceiverNode name endsWith: 'class') ifTrue: [ ^ #class ].
