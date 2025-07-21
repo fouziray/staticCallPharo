@@ -336,13 +336,13 @@ MicrodownWithStaticCallBenchmarkSuite >> measureBaselinePerformance [
 	
 	documents keysAndValuesDo: [ :size :content |
 		| time parser |
-		parser := MicrodownParser.
+		parser := Microdown.
 		
 		"Warm up"
-		3 timesRepeat: [ MicrodownParser parse: content ].
+		"3 timesRepeat: [ parser parse: content ]."
 		
 		"Measure"
-		time := [ 10 timesRepeat: [ parser parse: content ] ] timeToRun.
+		time := [ 3 timesRepeat: [ parser parse: content ] ] timeToRun.
 		times at: size put: time / 10.0. "Average per parse"
 		
 		Transcript show: '  ', size asString, ': ', (time / 10.0) asString, 'ms average'; cr.
@@ -356,20 +356,18 @@ MicrodownWithStaticCallBenchmarkSuite >> measureBaselinePerformance [
 { #category : 'as yet unclassified' }
 MicrodownWithStaticCallBenchmarkSuite >> measureOptimizedPerformance [ 
 	"Measure performance with simulated optimizations"
-	| documents times improvementFactor |
+	| documents times improvementFactor parser |
 	documents := results at: #testDocuments.
 	times := Dictionary new.
+	improvementFactor :=Dictionary new.
 	
-	"Simulate 5-15% improvement based on static call density"
-	improvementFactor := self calculateImprovementFactor.
-	
-	Transcript show: 'Measuring optimized performance (simulated)...'; cr.
-	Transcript show: 'Expected improvement factor: ', improvementFactor asString; cr.
-	
+	parser := MicrodownParser.
 	documents keysAndValuesDo: [ :size :content |
-		| baseTime optimizedTime |
+		| baseTime optimizedTime time |
 		baseTime := (results at: #baselineTimes) at: size.
-		optimizedTime := baseTime * (1.0 - improvementFactor).
+		time := [ 3 timesRepeat: [ parser parse: content ] ] timeToRun.
+		times at: size put: time / 10.0. "Average per parse"
+		improvementFactor at: size put:  (baseTime - optimizedTime) / baseTime .
 		times at: size put: optimizedTime.
 		
 		Transcript show: '  ', size asString, ': ', optimizedTime asString, 'ms (', 
@@ -378,6 +376,7 @@ MicrodownWithStaticCallBenchmarkSuite >> measureOptimizedPerformance [
 	].
 	
 	results at: #optimizedTimes put: times.
+	results at: #improvementFactor put: improvementFactor.
 	optimizedTime := times at: #book ifAbsent: [ times values min ].
 
 ]
