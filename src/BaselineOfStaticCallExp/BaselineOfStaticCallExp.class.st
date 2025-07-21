@@ -17,7 +17,7 @@ BaselineOfStaticCallExp >> baseline: spec [
 			package: 'StaticCallExp';
 			package: 'StaticCallExpBuilder' with: [ spec requires: #( 'VMMaker' 'StaticCallExp') ];
 			package: 'StaticCallExpBuilder-Tests' with: [ spec requires: #( 'StaticCallExpBuilder') ];		
-		"	package: 'StaticCallExpExample' with:[ spec requires: #( 'StaticCallExp') ] ;"
+			package: 'StaticCallExpExample' with:[ spec requires: #( 'StaticCallExp') ] ;
 		package: 'StaticCallExp-Tests' with: [ spec requires: #( 'StaticCallExp') ].
 
 		spec group: 'default' with: #('StaticCallExp' 'StaticCallExp-Tests').
