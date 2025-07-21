@@ -12,7 +12,7 @@ RBParser >> parseBinaryMessageWith: aNode [
 		  ifTrue: [
 			  self staticMessageNodeClass
 				  receiver: aNode
-				  selector: binaryNode
+				  selector:   (RBStaticBinarySelectorNode createFrom: binaryNode)
 				  keywordsPositions: binaryNode keywordPositions
 				  arguments: { self parseUnaryMessage } ]
 		  ifFalse: [

@@ -16,6 +16,36 @@ CompilerStaticCallTest >> testMethodContainsStaticCall [
 ]
 
 { #category : 'tests - compiler' }
+CompilerStaticCallTest >> testParsingBinaryStaticMessage [
+
+	| compiledMethod irMethod |
+
+	compiledMethod := RBParser parseExpression: ' 
+	|aCol|
+	aCol := OrderedCollection new.
+	^ 2 _SmallInteger_+ 2'.
+
+	self assert: (compiledMethod statements second children first isKindOf: RBStaticMessageNode) .
+	self assert: compiledMethod statements second children first isBinary.
+	
+]
+
+{ #category : 'tests - compiler' }
+CompilerStaticCallTest >> testParsingKeywordStaticMessage [
+
+	| compiledMethod irMethod |
+
+	compiledMethod := RBParser parseExpression: ' 
+	|aCol|
+	aCol := OrderedCollection new.
+	^ 2 _Object_as: 2'.
+
+	self assert: (compiledMethod statements second children first isKindOf: RBStaticMessageNode) .
+
+	
+]
+
+{ #category : 'tests - compiler' }
 CompilerStaticCallTest >> testStaticCallIrStaticNode [
 
 	| compiledMethod irMethod |
@@ -24,6 +54,20 @@ CompilerStaticCallTest >> testStaticCallIrStaticNode [
 	irMethod := compiledMethod ast generateIR.
 	
 	self assert: irMethod allSequences first sequence second calledMethod equals: SmallInteger >>#myFactorial
+	
+]
+
+{ #category : 'tests - compiler' }
+CompilerStaticCallTest >> testStaticCallIrStaticNodeBinary [
+
+	| compiledMethod irMethod |
+
+	compiledMethod := CompilerStaticCallTest compile: 'foo2 
+	|aCol|
+	aCol := OrderedCollection new.
+	^ 2 _SmallInteger_+ 2'.
+	irMethod :=  (CompilerStaticCallTest>>#foo2) ast generateIR.
+	self assert: irMethod allSequences first sequence seventh calledMethod equals: SmallInteger>>#+
 	
 ]
 
@@ -80,7 +124,7 @@ CompilerStaticCallTest >> testStaticMessageCompilerEmitCorrectBytecode [
 { #category : 'tests - compiler' }
 CompilerStaticCallTest >> testStaticMessageFalseReceiver [
 
-self deny: true _SmallInteger_asFloat
+self should:  [true _SmallInteger_asFloat] raise:  Exception . 
 
 ]
 
