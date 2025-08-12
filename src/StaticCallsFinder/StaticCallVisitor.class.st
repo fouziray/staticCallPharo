@@ -64,28 +64,27 @@ StaticCallVisitor >> method: aMethod [
 ]
 
 { #category : 'initialization' }
-StaticCallVisitor >> visitMessageNode: aMessageNode [ 
+StaticCallVisitor >> visitMessageNode: aMessageNode [
 	"Main visitor method for message nodes (method calls)"
-	| receiverType candidate |
-	
-	receiverType := self analyzeReceiver: aMessageNode receiver.
-	
-	"Create candidate if it looks promising"
-(	({ #self. #super . #class . #global. #literal } includes: receiverType) or: [
-	 (receiverType = #temp and: [ self hasStableType: aMessageNode receiver ])]) 
-		ifTrue: [
 
-			candidate := StaticCallCandidate new
-				callSite: aMessageNode;
-				selector: aMessageNode selector;
-				receiver: aMessageNode receiver;
-				receiverType: receiverType;
-				method: method;
-				yourself.
-			candidates add: candidate
-		].
-	
+	| receiverType candidate |
+	receiverType := self analyzeReceiver: aMessageNode receiver.
+
+	"Create candidate if it looks promising"
+	(({ #self. #super. #class. #global. #literal } includes: receiverType)
+		 or: [
+			 receiverType = #temp and: [
+				 self hasStableType: aMessageNode receiver ] ]) ifTrue: [
+		candidate := StaticCallCandidate new
+			             callSite: aMessageNode;
+			             selector: aMessageNode selector;
+			             receiver: aMessageNode receiver;
+			             receiverType: receiverType;
+			             method: method;
+			             yourself.
+		self haltIf: aMessageNode selector = #to:by:.
+		candidates add: candidate ].
+
 	"Continue visiting children"
 	super visitMessageNode: aMessageNode
-
 ]

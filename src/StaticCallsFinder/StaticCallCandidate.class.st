@@ -15,6 +15,17 @@ Class {
 	#tag : 'core'
 }
 
+{ #category : 'as yet unclassified' }
+StaticCallCandidate class >> method: aMethod callSite: anASTNode selector: aSelector receiver: aNode receiverType: aClass [
+
+	^ self new
+		  method: aMethod;
+		  callSite: anASTNode;
+		  selector: aSelector;
+		  receiver: aNode;
+		  receiverType: aClass
+]
+
 { #category : 'accessing' }
 StaticCallCandidate >> benefit [
 
@@ -98,7 +109,7 @@ StaticCallCandidate >> receiverType [
 StaticCallCandidate >> receiverType: aSymbol [
 
 	aSymbol = #literal
-		ifTrue: [ receiverType := self receiver value className ]
+		ifTrue: [ receiverType :=  (self receiver value class lookupSelector: selector)  classBinding value ]
 		ifFalse: [ 
 			receiverType := aSymbol.
 			aSymbol = #self ifTrue:[ receiverType := self receiver methodNode methodClass. ].

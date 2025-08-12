@@ -88,14 +88,14 @@ MicrodownWithStaticCallBenchmarkSuite >> appendTopCandidates: aStream [
 MicrodownWithStaticCallBenchmarkSuite >> applyOptimizations [
 	"Simulate applying static call optimizations"
 
-	| hotSpots backupMethods transformer newMethod |
+	| hotSpots backupMethods transformer  |
 	hotSpots := results at: #candidates.
 	backupMethods := Dictionary new.
 	transformer := StaticCallSiteTransformer new.
 
 
 	hotSpots do: [ :candidate |
-		| method originalSource newAst newSource |
+		| method originalSource newAst newSource newMethod |
 		method := candidate method.
 		originalSource := method sourceCode.
 		backupMethods at: method put: originalSource.
