@@ -82,7 +82,6 @@ StaticCallVisitor >> visitMessageNode: aMessageNode [
 			             receiverType: receiverType;
 			             method: method;
 			             yourself.
-		self haltIf: aMessageNode selector = #to:by:.
 		candidates add: candidate ].
 
 	"Continue visiting children"

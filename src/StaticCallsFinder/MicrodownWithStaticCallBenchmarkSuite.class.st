@@ -88,7 +88,7 @@ MicrodownWithStaticCallBenchmarkSuite >> appendTopCandidates: aStream [
 MicrodownWithStaticCallBenchmarkSuite >> applyOptimizations [
 	"Simulate applying static call optimizations"
 
-	| hotSpots backupMethods transformer  |
+	| hotSpots backupMethods transformer |
 	hotSpots := results at: #candidates.
 	backupMethods := Dictionary new.
 	transformer := StaticCallSiteTransformer new.
@@ -103,12 +103,14 @@ MicrodownWithStaticCallBenchmarkSuite >> applyOptimizations [
 		newAst := transformer
 			          transformMethod: method
 			          forCandidate: candidate.
+		ASTCache default at: newAst compiledMethod put: newAst.
 		newMethod := newAst generateMethod.
-
+		ASTCache default at: newAst method put: newAst.
+		1 halt.
 		method methodClass
 			addSelectorSilently: newMethod selector
 			withMethod: newMethod.
-
+		1 halt.
 		optimizedMethods add: candidate method ].
 	results at: #backupMethods put: backupMethods.
 	results at: #optimizedMethodCount put: optimizedMethods size
