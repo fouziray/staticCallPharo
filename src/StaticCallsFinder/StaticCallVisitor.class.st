@@ -34,6 +34,12 @@ StaticCallVisitor >> candidates [
 
 ]
 
+{ #category : 'as yet unclassified' }
+StaticCallVisitor >> evaluatePartial: aMessageNode [
+
+	1 halt.
+]
+
 { #category : 'initialization' }
 StaticCallVisitor >> hasStableType: aVariableNode [ 
 	"Check if variable likely has stable type based on context"
@@ -67,22 +73,28 @@ StaticCallVisitor >> method: aMethod [
 StaticCallVisitor >> visitMessageNode: aMessageNode [
 	"Main visitor method for message nodes (method calls)"
 
-	| receiverType candidate |
+	| receiverType candidate onlyDefinedUp |
 	receiverType := self analyzeReceiver: aMessageNode receiver.
 
 	"Create candidate if it looks promising"
+	(receiverType = #message) ifTrue: [ self evaluatePartial: aMessageNode receiver  ].
 	(({ #self. #super. #class. #global. #literal } includes: receiverType)
 		 or: [
 			 receiverType = #temp and: [
 				 self hasStableType: aMessageNode receiver ] ]) ifTrue: [
-		candidate := StaticCallCandidate new
+			onlyDefinedUp := ((method classBinding value lookupSelector: aMessageNode selector) isNotNil) and:[ (method classBinding value allSubclasses anySatisfy: [ :subClass | subClass includesSelector: #processData ]) not].
+			
+			onlyDefinedUp ifTrue:[
+				candidate := StaticCallCandidate new
 			             callSite: aMessageNode;
 			             selector: aMessageNode selector;
 			             receiver: aMessageNode receiver;
 			             receiverType: receiverType;
 			             method: method;
 			             yourself.
-		candidates add: candidate ].
+		candidates add: candidate
+				].
+		 ].
 
 	"Continue visiting children"
 	super visitMessageNode: aMessageNode

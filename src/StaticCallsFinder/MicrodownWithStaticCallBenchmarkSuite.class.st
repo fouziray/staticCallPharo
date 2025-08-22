@@ -98,20 +98,22 @@ MicrodownWithStaticCallBenchmarkSuite >> applyOptimizations [
 		| method originalSource newAst newSource newMethod |
 		method := candidate method.
 		originalSource := method sourceCode.
-		backupMethods at: method put: originalSource.
+		method ast hasBlock ifFalse: [
+			backupMethods at: method put: originalSource.
 
-		newAst := transformer
-			          transformMethod: method
-			          forCandidate: candidate.
-		ASTCache default at: newAst compiledMethod put: newAst.
-		newMethod := newAst generateMethod.
-		ASTCache default at: newAst method put: newAst.
-		1 halt.
-		method methodClass
-			addSelectorSilently: newMethod selector
-			withMethod: newMethod.
-		1 halt.
-		optimizedMethods add: candidate method ].
+			newAst := transformer
+				          transformMethod: method
+				          forCandidate: candidate.
+			ASTCache default at: newAst compiledMethod put: newAst.
+
+			newMethod := newAst generateMethod.
+			ASTCache default at: newAst compiledMethod put: newAst.
+
+			method methodClass
+				addSelectorSilently: newMethod selector
+				withMethod: newMethod.
+
+			optimizedMethods add: candidate method ] ].
 	results at: #backupMethods put: backupMethods.
 	results at: #optimizedMethodCount put: optimizedMethods size
 ]
@@ -368,7 +370,7 @@ MicrodownWithStaticCallBenchmarkSuite >> measureOptimizedPerformance [
 		| baseTime optimizedTime time |
 		baseTime := (results at: #baselineTimes) at: size.
 		time := [ 3 timesRepeat: [ parser parse: content ] ] timeToRun.
-		times at: size put: time / 10.0. "Average per parse"
+		times at: size put: time / 3.0. "Average per parse"
 		improvementFactor at: size put:  (baseTime - optimizedTime) / baseTime .
 		times at: size put: optimizedTime.
 		
@@ -440,16 +442,13 @@ MicrodownWithStaticCallBenchmarkSuite >> rollbackOptimizations [
 	| backupMethods |
 	backupMethods := results at: #backupMethods ifAbsent: [ Dictionary new ].
 	
-	Transcript show: 'Rolling back ', backupMethods size asString, ' optimizations...'; cr.
+	
 	
 	backupMethods keysAndValuesDo: [ :method :originalSource |
 		[ 
 			method methodClass compile: originalSource classified: method protocol.
-			Transcript show: '  ✓ Restored: ', method methodClass name, '>>', method selector; cr.
-		] on: Error do: [ :error |
-			Transcript show: '   Failed to restore: ', method methodClass name, 
-			                 '>>', method selector, ' (', error messageText, ')'; cr.
-		].
+			
+		] 
 	].
 	
 	optimizedMethods := Set new.
