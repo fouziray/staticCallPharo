@@ -289,19 +289,9 @@ MicrodownWithStaticCallBenchmarkSuite >> generateBenchmarkReport [
 		s nextPutAll: '- Baseline loading time: ', (baselineTime ifNil: [ 'N/A' ] ifNotNil: [ baselineTime  asString, 'ms' ]); cr.
 		s nextPutAll: '- Optimized loading time: ', (optimizedTime ifNil: [ 'N/A' ] ifNotNil: [ optimizedTime  asString, 'ms' ]); cr.
 		
-		baselineTime ifNotNil: [ optimizedTime ifNotNil: [
-			| totalImprovement |
-			totalImprovement := ((baselineTime - optimizedTime) / baselineTime * 100.0) rounded.
-			s nextPutAll: '- **Total improvement: ', totalImprovement asString, '%**'; cr.
-		]].
 		
-		s cr.
-		s nextPutAll: '## Top Optimization Candidates'; cr.
-		self appendTopCandidates: s.
 		
-		s cr.
-		s nextPutAll: '## Recommendations'; cr.
-		self appendRecommendations: s.
+		
 	]
 
 ]
