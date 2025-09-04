@@ -1,6 +1,6 @@
 Class {
 	#name : 'MicrodownWithStaticCallBenchmarkSuite',
-	#superclass : 'Object',
+	#superclass : 'StaticStats',
 	#instVars : [
 		'analyzer',
 		'results',
@@ -82,6 +82,11 @@ MicrodownWithStaticCallBenchmarkSuite >> appendTopCandidates: aStream [
 			           candidate selector asString.
 	].
 
+]
+
+{ #category : 'initialization' }
+MicrodownWithStaticCallBenchmarkSuite >> applyLink [
+1halt.
 ]
 
 { #category : 'as yet unclassified' }
@@ -332,7 +337,7 @@ MicrodownWithStaticCallBenchmarkSuite >> initialize [
 
 { #category : 'as yet unclassified' }
 MicrodownWithStaticCallBenchmarkSuite >> measureBaselinePerformance [ 
-	"Measure baseline parsing performance"
+
 	| documents times |
 	documents := results at: #testDocuments.
 	times := Dictionary new.
@@ -343,10 +348,10 @@ MicrodownWithStaticCallBenchmarkSuite >> measureBaselinePerformance [
 		parser := Microdown.
 		
 		"Warm up"
-		"3 timesRepeat: [ parser parse: content ]."
+		3 timesRepeat: [ parser parse: content ].
 		
 		"Measure"
-		time := [ 3 timesRepeat: [ parser parse: content ] ] timeToRun.
+		time := [ 10 timesRepeat: [ parser parse: content ] ] timeToRun.
 		times at: size put: time / 10.0. "Average per parse"
 		
 		Transcript show: '  ', size asString, ': ', (time / 10.0) asString, 'ms average'; cr.
@@ -359,7 +364,7 @@ MicrodownWithStaticCallBenchmarkSuite >> measureBaselinePerformance [
 
 { #category : 'as yet unclassified' }
 MicrodownWithStaticCallBenchmarkSuite >> measureOptimizedPerformance [ 
-	"Measure performance with simulated optimizations"
+
 	| documents times improvementFactor parser |
 	documents := results at: #testDocuments.
 	times := Dictionary new.
@@ -369,13 +374,18 @@ MicrodownWithStaticCallBenchmarkSuite >> measureOptimizedPerformance [
 	documents keysAndValuesDo: [ :size :content |
 		| baseTime optimizedTime time |
 		baseTime := (results at: #baselineTimes) at: size.
-		time := [ 3 timesRepeat: [ parser parse: content ] ] timeToRun.
-		times at: size put: time / 3.0. "Average per parse"
-		improvementFactor at: size put:  (baseTime - optimizedTime) / baseTime .
-		times at: size put: optimizedTime.
 		
-		Transcript show: '  ', size asString, ': ', optimizedTime asString, 'ms (', 
-		                 ((baseTime - optimizedTime) / baseTime * 100.0) rounded asString, 
+		"Warm up"
+		3 timesRepeat: [ parser parse: content ].
+		
+		"measuring"
+		time := [ 10 timesRepeat: [ parser parse: content ] ] timeToRun.
+		times at: size put: time / 10.0. "Average per parse"
+		improvementFactor at: size put:  (baseTime - time) / baseTime .
+	
+		
+		Transcript show: '  ', size asString, ': ', time asString, 'ms (', 
+		                 (((baseTime - time) / baseTime) * 100.0) rounded asString, 
 		                 '% improvement)'; cr.
 	].
 	
@@ -473,6 +483,37 @@ MicrodownWithStaticCallBenchmarkSuite >> runFullBenchmarkSuite [
 	"Phase 4: Apply optimizations (simulate static calls)"
 	self applyOptimizations.
 
+	"Phase 5: Measure optimized performance"
+	self measureOptimizedPerformance.
+
+	"Phase 6: Generate comprehensive report"
+	report := self generateBenchmarkReport.
+
+	self rollbackOptimizations.
+	Transcript
+		show: 'Benchmark complete!';
+		cr.
+	^ report
+]
+
+{ #category : 'initialization' }
+MicrodownWithStaticCallBenchmarkSuite >> runFullBenchmarkSuiteInstrumentedCallsites [
+
+	| report |
+	self analyzeMicrodownPackage.
+
+	"Phase 2: Create test documents of various sizes"
+	self setupTestDocuments.
+
+	"Phase 3: Baseline performance measurement"
+	self measureBaselinePerformance.
+
+	"Phase 4: Apply optimizations (simulate static calls)"
+	self applyOptimizations.
+
+	"Phase in-between: Instrument candidate call sites for stats"
+	self applyLink.
+	
 	"Phase 5: Measure optimized performance"
 	self measureOptimizedPerformance.
 

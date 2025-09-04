@@ -39,12 +39,10 @@ StaticCallAnalyzer >> analyzeClass: aClass [
 	results := OrderedCollection new.
 	
 	aClass methods do: [ :method |
-		self haltIf:  method classBinding value = MicAbstractDelimiter.
 		results addAll: (self analyzeCompiledMethod: method)
 	].
 	
 	aClass class methods do: [ :method |
-		self haltIf:  method classBinding value = MicAbstractDelimiter.
 		results addAll: (self analyzeCompiledMethod: method)
 	].
 	

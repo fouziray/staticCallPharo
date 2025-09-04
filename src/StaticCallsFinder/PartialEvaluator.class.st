@@ -99,9 +99,10 @@ PartialEvaluator >> visitLiteralValueNode: aRBLiteralValueNode [
 PartialEvaluator >> visitMessageNode: aNode [
 
     | receiver args selector |
+  self haltIf: aNode selector = #isCloser.
     receiver := self evaluate: aNode receiver.
     args := aNode arguments collect: [ :arg | self evaluate: arg ].
-    
+  
     ^ self tryEvaluateMessage: receiver selector: aNode selector arguments: args originalNode: aNode
 ]
 

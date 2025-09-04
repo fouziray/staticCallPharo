@@ -37,7 +37,7 @@ StaticCallVisitor >> candidates [
 { #category : 'as yet unclassified' }
 StaticCallVisitor >> evaluatePartial: aMessageNode [
 
-	1 halt.
+
 ]
 
 { #category : 'initialization' }
@@ -71,7 +71,6 @@ StaticCallVisitor >> method: aMethod [
 
 { #category : 'initialization' }
 StaticCallVisitor >> visitMessageNode: aMessageNode [
-	"Main visitor method for message nodes (method calls)"
 
 	| receiverType candidate onlyDefinedUp |
 	receiverType := self analyzeReceiver: aMessageNode receiver.
@@ -82,7 +81,7 @@ StaticCallVisitor >> visitMessageNode: aMessageNode [
 		 or: [
 			 receiverType = #temp and: [
 				 self hasStableType: aMessageNode receiver ] ]) ifTrue: [
-			onlyDefinedUp := ((method classBinding value lookupSelector: aMessageNode selector) isNotNil) and:[ (method classBinding value allSubclasses anySatisfy: [ :subClass | subClass includesSelector: #processData ]) not].
+			onlyDefinedUp := ((method classBinding value lookupSelector: aMessageNode selector) isNotNil) and:[ (method classBinding value allSubclasses anySatisfy: [ :subClass | subClass includesSelector: aMessageNode selector ]) not].
 			
 			onlyDefinedUp ifTrue:[
 				candidate := StaticCallCandidate new
