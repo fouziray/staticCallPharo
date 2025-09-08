@@ -1,5 +1,5 @@
 Class {
-	#name : 'MicroStats',
+	#name : 'MicroBenchStats',
 	#superclass : 'SMarkSuite',
 	#instVars : [
 		'program',
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-MicroStats class >> benchSend64MsgMega [
+MicroBenchStats class >> benchSend64MsgMega [
 
 	<script>
 	^ ((self reportResults: (MsgSendBenchmarkMega 
@@ -22,7 +22,7 @@ MicroStats class >> benchSend64MsgMega [
 ]
 
 { #category : 'as yet unclassified' }
-MicroStats class >> benchSend64MsgMono [
+MicroBenchStats class >> benchSend64MsgMono [
 
 	<script>
 	^ ((self reportResults: (MsgSendBenchmarkMono
@@ -33,7 +33,7 @@ MicroStats class >> benchSend64MsgMono [
 ]
 
 { #category : 'as yet unclassified' }
-MicroStats class >> benchSend64MsgPoly [
+MicroBenchStats class >> benchSend64MsgPoly [
 
 	<script>
 	^ ((self reportResults: (MsgSendBenchmarkPoly 
@@ -44,7 +44,7 @@ MicroStats class >> benchSend64MsgPoly [
 ]
 
 { #category : 'as yet unclassified' }
-MicroStats class >> reportResults: aResult [
+MicroBenchStats class >> reportResults: aResult [
 
  ^ String streamContents:[ :aStream | aResult reportOn: aStream]
 
@@ -52,87 +52,87 @@ MicroStats class >> reportResults: aResult [
 ]
 
 { #category : 'benchmarking' }
-MicroStats >> benchFiboStaticWithouMuchRep [
+MicroBenchStats >> benchFiboStaticWithouMuchRep [
 
 	program iteration: 30.
 	program benchFiboStaticWithoutRepetition
 ]
 
 { #category : 'benchmarking' }
-MicroStats >> benchFiboWithouMuchRep [
+MicroBenchStats >> benchFiboWithouMuchRep [
 
 	program iteration: 30.
 	program benchFiboWithoutRepetition
 ]
 
 { #category : 'benchmarking' }
-MicroStats >> benchMy1 [
+MicroBenchStats >> benchMy1 [
 
 		4 benchFib .
 ]
 
 { #category : 'benchmarking' }
-MicroStats >> benchMyFactorial [
+MicroBenchStats >> benchMyFactorial [
 
 
 		program benchFibo.
 ]
 
 { #category : 'benchmarking' }
-MicroStats >> benchMyFactorialStatic [
+MicroBenchStats >> benchMyFactorialStatic [
 
 		program benchFiboStatic.
 ]
 
 { #category : 'benchmarking' }
-MicroStats >> benchSendsTo64Yourselves [
+MicroBenchStats >> benchSendsTo64Yourselves [
 
 	1 to:  (program iteration  last) do: [ :e | icCaller send: Object ]
 ]
 
 { #category : 'benchmarking' }
-MicroStats >> benchSendsTo64YourselvesStatic [
+MicroBenchStats >> benchSendsTo64YourselvesStatic [
 
 	1 to: program iteration last do: [ :e | icCaller sendSStatic: Object ]
 ]
 
 { #category : 'script entry' }
-MicroStats >> defaultNumberOfIterations [
+MicroBenchStats >> defaultNumberOfIterations [
     ^ 50
 ]
 
 { #category : 'script entry' }
-MicroStats >> defaultNumberOfProcesses [
+MicroBenchStats >> defaultNumberOfProcesses [
     ^ 8
 ]
 
 { #category : 'script entry' }
-MicroStats >> defaultProblemSize [
+MicroBenchStats >> defaultProblemSize [
     ^ 30
 ]
 
 { #category : 'running' }
-MicroStats >> reinitCaller [
+MicroBenchStats >> reinitCaller [
 
 	icCaller := Caller new
 ]
 
 { #category : 'as yet unclassified' }
-MicroStats >> reportResults: aResult [ 
+MicroBenchStats >> reportResults: aResult [ 
 	^ self class reportResults: aResult 
 ]
 
 { #category : 'running' }
-MicroStats >> setUp [
+MicroBenchStats >> setUp [
 
 	self warmUp.
-	program := BMicroVariedInput iterationNumber: 500.
+	program := BMicroVariedInput iterationNumber: 1000.
 
 	
 ]
 
 { #category : 'benchmarking' }
-MicroStats >> setUpIcMega [
+MicroBenchStats >> setUpIcMega [
 
 	self reinitCaller.
 	3 timesRepeat: [
@@ -147,7 +147,7 @@ MicroStats >> setUpIcMega [
 ]
 
 { #category : 'benchmarking' }
-MicroStats >> setUpIcPoly [
+MicroBenchStats >> setUpIcPoly [
 
 	self reinitCaller.
 	3 timesRepeat: [

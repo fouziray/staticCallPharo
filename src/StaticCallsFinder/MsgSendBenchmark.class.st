@@ -1,6 +1,6 @@
 Class {
 	#name : 'MsgSendBenchmark',
-	#superclass : 'MicroStats',
+	#superclass : 'MicroBenchStats',
 	#instVars : [
 		'icType'
 	],
