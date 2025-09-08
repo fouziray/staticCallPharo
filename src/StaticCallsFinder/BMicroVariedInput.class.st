@@ -75,10 +75,35 @@ BMicroVariedInput >> benchFiboStatic [
 	^ result
 ]
 
-{ #category : 'initialization' }
-BMicroVariedInput >> initialize [ 
+{ #category : 'as yet unclassified' }
+BMicroVariedInput >> benchFiboStaticWithoutRepetition [
 
-iteration:= 1 to: 20 by: 5
+	| result |
+	result := Dictionary new.
+	methodName ifNil: [ methodName := Integer >> #benchFib ].
+
+	iteration do: [ :aVar | 
+			aVar benchFibStatic ] .
+	^ result
+]
+
+{ #category : 'as yet unclassified' }
+BMicroVariedInput >> benchFiboWithoutRepetition [
+
+	| result |
+	result := Dictionary new.
+	methodName ifNil: [ methodName := Integer >> #benchFib ].
+
+	iteration do: [ :aVar | 
+			aVar benchFib ] .
+	^ result
+]
+
+{ #category : 'initialization' }
+BMicroVariedInput >> initialize [
+
+	iteration := 1 to: 20 by: 5.
+	step := 5
 ]
 
 { #category : 'initialization' }

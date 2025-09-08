@@ -20,7 +20,7 @@ BaselineOfStaticCallExp >> baseline: spec [
 			package: 'StaticCallExpExample' with:[ spec requires: #( 'StaticCallExp') ] ;
 		package: 'StaticCallExp-Tests' with: [ spec requires: #( 'StaticCallExp') ].
 
-		spec group: 'default' with: #('StaticCallExp' 'StaticCallExp-Tests').
+		spec group: 'default' with: #('StaticCallExp' 'StaticCallExp-Tests' 'StaticCallsFinder').
 		spec group: 'buildAVM' with:  #( 'StaticCallExpBuilder-Tests' 'StaticCallExp-Tests').
 		spec group: 'buildTests' with: #('StaticCallExpBuilder-Tests')
 		
