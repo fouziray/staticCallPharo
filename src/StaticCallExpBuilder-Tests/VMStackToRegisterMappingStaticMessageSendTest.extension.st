@@ -1,5 +1,11 @@
 Extension { #name : 'VMStackToRegisterMappingStaticMessageSendTest' }
-
+Class {
+	#name : 'VMStackToRegisterMappingStaticMessageSendTest',
+	#superclass : 'VMStackToRegisterMappingCogitTest',
+	#instVars : [],
+	#category : 'StaticCallExpBuilder-Tests',
+	#package : 'StaticCallExpBuilder-Tests'
+}
 { #category : '*StaticCallExpBuilder-Tests' }
 VMStackToRegisterMappingStaticMessageSendTest >> initStack [
 
