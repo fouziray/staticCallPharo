@@ -5,6 +5,21 @@ Class {
 	#package : 'StaticCallExpBuilder-Tests'
 }
 
+{ #category : 'helpers' }
+VMStackToRegisterMappingStaticMessageSendTest >> initStack [
+
+	self createBaseFrame.
+	
+	"Initialize Stack to the correct pointers in the selected page"
+	machineSimulator smalltalkStackPointerRegisterValue: interpreter stackPointer.
+	machineSimulator framePointerRegisterValue: interpreter framePointer.
+	machineSimulator baseRegisterValue: cogit varBaseAddress.
+
+	cogit setCStackPointer: interpreter rumpCStackAddress.
+	cogit setCFramePointer: interpreter rumpCStackAddress.
+
+]
+
 { #category : 'as yet unclassified' }
 VMStackToRegisterMappingStaticMessageSendTest >> setUp [ 
 
