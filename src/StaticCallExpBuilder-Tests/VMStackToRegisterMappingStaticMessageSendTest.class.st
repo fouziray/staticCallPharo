@@ -1,27 +1,11 @@
-Extension { #name : 'VMStackToRegisterMappingStaticMessageSendTest' }
 Class {
 	#name : 'VMStackToRegisterMappingStaticMessageSendTest',
 	#superclass : 'VMStackToRegisterMappingCogitTest',
-	#instVars : [],
 	#category : 'StaticCallExpBuilder-Tests',
 	#package : 'StaticCallExpBuilder-Tests'
 }
-{ #category : '*StaticCallExpBuilder-Tests' }
-VMStackToRegisterMappingStaticMessageSendTest >> initStack [
 
-	self createBaseFrame.
-	
-	"Initialize Stack to the correct pointers in the selected page"
-	machineSimulator smalltalkStackPointerRegisterValue: interpreter stackPointer.
-	machineSimulator framePointerRegisterValue: interpreter framePointer.
-	machineSimulator baseRegisterValue: cogit varBaseAddress.
-
-	cogit setCStackPointer: interpreter rumpCStackAddress.
-	cogit setCFramePointer: interpreter rumpCStackAddress.
-
-]
-
-{ #category : '*StaticCallExpBuilder-Tests' }
+{ #category : 'as yet unclassified' }
 VMStackToRegisterMappingStaticMessageSendTest >> setUp [ 
 
 	super setUp.
@@ -37,7 +21,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> setUp [
 
 ]
 
-{ #category : '*StaticCallExpBuilder-Tests' }
+{ #category : 'as yet unclassified' }
 VMStackToRegisterMappingStaticMessageSendTest >> setUpTrampolines [
 
 	super setUpTrampolines.
@@ -63,7 +47,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> setUpTrampolines [
 	cogit objectRepresentation setAllStoreTrampolinesWith: (self compileTrampoline: [ cogit RetN: 0 ] named: #ceStoreTrampoline).
 ]
 
-{ #category : '*StaticCallExpBuilder-Tests' }
+{ #category : 'as yet unclassified' }
 VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCeStaticMethod [
 
 	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod builder |
@@ -108,7 +92,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCeStaticMethod 
 
 ]
 
-{ #category : '*StaticCallExpBuilder-Tests' }
+{ #category : 'as yet unclassified' }
 VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCoggedMethodCallMethodDirectly [
 
 	| selector calledCompiledMethod calledCogMethod staticCallerCompiledMethod staticCallerCogMethod |
@@ -142,7 +126,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCoggedMethodCal
 	self assert: machineSimulator pc equals: calledCogMethod address + cogit noCheckEntryOffset
 ]
 
-{ #category : '*StaticCallExpBuilder-Tests' }
+{ #category : 'as yet unclassified' }
 VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfNonCoggedMethodActivatesCorrectMethod [
 
 	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod |
@@ -176,7 +160,7 @@ VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfNonCoggedMethod
 	self assert: machineSimulator receiverRegisterValue equals: (memory integerObjectOf: 13)
 ]
 
-{ #category : '*StaticCallExpBuilder-Tests' }
+{ #category : 'as yet unclassified' }
 VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfNonCoggedMethodCallsTrampoline [
 
 	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod |
