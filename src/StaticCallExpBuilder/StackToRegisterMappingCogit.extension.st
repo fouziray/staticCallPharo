@@ -1,52 +1,28 @@
 Extension { #name : 'StackToRegisterMappingCogit' }
 
 { #category : '*StaticCallExpBuilder' }
+StackToRegisterMappingCogit >> genSend: selectorIndex numArgs: numArgs [
+1 halt.
+	self marshallSendArguments: numArgs.
+	^ self
+		  genMarshalledSend: selectorIndex
+		  numArgs: numArgs
+		  sendTable: ordinarySendTrampolines
+]
+
+{ #category : '*StaticCallExpBuilder' }
 StackToRegisterMappingCogit >> genSendStaticMessage [
+
 	| methodLiteralIndex argumentCount methodToGoTo jumpInterpret mergeJump staticSendTrampoline |
 	" i need to read literal of the stack frame, found at byte1 index, after that load it to temp, we check the method is cogged or not to jump to it via trampoline"
-
 	methodLiteralIndex := byte1.
-	
+
 	"Fetch the method from the stack"
-	methodToGoTo := self getLiteral: methodLiteralIndex .
-	argumentCount := coInterpreter argumentCountOf: methodToGoTo.  
-
-	"Allocate registers"
-	self marshallSendArguments: argumentCount.
-
-	self ssAllocateRequiredReg: ClassReg.
-	self genMoveConstant: methodToGoTo R: ClassReg.
-	objectRepresentation genEnsureObjInRegNotForwarded: ClassReg scratchReg: TempReg.
-	
-	"If the method is compiled, we jump to it, if not we jump to the interpret."
-	objectRepresentation genLoadSlot: HeaderIndex sourceReg: ClassReg destReg: TempReg.
-	jumpInterpret := objectRepresentation genJumpImmediate: TempReg.
-
-	"Jump to the method's unchecked entry-point."
-	self AddCq: cmNoCheckEntryOffset R: TempReg.
-	self CallR: TempReg. "Receiver and Args travel in registers"
-	mergeJump := self Jump: 0.
-	
-	"Call the trampoline to continue execution in the interpreter"
-	jumpInterpret jmpTarget: self Label.
-	
-	"If the arguments are in registers, push them to the stack before going to the interpreter"
-	argumentCount = 0 ifTrue: [ 
-		staticSendTrampoline := staticSendTrampoline0 ].
-	argumentCount = 1 ifTrue: [ 
-		staticSendTrampoline := staticSendTrampoline1 ].
-	argumentCount = 2 ifTrue: [ 
-		staticSendTrampoline := staticSendTrampoline2 ].
-	argumentCount > 2 ifTrue: [ 
-		staticSendTrampoline := staticSendTrampoline3 ].
-	self CallRT: staticSendTrampoline. "Receiver and Args travel in the stack"
-
-	mergeJump jmpTarget: self Label.
-	self annotateBytecode: self Label.
-
-	self voidReceiverOptStatus.
-	self ssPushRegister: ReceiverResultReg.
-	^0
+	methodToGoTo := self getLiteral: methodLiteralIndex.
+	self
+		genStaticSend: methodToGoTo
+		numArgs: (coInterpreter argumentCountOf: methodToGoTo).
+	^ 0
 ]
 
 { #category : '*StaticCallExpBuilder' }
@@ -154,6 +130,36 @@ StackToRegisterMappingCogit >> genSpecialSelectorComparison [
 ]
 
 { #category : '*StaticCallExpBuilder' }
+StackToRegisterMappingCogit >> genStaticSend: method numArgs: numArgs [
+
+	<inline: false>
+	<var: #sendTable type: #'sqInt *'>
+	| annotation sendTable |
+	self assert: needsFrame.
+
+	sendTable := staticSendTrampolines.
+	"annotation := self annotationForSendTable: sendTable."
+
+	self marshallSendArguments: numArgs.
+
+	"Will jump to no check entry point, so put forwarder resolution here in the callsite."
+	objectRepresentation
+		genEnsureOopInRegNotForwarded: ReceiverResultReg
+		scratchReg: TempReg.
+	"0 through (NumSendTrampolines - 2) numArgs sends have the arg count implciti in the trampoline.
+	 The last send trampoline (NumSendTrampolines - 1) passes numArgs in SendNumArgsReg."
+	numArgs >= (NumSendTrampolines - 1) ifTrue: [
+		self MoveCq: numArgs R: SendNumArgsReg ].
+
+	self genMoveConstant: method R: TempReg.
+	(self Call: (sendTable at: (numArgs min: NumSendTrampolines - 1)))
+		"annotation: annotation".
+
+	self voidReceiverOptStatus.
+	^ self ssPushRegister: ReceiverResultReg
+]
+
+{ #category : '*StaticCallExpBuilder' }
 StackToRegisterMappingCogit >> genStaticSendTrampolineFor: aRoutine numArgs: numArgs called: aString arg: regOrConst0 [
 	"Generate a trampoline with four arguments.
 	 Hack: a negative value indicates an abstract register, a non-negative value indicates a constant."
@@ -208,8 +214,6 @@ StackToRegisterMappingCogit >> genStaticallyResolvedSpecialSelectorComparison [
 StackToRegisterMappingCogit >> generateSendTrampolines [
 	"Override to generate code to push the register arg(s) for <= numRegArg arity sends."
 
-	self generateStaticSendTrampoline.
-
 	0 to: NumSendTrampolines - 1 do: [ :numArgs |
 		ordinarySendTrampolines at: numArgs put: (self
 				 genSendTrampolineFor: #ceSend:super:to:numArgs:
@@ -219,6 +223,13 @@ StackToRegisterMappingCogit >> generateSendTrampolines [
 				 arg: (self trampolineArgConstant: false)
 				 arg: ReceiverResultReg
 				 arg: (self numArgsOrSendNumArgsReg: numArgs)) ].
+	0 to: NumSendTrampolines - 1 do: [ :numArgs |
+		staticSendTrampolines at: numArgs put: (self
+				 genTrampolineFor: #ceStaticSend:to:numArgs:
+				 called: (self trampolineName: 'ceStaticSend' numArgs: numArgs)
+				 arg: TempReg
+				 arg: ReceiverResultReg
+				 arg: (self numArgsOrSendNumArgsReg: numArgs)) "method to go to" ].
 
 	"Generate these in the middle so they are within [firstSend, lastSend]."
 	BytecodeSetHasDirectedSuperSend ifTrue: [
@@ -246,31 +257,6 @@ StackToRegisterMappingCogit >> generateSendTrampolines [
 				 arg: (self numArgsOrSendNumArgsReg: numArgs)) ].
 	firstSend := ordinarySendTrampolines at: 0.
 	lastSend := superSendTrampolines at: NumSendTrampolines - 1
-]
-
-{ #category : '*StaticCallExpBuilder' }
-StackToRegisterMappingCogit >> generateStaticSendTrampoline [
-		
-	staticSendTrampoline0 := (self
-				 genStaticSendTrampolineFor: #ceStaticSendInterpreted:
-				 numArgs: 0
-				 called: (self trampolineName: 'ceStaticSend' numArgs: 0)
-				 arg: ClassReg).
-	staticSendTrampoline1 := (self
-				 genStaticSendTrampolineFor: #ceStaticSendInterpreted:
-				 numArgs: 1
-				 called: (self trampolineName: 'ceStaticSend' numArgs: 1)
-				 arg: ClassReg).
-	staticSendTrampoline2 := (self
-				 genStaticSendTrampolineFor: #ceStaticSendInterpreted:
-				 numArgs: 2
-				 called: (self trampolineName: 'ceStaticSend' numArgs: 2)
-				 arg: ClassReg).
-	staticSendTrampoline3 := (self
-				 genStaticSendTrampolineFor: #ceStaticSendInterpreted:
-				 numArgs: 3
-				 called: (self trampolineName: 'ceStaticSend' numArgs: 3)
-				 arg: ClassReg)
 ]
 
 { #category : '*StaticCallExpBuilder' }
@@ -403,6 +389,51 @@ StackToRegisterMappingCogit class >> initializeBytecodeTableForSistaV1 [
 		(3 253 253 genStoreAndPopRemoteTempLongBytecode)
 		
 		(3 254 255	unknownBytecode))
+]
+
+{ #category : '*StaticCallExpBuilder' }
+StackToRegisterMappingCogit >> linkStaticMethod: methodToGoTo [ 
+	| argumentCount jumpInterpret mergeJump staticSendTrampoline |
+	
+	argumentCount := coInterpreter argumentCountOf: methodToGoTo.  
+	
+	"Allocate registers"
+	self marshallSendArguments: argumentCount.
+
+	self ssAllocateRequiredReg: ClassReg.
+	self genMoveConstant: methodToGoTo R: ClassReg.
+	objectRepresentation genEnsureObjInRegNotForwarded: ClassReg scratchReg: TempReg.
+	
+	"If the method is compiled, we jump to it, if not we jump to the interpret."
+	objectRepresentation genLoadSlot: HeaderIndex sourceReg: ClassReg destReg: TempReg.
+	jumpInterpret := objectRepresentation genJumpImmediate: TempReg.
+
+	"Jump to the method's unchecked entry-point."
+	self AddCq: cmNoCheckEntryOffset R: TempReg.
+	self CallR: TempReg. "Receiver and Args travel in registers"
+	mergeJump := self Jump: 0.
+	
+	"Call the trampoline to continue execution in the interpreter"
+	jumpInterpret jmpTarget: self Label.
+	
+	"If the arguments are in registers, push them to the stack before going to the interpreter"
+	argumentCount = 0 ifTrue: [ 
+		staticSendTrampoline := staticSendTrampoline0 ].
+	argumentCount = 1 ifTrue: [ 
+		staticSendTrampoline := staticSendTrampoline1 ].
+	argumentCount = 2 ifTrue: [ 
+		staticSendTrampoline := staticSendTrampoline2 ].
+	argumentCount > 2 ifTrue: [ 
+		staticSendTrampoline := staticSendTrampoline3 ].
+	self CallRT: staticSendTrampoline. "Receiver and Args travel in the stack"
+
+	mergeJump jmpTarget: self Label.
+	self annotateBytecode: self Label.
+
+	self voidReceiverOptStatus.
+	self ssPushRegister: ReceiverResultReg.
+
+	^0
 ]
 
 { #category : '*StaticCallExpBuilder' }

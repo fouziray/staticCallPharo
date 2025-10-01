@@ -21,6 +21,14 @@ VMStackToRegisterMappingStaticMessageSendTest >> initStack [
 ]
 
 { #category : 'as yet unclassified' }
+VMStackToRegisterMappingStaticMessageSendTest >> myYourself [
+
+	| x |
+	x := self.
+	^ x
+]
+
+{ #category : 'as yet unclassified' }
 VMStackToRegisterMappingStaticMessageSendTest >> setUp [ 
 
 	super setUp.
@@ -40,12 +48,12 @@ VMStackToRegisterMappingStaticMessageSendTest >> setUp [
 VMStackToRegisterMappingStaticMessageSendTest >> setUpTrampolines [
 
 	super setUpTrampolines.
-	
+
 	cogit methodAbortTrampolines at: 0 put: cogit ceMethodAbortTrampoline.
 	cogit methodAbortTrampolines at: 1 put: cogit ceMethodAbortTrampoline.
 	cogit methodAbortTrampolines at: 2 put: cogit ceMethodAbortTrampoline.
 	cogit methodAbortTrampolines at: 3 put: cogit ceMethodAbortTrampoline.
-	
+
 	cogit picMissTrampolines at: 0 put: cogit ceCPICMissTrampoline.
 	cogit picMissTrampolines at: 1 put: cogit ceCPICMissTrampoline.
 	cogit picMissTrampolines at: 2 put: cogit ceCPICMissTrampoline.
@@ -55,15 +63,81 @@ VMStackToRegisterMappingStaticMessageSendTest >> setUpTrampolines [
 	cogit picAbortTrampolines at: 1 put: cogit cePICAbortTrampoline.
 	cogit picAbortTrampolines at: 2 put: cogit cePICAbortTrampoline.
 	cogit picAbortTrampolines at: 3 put: cogit cePICAbortTrampoline.
-	
-	cogit generateStaticSendTrampoline.
-		
-	cogit ceStoreCheckTrampoline: (self compileTrampoline: [ cogit RetN: 0 ] named:#ceStoreCheckTrampoline).
-	cogit objectRepresentation setAllStoreTrampolinesWith: (self compileTrampoline: [ cogit RetN: 0 ] named: #ceStoreTrampoline).
+
+	cogit ceStoreCheckTrampoline: (self
+			 compileTrampoline: [ cogit RetN: 0 ]
+			 named: #ceStoreCheckTrampoline).
+	cogit objectRepresentation setAllStoreTrampolinesWith:
+		(self compileTrampoline: [ cogit RetN: 0 ] named: #ceStoreTrampoline)
 ]
 
 { #category : 'as yet unclassified' }
-VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCeStaticMethod [
+VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCeStaticMethodAmelioration [
+
+	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod builder staticCallTargetCogMethod |
+	calledCompiledMethod := self createMethodOopFromHostMethod:
+		                        self class >> #myYourself.
+
+	selector := self newOldSpaceObjectWithSlots: 0.
+
+	staticCallerCompiledMethod := methodBuilder newMethod
+		                              literalAt: 0
+		                              put: (memory integerObjectOf: 13);
+		                              literalAt: 1
+		                              put: calledCompiledMethod;
+		                              literalAt: 2 put: selector;
+		                              literalAt: 3 put: memory nilObject;
+		                              bytecodes: #[ 32 246 1 92 ];
+		                              buildMethod. "PushLiteral 1" "Static Send literal at 2" "Return top"
+
+	cogit generateSendTrampolines.
+	staticCallerCogMethod := cogit
+		                         cog: staticCallerCompiledMethod
+		                         selector: memory nilObject.
+	staticCallTargetCogMethod := cogit
+		                             cog: calledCompiledMethod
+		                             selector: memory nilObject.
+
+
+	builder := self machineCodeFrameBuilder.
+	builder returnAddress: callerAddress.
+	builder receiver: memory falseObject.
+	builder method: staticCallerCogMethod.
+	builder buildFrame.
+
+	interpreter stackPointer:
+		machineSimulator smalltalkStackPointerRegisterValue.
+	interpreter framePointer: machineSimulator framePointerRegisterValue.
+
+	"Push receiver, arg, then send"
+	"interpreter push: (memory integerObjectOf: 13)."
+	"	interpreter push: 16r320000460."
+
+	"machineSimulator smalltalkStackPointerRegisterValue:
+		interpreter stackPointer."
+
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+
+	self
+		assert: machineSimulator instructionPointerRegisterValue
+		equals: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+	"We are at the beginning of the called method"
+
+	"self
+		assert: (interpreter stackValue: 3)
+		equals: (memory integerObjectOf: 13).
+	self assert: (interpreter stackValue: 1) equals: 16r320000460.
+	self
+		assert: machineSimulator pc
+		equals: cogit getEnterCogCodePopReceiverReg"
+]
+
+{ #category : 'tests' }
+VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCeStaticMethodIntialVersion [
 
 	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod builder |
 
