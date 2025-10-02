@@ -22,6 +22,17 @@ MicroBenchStats class >> benchSend64MsgMega [
 ]
 
 { #category : 'as yet unclassified' }
+MicroBenchStats class >> benchSend64MsgMega2 [
+
+	<script>
+	^ ((self reportResults: (MsgSendBenchmarkMega
+			     runOnly: #benchSendsTo64Yourselves2
+			     iterations: 30)) , (self reportResults: (MsgSendBenchmarkMega
+			     runOnly: #benchSendsTo64YourselvesStatic2
+			     iterations: 30))) inspect
+]
+
+{ #category : 'as yet unclassified' }
 MicroBenchStats class >> benchSend64MsgMono [
 
 	<script>
@@ -40,6 +51,17 @@ MicroBenchStats class >> benchSend64MsgPoly [
 			     runOnly: #benchSendsTo64Yourselves
 			     iterations: 30)) , (self reportResults: (MsgSendBenchmarkPoly
 			     runOnly: #benchSendsTo64YourselvesStatic
+			     iterations: 30))) inspect
+]
+
+{ #category : 'as yet unclassified' }
+MicroBenchStats class >> benchSend64MsgPoly2 [
+
+	<script>
+	^ ((self reportResults: (MsgSendBenchmarkPoly
+			     runOnly: #benchSendsTo64Yourselves3
+			     iterations: 30)) , (self reportResults: (MsgSendBenchmarkPoly
+			     runOnly: #benchSendsTo64YourselvesStatic3
 			     iterations: 30))) inspect
 ]
 
@@ -91,9 +113,33 @@ MicroBenchStats >> benchSendsTo64Yourselves [
 ]
 
 { #category : 'benchmarking' }
+MicroBenchStats >> benchSendsTo64Yourselves2 [
+
+	1 to: program iteration last do: [ :e | icCaller send: String ]
+]
+
+{ #category : 'benchmarking' }
+MicroBenchStats >> benchSendsTo64Yourselves3 [
+
+	1 to: program iteration last do: [ :e | icCaller send: 23 ]
+]
+
+{ #category : 'benchmarking' }
 MicroBenchStats >> benchSendsTo64YourselvesStatic [
 
 	1 to: program iteration last do: [ :e | icCaller sendSStatic: Object ]
+]
+
+{ #category : 'benchmarking' }
+MicroBenchStats >> benchSendsTo64YourselvesStatic2 [
+
+	1 to: program iteration last do: [ :e | icCaller sendSStatic: String ]
+]
+
+{ #category : 'benchmarking' }
+MicroBenchStats >> benchSendsTo64YourselvesStatic3 [
+
+	1 to: program iteration last do: [ :e | icCaller sendSStatic: 23 ]
 ]
 
 { #category : 'script entry' }
