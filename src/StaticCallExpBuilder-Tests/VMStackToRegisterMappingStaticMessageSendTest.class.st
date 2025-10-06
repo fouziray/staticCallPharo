@@ -5,6 +5,19 @@ Class {
 	#package : 'StaticCallExpBuilder-Tests'
 }
 
+{ #category : 'patching' }
+VMStackToRegisterMappingStaticMessageSendTest >> getInstrunctionsStartingFrom: start to: end [
+
+	^ machineSimulator disassembler
+		  printImmediatesInHexa;
+		  useAlternatePrinterVariant;
+		  disassembleNext: 150
+		  instructionsIn:
+			  (cogit objectMemory memoryManager copyFrom: start to: end)
+		  startAddress: start
+		  pc: machineSimulator instructionPointerRegisterValue
+]
+
 { #category : 'helpers' }
 VMStackToRegisterMappingStaticMessageSendTest >> initStack [
 
@@ -280,4 +293,78 @@ VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfNonCoggedMethod
 		until: cogit staticSendTrampoline0. 
 	self assert: machineSimulator pc equals: cogit staticSendTrampoline0.
 	self assert: machineSimulator classRegisterValue equals: calledCompiledMethod 
+]
+
+{ #category : 'as yet unclassified' }
+VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendPatching [
+
+	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod builder staticCallTargetCogMethod instructionsBefore instructionsAfter |
+	calledCompiledMethod := self createMethodOopFromHostMethod:
+		                        self class >> #myYourself.
+
+	selector := self newOldSpaceObjectWithSlots: 0.
+
+	staticCallerCompiledMethod := methodBuilder newMethod
+		                              literalAt: 0
+		                              put: (memory integerObjectOf: 13);
+		                              literalAt: 1
+		                              put: calledCompiledMethod;
+		                              literalAt: 2 put: selector;
+		                              literalAt: 3 put: memory nilObject;
+		                              bytecodes: #[ 32 246 1 92 ];
+		                              buildMethod. "PushLiteral 1" "Static Send literal at 2" "Return top"
+
+	cogit generateSendTrampolines.
+	staticCallerCogMethod := cogit
+		                         cog: staticCallerCompiledMethod
+		                         selector: memory nilObject.
+	staticCallTargetCogMethod := cogit
+		                             cog: calledCompiledMethod
+		                             selector: memory nilObject.
+
+
+	builder := self machineCodeFrameBuilder.
+	builder returnAddress: callerAddress.
+	builder receiver: memory falseObject.
+	builder method: staticCallerCogMethod.
+	builder buildFrame.
+
+	interpreter stackPointer:
+		machineSimulator smalltalkStackPointerRegisterValue.
+	interpreter framePointer: machineSimulator framePointerRegisterValue.
+
+	"Push receiver, arg, then send"
+	"interpreter push: (memory integerObjectOf: 13)."
+	"	interpreter push: 16r320000460."
+
+	"machineSimulator smalltalkStackPointerRegisterValue:
+		interpreter stackPointer."
+self openMachineDebugger.
+
+instructionsBefore:= self getInstrunctionsStartingFrom:(staticCallerCogMethod address + cogit noCheckEntryOffset) to: (staticCallTargetCogMethod address + staticCallTargetCogMethod stackCheckOffset).
+
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+			
+instructionsAfter:= self getInstrunctionsStartingFrom:(staticCallerCogMethod address + cogit noCheckEntryOffset) to: (staticCallTargetCogMethod address + staticCallTargetCogMethod stackCheckOffset).
+
+{instructionsBefore. instructionsAfter }.
+self deny:( (instructionsBefore collect: #asString) ) equals: ((instructionsAfter collect: #asString)).
+self deny: (( (instructionsBefore collect: #asString) ) at:23 ) equals: ( (instructionsAfter collect: #asString) at:23)."
+self openMachineDebuggerAt: staticCallerCogMethod address + cogit noCheckEntryOffset".
+	self
+		assert: machineSimulator instructionPointerRegisterValue
+		equals: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset
+	"We are at the beginning of the called method"
+
+	"self
+		assert: (interpreter stackValue: 3)
+		equals: (memory integerObjectOf: 13).
+	self assert: (interpreter stackValue: 1) equals: 16r320000460.
+	self
+		assert: machineSimulator pc
+		equals: cogit getEnterCogCodePopReceiverReg"
 ]
