@@ -29,8 +29,7 @@ MicrodownWithStaticCallBenchmarkSuite class >> runFullBenchmark [
 { #category : 'as yet unclassified' }
 MicrodownWithStaticCallBenchmarkSuite >> analyzeAllMicroDownPackages [
 
-	profiler addLinkToNodes: profiler selectMicrodownPackages.
-	 
+	profiler addLinkToNodes: self selectMicrodownPackages
 ]
 
 { #category : 'initialization' }
@@ -535,6 +534,18 @@ MicrodownWithStaticCallBenchmarkSuite >> runQuickBenchmark [
 	self measureQuickPerformance.
 	^ self generateQuickReport
 
+]
+
+{ #category : 'as yet unclassified' }
+MicrodownWithStaticCallBenchmarkSuite >> selectMicrodownPackages [
+
+	^ (((PackageOrganizer default packages select: [ :e |
+		    (e name beginsWith: 'Microdown') and: [
+			    e name ~= 'Microdown-Tests' ] ]) collect: [ :package |
+		   package definedClasses ]) flattened collect:
+		  [ :c |
+		  c methods collect: [ :m | m ast sendNodes reject: #isInlined ] ])
+			  flattened
 ]
 
 { #category : 'as yet unclassified' }

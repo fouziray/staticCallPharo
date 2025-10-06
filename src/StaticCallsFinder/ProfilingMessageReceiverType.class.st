@@ -29,21 +29,9 @@ ProfilingMessageReceiverType >> initialize [
 ]
 
 { #category : 'as yet unclassified' }
-ProfilingMessageReceiverType >> selectMicrodownPackages [
+ProfilingMessageReceiverType >> receiverProfileTypesAt: aMessageNode [ 
 
-	^ (((PackageOrganizer default packages select: [ :e |
-		    (e name beginsWith: 'Microdown') and: [
-			    e name ~= 'Microdown-Tests' ] ]) collect: [ :package |
-		   package definedClasses ]) flattened collect:
-		  [ :c |
-		  c methods collect: [ :m | m ast sendNodes reject: #isInlined ] ])
-			  flattened
-]
-
-{ #category : 'as yet unclassified' }
-ProfilingMessageReceiverType >> types [
-
-	^ types
+	^ types at: aMessageNode 
 ]
 
 { #category : 'as yet unclassified' }
