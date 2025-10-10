@@ -34,6 +34,12 @@ VMStackToRegisterMappingStaticMessageSendTest >> initStack [
 ]
 
 { #category : 'as yet unclassified' }
+VMStackToRegisterMappingStaticMessageSendTest >> interpreterClass [
+
+	^ CogVMSimulatorLSBCountingStaticLinks
+]
+
+{ #category : 'as yet unclassified' }
 VMStackToRegisterMappingStaticMessageSendTest >> myYourself [
 
 	| x |
@@ -82,6 +88,289 @@ VMStackToRegisterMappingStaticMessageSendTest >> setUpTrampolines [
 			 named: #ceStoreCheckTrampoline).
 	cogit objectRepresentation setAllStoreTrampolinesWith:
 		(self compileTrampoline: [ cogit RetN: 0 ] named: #ceStoreTrampoline)
+]
+
+{ #category : 'as yet unclassified' }
+VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendExecutesLinkedCall [
+
+	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod builder staticCallTargetCogMethod |
+	calledCompiledMethod := self createMethodOopFromHostMethod:
+		                        self class >> #myYourself.
+
+	selector := self newOldSpaceObjectWithSlots: 0.
+
+	staticCallerCompiledMethod := methodBuilder newMethod
+		                              literalAt: 0
+		                              put: (memory integerObjectOf: 13);
+		                              literalAt: 1
+		                              put: calledCompiledMethod;
+		                              literalAt: 2 put: selector;
+		                              literalAt: 3 put: memory nilObject;
+		                              bytecodes: #[ 32 246 1 92 ];
+		                              buildMethod. "PushLiteral 1" "Static Send literal at 2" "Return top"
+
+	cogit generateSendTrampolines.
+	staticCallerCogMethod := cogit
+		                         cog: staticCallerCompiledMethod
+		                         selector: memory nilObject.
+	staticCallTargetCogMethod := cogit
+		                             cog: calledCompiledMethod
+		                             selector: memory nilObject.
+
+
+	builder := self machineCodeFrameBuilder.
+	builder returnAddress: callerAddress.
+	builder receiver: memory falseObject.
+	builder method: staticCallerCogMethod.
+	builder buildFrame.
+
+	interpreter stackPointer:
+		machineSimulator smalltalkStackPointerRegisterValue.
+	interpreter framePointer: machineSimulator framePointerRegisterValue.
+
+	"Push receiver, arg, then send"
+	"interpreter push: (memory integerObjectOf: 13)."
+	"	interpreter push: 16r320000460."
+
+	"machineSimulator smalltalkStackPointerRegisterValue:
+		interpreter stackPointer."
+
+
+
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+
+	"self openMachineDebuggerAt: staticCallerCogMethod address + cogit noCheckEntryOffset"
+
+	self
+		assert: machineSimulator instructionPointerRegisterValue
+		equals: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+	self assert: interpreter staticCallLinkCounter equals: 1
+]
+
+{ #category : 'as yet unclassified' }
+VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendExecutesLinkedCall2 [
+
+	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod builder staticCallTargetCogMethod |
+	calledCompiledMethod := self createMethodOopFromHostMethod:
+		                        self class >> #myYourself.
+
+	selector := self newOldSpaceObjectWithSlots: 0.
+
+	staticCallerCompiledMethod := methodBuilder newMethod
+		                              literalAt: 0
+		                              put: (memory integerObjectOf: 13);
+		                              literalAt: 1
+		                              put: calledCompiledMethod;
+		                              literalAt: 2 put: selector;
+		                              literalAt: 3 put: memory nilObject;
+		                              bytecodes: #[ 32 246 1 92 ];
+		                              buildMethod. "PushLiteral 1" "Static Send literal at 2" "Return top"
+
+	cogit generateSendTrampolines.
+	staticCallerCogMethod := cogit
+		                         cog: staticCallerCompiledMethod
+		                         selector: memory nilObject.
+	staticCallTargetCogMethod := cogit
+		                             cog: calledCompiledMethod
+		                             selector: memory nilObject.
+
+
+	builder := self machineCodeFrameBuilder.
+	builder returnAddress: callerAddress.
+	builder receiver: memory falseObject.
+	builder method: staticCallerCogMethod.
+	builder buildFrame.
+
+	interpreter stackPointer:
+		machineSimulator smalltalkStackPointerRegisterValue.
+	interpreter framePointer: machineSimulator framePointerRegisterValue.
+
+	"Push receiver, arg, then send"
+	"interpreter push: (memory integerObjectOf: 13)."
+	"	interpreter push: 16r320000460."
+
+	"machineSimulator smalltalkStackPointerRegisterValue:
+		interpreter stackPointer."
+
+
+
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+	"self openMachineDebuggerAt: staticCallerCogMethod address + cogit noCheckEntryOffset"
+
+	self
+		assert: machineSimulator instructionPointerRegisterValue
+		equals: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+	self assert: interpreter staticCallLinkCounter equals: 1
+]
+
+{ #category : 'as yet unclassified' }
+VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendExecutesUnlinkedCall [
+
+	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod builder staticCallTargetCogMethod |
+	calledCompiledMethod := self createMethodOopFromHostMethod:
+		                        self class >> #myYourself.
+
+	selector := self newOldSpaceObjectWithSlots: 0.
+
+	staticCallerCompiledMethod := methodBuilder newMethod
+		                              literalAt: 0
+		                              put: (memory integerObjectOf: 13);
+		                              literalAt: 1
+		                              put: calledCompiledMethod;
+		                              literalAt: 2 put: selector;
+		                              literalAt: 3 put: memory nilObject;
+		                              bytecodes: #[ 32 246 1 92 ];
+		                              buildMethod. "PushLiteral 1" "Static Send literal at 2" "Return top"
+
+	cogit generateSendTrampolines.
+	staticCallerCogMethod := cogit
+		                         cog: staticCallerCompiledMethod
+		                         selector: memory nilObject.
+	staticCallTargetCogMethod := cogit
+		                             cog: calledCompiledMethod
+		                             selector: memory nilObject.
+
+
+	builder := self machineCodeFrameBuilder.
+	builder returnAddress: callerAddress.
+	builder receiver: memory falseObject.
+	builder method: staticCallerCogMethod.
+	builder buildFrame.
+
+	interpreter stackPointer:
+		machineSimulator smalltalkStackPointerRegisterValue.
+	interpreter framePointer: machineSimulator framePointerRegisterValue.
+
+	"Push receiver, arg, then send"
+	"interpreter push: (memory integerObjectOf: 13)."
+	"	interpreter push: 16r320000460."
+
+	"machineSimulator smalltalkStackPointerRegisterValue:
+		interpreter stackPointer."
+
+
+
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+
+	"Here we remove the method from compiled code space and see if the call site is linked back to its original state"
+
+	"self openMachineDebuggerAt: staticCallerCogMethod address.
+	"
+	self createBaseFrame. 
+	interpreter commenceCogCompiledCodeCompaction.
+	cogit freeMethod: staticCallerCogMethod address.
+	
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+
+	"self openMachineDebuggerAt: staticCallerCogMethod address + cogit noCheckEntryOffset"
+
+	self
+		assert: machineSimulator instructionPointerRegisterValue
+		equals: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+	self assert: interpreter staticCallLinkCounter equals: 2
+]
+
+{ #category : 'as yet unclassified' }
+VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendExecutesUnlinkedCall2 [
+
+	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod builder staticCallTargetCogMethod |
+	calledCompiledMethod := self createMethodOopFromHostMethod:
+		                        self class >> #myYourself.
+
+	selector := self newOldSpaceObjectWithSlots: 0.
+
+	staticCallerCompiledMethod := methodBuilder newMethod
+		                              literalAt: 0
+		                              put: (memory integerObjectOf: 13);
+		                              literalAt: 1
+		                              put: calledCompiledMethod;
+		                              literalAt: 2 put: selector;
+		                              literalAt: 3 put: memory nilObject;
+		                              bytecodes: #[ 32 246 1 92 ];
+		                              buildMethod. "PushLiteral 1" "Static Send literal at 2" "Return top"
+
+	cogit generateSendTrampolines.
+	staticCallerCogMethod := cogit
+		                         cog: staticCallerCompiledMethod
+		                         selector: memory nilObject.
+	staticCallTargetCogMethod := cogit
+		                             cog: calledCompiledMethod
+		                             selector: memory nilObject.
+
+
+	builder := self machineCodeFrameBuilder.
+	builder returnAddress: callerAddress.
+	builder receiver: memory falseObject.
+	builder method: staticCallerCogMethod.
+	builder buildFrame.
+
+	interpreter stackPointer:
+		machineSimulator smalltalkStackPointerRegisterValue.
+	interpreter framePointer: machineSimulator framePointerRegisterValue.
+
+	"Push receiver, arg, then send"
+	"interpreter push: (memory integerObjectOf: 13)."
+	"	interpreter push: 16r320000460."
+
+	"machineSimulator smalltalkStackPointerRegisterValue:
+		interpreter stackPointer."
+
+
+
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+
+	"Here we remove the method from compiled code space and see if the call site is linked back to its original state"
+
+
+	cogit freeMethod: staticCallTargetCogMethod.
+	self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+self
+		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
+		until: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+	"self openMachineDebuggerAt: staticCallerCogMethod address + cogit noCheckEntryOffset"
+
+	self
+		assert: machineSimulator instructionPointerRegisterValue
+		equals: staticCallTargetCogMethod address
+			+ staticCallTargetCogMethod stackCheckOffset.
+	self assert: interpreter staticCallLinkCounter equals: 2
 ]
 
 { #category : 'as yet unclassified' }
@@ -339,21 +628,37 @@ VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendPatching [
 
 	"machineSimulator smalltalkStackPointerRegisterValue:
 		interpreter stackPointer."
-self openMachineDebugger.
 
-instructionsBefore:= self getInstrunctionsStartingFrom:(staticCallerCogMethod address + cogit noCheckEntryOffset) to: (staticCallTargetCogMethod address + staticCallTargetCogMethod stackCheckOffset).
+
+	instructionsBefore := self
+		                      getInstrunctionsStartingFrom:
+		                      staticCallerCogMethod address
+		                      + cogit noCheckEntryOffset
+		                      to: staticCallTargetCogMethod address
+			                      + staticCallTargetCogMethod stackCheckOffset.
 
 	self
 		runFrom: staticCallerCogMethod address + cogit noCheckEntryOffset
 		until: staticCallTargetCogMethod address
 			+ staticCallTargetCogMethod stackCheckOffset.
-			
-instructionsAfter:= self getInstrunctionsStartingFrom:(staticCallerCogMethod address + cogit noCheckEntryOffset) to: (staticCallTargetCogMethod address + staticCallTargetCogMethod stackCheckOffset).
 
-{instructionsBefore. instructionsAfter }.
-self deny:( (instructionsBefore collect: #asString) ) equals: ((instructionsAfter collect: #asString)).
-self deny: (( (instructionsBefore collect: #asString) ) at:23 ) equals: ( (instructionsAfter collect: #asString) at:23)."
-self openMachineDebuggerAt: staticCallerCogMethod address + cogit noCheckEntryOffset".
+	instructionsAfter := self
+		                     getInstrunctionsStartingFrom:
+		                     staticCallerCogMethod address
+		                     + cogit noCheckEntryOffset
+		                     to: staticCallTargetCogMethod address
+			                     + staticCallTargetCogMethod stackCheckOffset.
+
+	{
+		instructionsBefore.
+		instructionsAfter }.
+	self
+		deny: (instructionsBefore collect: #asString)
+		equals: (instructionsAfter collect: #asString).
+	self
+		deny: ((instructionsBefore collect: #asString) at: 23)
+		equals: ((instructionsAfter collect: #asString) at: 23). "
+self openMachineDebuggerAt: staticCallerCogMethod address + cogit noCheckEntryOffset"
 	self
 		assert: machineSimulator instructionPointerRegisterValue
 		equals: staticCallTargetCogMethod address
