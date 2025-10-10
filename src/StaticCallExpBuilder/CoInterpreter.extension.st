@@ -32,6 +32,7 @@ CoInterpreter >> ceStaticSend: methodToGoTo to: rcvr numArgs: numArgs [
 		                            functionPointerFor: primitiveIndex
 		                            inClass: nil.
 
+	
 	cogMethod := self
 		             ensureMethodIsCogged: newMethod
 		             maybeClosure: objectMemory nilObject.
