@@ -395,6 +395,18 @@ MicrodownWithStaticCallBenchmarkSuite >> measureOptimizedPerformance [
 ]
 
 { #category : 'as yet unclassified' }
+MicrodownWithStaticCallBenchmarkSuite >> measureQuickForTest [
+	
+
+	| doc  parser |
+	doc := (results at: #testDocuments) at: #quick.
+	parser := MicrodownParser new.
+
+	parser parse: doc.
+
+]
+
+{ #category : 'as yet unclassified' }
 MicrodownWithStaticCallBenchmarkSuite >> measureQuickPerformance [ 
 	"Quick performance measurement"
 	| doc time parser |
@@ -534,6 +546,16 @@ MicrodownWithStaticCallBenchmarkSuite >> runQuickBenchmark [
 	self measureQuickPerformance.
 	^ self generateQuickReport
 
+]
+
+{ #category : 'initialization' }
+MicrodownWithStaticCallBenchmarkSuite >> runQuickBenchmarkForTest [
+	" benchmark with minimal setup"
+
+	self analyzeMicrodownPackage.
+	self setupQuickTest.
+	self measureQuickForTest.
+	^ self generateQuickReport
 ]
 
 { #category : 'as yet unclassified' }
