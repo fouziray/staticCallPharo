@@ -25,22 +25,23 @@ PolymorphicCallSitesVisitor >> messageExecutionsDictionary [
 PolymorphicCallSitesVisitor >> visitMethodTrace: aScpMethodTrace [
 
 	aScpMethodTrace parent ifNotNil: [ :message |
-		messageExecutionsDictionary at: message node 
-		 	ifPresent: [ :d | 
-				d at: aScpMethodTrace node compiledMethod 
-					ifPresent: [ :receivers | receivers add: aScpMethodTrace receiver ]
-					ifAbsentPut: [ self error: 'Wrong initialization of identity set' ]
-			]  
-			ifAbsentPut: [ 
+		messageExecutionsDictionary
+			at: message node
+			ifPresent: [ :d |
+				d
+					at: aScpMethodTrace node compiledMethod
+					ifPresent: [ :receivers |
+					receivers add: aScpMethodTrace receiver ]
+					ifAbsentPut: [
+						IdentitySet new
+							add: aScpMethodTrace receiver;
+							yourself ] ]
+			ifAbsentPut: [
 				IdentityDictionary new
-					at: aScpMethodTrace node compiledMethod put: (IdentitySet new 
-						add: aScpMethodTrace receiver; 
-						yourself); 
-					yourself
-			]
-	].
+					at: aScpMethodTrace node compiledMethod put: (IdentitySet new
+							 add: aScpMethodTrace receiver;
+							 yourself);
+					yourself ] ].
 
-	aScpMethodTrace children do: [ :m |
-		m accept: self
-	]
+	aScpMethodTrace children do: [ :m | m accept: self ]
 ]
