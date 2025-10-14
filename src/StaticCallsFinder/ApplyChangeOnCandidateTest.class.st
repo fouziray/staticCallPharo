@@ -18,6 +18,12 @@ ApplyChangeOnCandidateTest >> example01 [
 ]
 
 { #category : 'as yet unclassified' }
+ApplyChangeOnCandidateTest >> example02 [
+
+^	[1 asInteger] value 
+]
+
+{ #category : 'as yet unclassified' }
 ApplyChangeOnCandidateTest >> retrieveOldAstOf: aMethod [ 
 	
 	aMethod classBinding value addSelectorSilently: aMethod selector withMethod: ((RBParser parseMethod: aMethod sourceCode) generateMethod) 
@@ -74,27 +80,49 @@ ApplyChangeOnCandidateTest >> testDevirtualizationRefactoring [
 	| candidate newMethod originalSource |
 	method := ApplyChangeOnCandidateTest >> #example01.
 	originalSource := method sourceCode.
-	method ast hasBlock
-		ifFalse: [
-			candidate := StaticCallCandidate
-				             method: method
-				             callSite: method ast sendNodes first
-				             selector: method selector
-				             receiver: method ast sendNodes first receiver
-				             receiverType: Number.
 
-			newMethod := transformer getNewMethodOfDevirtualizing: candidate.
+	candidate := StaticCallCandidate
+		             method: method
+		             callSite: method ast sendNodes first
+		             selector: method selector
+		             receiver: method ast sendNodes first receiver
+		             receiverType: Number.
+
+	newMethod := transformer getNewMethodOfDevirtualizing: candidate.
 
 
-			self assert:
-				(newMethod ast sendNodes first isKindOf: RBStaticMessageNode).
+	self assert:
+		(newMethod ast sendNodes first isKindOf: RBStaticMessageNode).
 
-			self class addSelector: newMethod selector withMethod: newMethod ]
-		ifTrue: [ 1 halt ]
+	self class addSelector: newMethod selector withMethod: newMethod
+]
+
+{ #category : 'tests' }
+ApplyChangeOnCandidateTest >> testDevirtualizationRefactoringInsideBlock [
+
+	| candidate newMethod originalSource |
+	method := ApplyChangeOnCandidateTest >> #example02.
+	originalSource := method sourceCode.
+
+	candidate := StaticCallCandidate
+		             method: method
+		             callSite: method ast sendNodes first
+		             selector: method selector
+		             receiver: method ast sendNodes first receiver
+		             receiverType: Number.
+
+	newMethod := transformer getNewMethodOfDevirtualizing: candidate.
+
+
+	self assert:
+		(newMethod ast sendNodes first isKindOf: RBStaticMessageNode).
+
+	self class addSelector: newMethod selector withMethod: newMethod
 ]
 
 { #category : 'tests' }
 ApplyChangeOnCandidateTest >> testRunExample [
 
-	self assert: self example01 equals: 1
+	self assert: self example01 equals: 1.
+	self assert: self example02 equals: 1
 ]
