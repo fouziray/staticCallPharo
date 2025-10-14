@@ -33,7 +33,26 @@ traceRecordTree := ScpExecutionRecorder recordBlock: [
 targetMethodsDict := self visitRecord: traceRecordTree.
 targetMethodAssociationWithTypes :=(targetMethodsDict at: (self class >> #methodWithPolymorphicCallSites) ast sendNodes last ) associations first.
 
-self assert: (targetMethodsDict associations select: [ :messageTargetAndReceiver | messageTargetAndReceiver value keys size = 1   ]) equals: targetMethodsDict associations .
+self assert: (targetMethodsDict associations select: [ :messageTargetAndReceiver | messageTargetAndReceiver value keys size = 1    ]) equals: targetMethodsDict associations .
+self assert: targetMethodAssociationWithTypes value size equals: 3.
+
+self assert:  targetMethodAssociationWithTypes key equals: ProtoObject >> #class
+]
+
+{ #category : 'tests' }
+PolymorphicCallSitesTests >> testFalsePolymorphicIsMonoMorphicFiltering [
+
+| traceRecordTree targetMethodsDict targetMethodAssociationWithTypes |	
+traceRecordTree := ScpExecutionRecorder recordBlock: [ 
+
+	self methodWithPolymorphicCallSites
+  
+] as: ScpExecutionRecordTree.
+
+targetMethodsDict := self visitRecord: traceRecordTree.
+targetMethodAssociationWithTypes :=(targetMethodsDict at: (self class >> #methodWithPolymorphicCallSites) ast sendNodes last ) associations first.
+self assert: (targetMethodsDict associations select: [ :messageTargetAndReceiver | messageTargetAndReceiver value keys size = 1 and:[ messageTargetAndReceiver value values  first size > 1]   ]) first equals: targetMethodsDict associations first .
+
 self assert: targetMethodAssociationWithTypes value size equals: 3.
 
 self assert:  targetMethodAssociationWithTypes key equals: ProtoObject >> #class
