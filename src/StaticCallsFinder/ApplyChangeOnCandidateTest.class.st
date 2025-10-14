@@ -24,16 +24,6 @@ ApplyChangeOnCandidateTest >> retrieveOldAstOf: aMethod [
 ]
 
 { #category : 'running' }
-ApplyChangeOnCandidateTest >> rollbackBackedUpAst [
-
-	backupMethods keysAndValuesDo: [ :method :originalSource |
-		[
-		method methodClass
-			compile: originalSource
-			classified: method protocol ] ]
-]
-
-{ #category : 'running' }
 ApplyChangeOnCandidateTest >> setUp [ 
 backupMethods := Dictionary new.
 	transformer:= StaticCallSiteTransformer new.
@@ -43,7 +33,8 @@ backupMethods := Dictionary new.
 ApplyChangeOnCandidateTest >> tearDown [ 
 method isNotNil ifTrue:[
 	self retrieveOldAstOf: method].
-	self rollbackBackedUpAst.
+
+	transformer rollbackBackedUpAst
 ]
 
 { #category : 'tests' }
@@ -80,31 +71,26 @@ ApplyChangeOnCandidateTest >> testApplyChangeOntodo [
 { #category : 'tests' }
 ApplyChangeOnCandidateTest >> testDevirtualizationRefactoring [
 
-	| newAst candidate newMethod originalSource |
+	| candidate newMethod originalSource |
 	method := ApplyChangeOnCandidateTest >> #example01.
 	originalSource := method sourceCode.
-	method ast hasBlock ifFalse: [
-			backupMethods at: method put: originalSource.
-	candidate := StaticCallCandidate
-		             method: method
-		             callSite: (method ast sendNodes first)
-		             selector: method selector
-		             receiver: (method ast sendNodes first) receiver
-		             receiverType: Number.
-	newAst := transformer transformMethod: method forCandidate: candidate.
-	
-	ASTCache default at: newAst compiledMethod put: newAst.
-	
-	newMethod := newAst generateMethod.
+	method ast hasBlock
+		ifFalse: [
+			candidate := StaticCallCandidate
+				             method: method
+				             callSite: method ast sendNodes first
+				             selector: method selector
+				             receiver: method ast sendNodes first receiver
+				             receiverType: Number.
 
-	ASTCache default at: newAst compiledMethod put: newAst.
+			newMethod := transformer getNewMethodOfDevirtualizing: candidate.
 
-	self assert: ((newMethod ast sendNodes first) isKindOf: RBStaticMessageNode ).
-	
-	self class
-		addSelector:  newMethod selector
-		withMethod: newMethod.
-		] ifTrue: [  1 halt ]
+
+			self assert:
+				(newMethod ast sendNodes first isKindOf: RBStaticMessageNode).
+
+			self class addSelector: newMethod selector withMethod: newMethod ]
+		ifTrue: [ 1 halt ]
 ]
 
 { #category : 'tests' }
