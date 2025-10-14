@@ -373,6 +373,51 @@ self
 	self assert: interpreter staticCallLinkCounter equals: 2
 ]
 
+{ #category : 'tests - sends static' }
+VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCeStaticMethod [
+
+	| selector calledCompiledMethod staticCallerCompiledMethod staticCallerCogMethod builder |
+
+	calledCompiledMethod := self createMethodOopFromHostMethod: (Object >> #yourself).
+	
+	selector := self newOldSpaceObjectWithSlots: 0.
+	
+	staticCallerCompiledMethod := methodBuilder newMethod
+			 literalAt: 0 put: (memory integerObjectOf: 13);
+			 literalAt: 1 put: calledCompiledMethod;
+			 literalAt: 2 put: selector;
+			 literalAt: 3 put: memory nilObject;
+			 bytecodes: #[32 "PushLiteral 1" 
+				246 1 "Static Send literal at 2"
+				92 "Return top"];
+			 buildMethod.
+
+	staticCallerCogMethod := cogit cog: staticCallerCompiledMethod selector: memory nilObject.
+
+	builder := self machineCodeFrameBuilder.
+	builder returnAddress: callerAddress.
+	builder receiver: memory falseObject.
+	builder method: staticCallerCogMethod.
+	builder buildFrame.
+	
+	interpreter stackPointer: machineSimulator smalltalkStackPointerRegisterValue.
+	interpreter framePointer: machineSimulator framePointerRegisterValue.
+	
+	"Push receiver, arg, then send"
+	interpreter push: (memory integerObjectOf: 13).
+	interpreter push: 16r320000460 .
+	
+	"Sending the static message will come back to the machine code, we need to stop it and see if we are in the correct place"
+	[interpreter ceStaticSendInterpreted: calledCompiledMethod] 
+		on: ReenterMachineCode 
+		do: [] .
+
+	self assert: interpreter stackTop equals: (memory integerObjectOf: 13).
+	self assert: (interpreter stackValue: 1) equals: 16r320000460.
+	self assert: machineSimulator pc equals: cogit getEnterCogCodePopReceiverReg 
+
+]
+
 { #category : 'as yet unclassified' }
 VMStackToRegisterMappingStaticMessageSendTest >> testStaticSendOfCeStaticMethodAmelioration [
 
