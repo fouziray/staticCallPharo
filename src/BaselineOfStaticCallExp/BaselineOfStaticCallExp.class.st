@@ -23,8 +23,10 @@ BaselineOfStaticCallExp >> baseline: spec [
 			package: 'StaticCallExpExample'
 			with: [ spec requires: #( 'StaticCallExp' ) ];
 			package: 'StaticCallExp-Tests'
-			with: [ spec requires: #( 'StaticCallExp' ) ].
-
+			with: [ spec requires: #( 'StaticCallExp' ) ];
+			package: 'PolymorphicCallSites' with: [
+				spec repository:
+				'github://scopeo-project/scopeo' ].
 		spec
 			group: 'default'
 			with:

@@ -44,11 +44,14 @@ StaticCallSubclassRedefineTest >> createTestClassHierarchy [
 		^ ''subclass 1 implementation'''.
 
 	"Create second subclass that also overrides the method"
-	subClass2 := baseClass
-		             subclass: #StaticCallTestSub2
-		             instanceVariableNames: ''
-		             classVariableNames: ''
-		             package: 'StaticCallsFinder-TestClasses'.
+	subClass2 := baseClass classInstaller make: [ :builder |
+		             builder
+			             superclass: baseClass;
+			             name: #StaticCallTestSub2;
+			             slotsFromString: '';
+			             sharedVariablesFromString: '';
+			             package: 'StaticCallsFinder-TestClasses';
+			             environment: baseClass environment ].
 
 	subClass2 compile: 'processData
 		^ ''subclass 2 implementation'''
