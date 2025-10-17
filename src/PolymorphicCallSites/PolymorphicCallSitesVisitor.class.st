@@ -8,6 +8,14 @@ Class {
 	#package : 'PolymorphicCallSites'
 }
 
+{ #category : 'tests' }
+PolymorphicCallSitesVisitor class >> filterFakePoly: targetMethodsDict [
+
+	^ targetMethodsDict associations select: [ :messageTargetAndReceiver |
+		  messageTargetAndReceiver value keys size = 1 and: [
+			  messageTargetAndReceiver value values first size > 1 ] ]
+]
+
 { #category : 'initialization' }
 PolymorphicCallSitesVisitor >> initialize [
 
@@ -33,12 +41,12 @@ PolymorphicCallSitesVisitor >> visitMethodTrace: aScpMethodTrace [
 					ifPresent: [ :receivers |
 					receivers add: aScpMethodTrace receiver ]
 					ifAbsentPut: [
-						IdentitySet new
+						ClassSet new
 							add: aScpMethodTrace receiver;
 							yourself ] ]
 			ifAbsentPut: [
-				IdentityDictionary new
-					at: aScpMethodTrace node compiledMethod put: (IdentitySet new
+				Dictionary new
+					at: aScpMethodTrace node compiledMethod put: (ClassSet new
 							 add: aScpMethodTrace receiver;
 							 yourself);
 					yourself ] ].

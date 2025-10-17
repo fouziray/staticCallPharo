@@ -31,6 +31,12 @@ RBStaticMessageNode >> acceptVisitor: aProgramNodeVisitor [
 	^ aProgramNodeVisitor visitStaticMessageNode: self
 ]
 
+{ #category : 'testing' }
+RBStaticMessageNode >> isStaticCall [
+
+	^ true
+]
+
 { #category : 'accessing' }
 RBStaticMessageNode >> selector: aSelector [
 
