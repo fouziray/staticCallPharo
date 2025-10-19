@@ -88,13 +88,18 @@ ApplyChangeOnCandidateTest >> testDevirtualizationRefactoring [
 		             receiver: method ast sendNodes first receiver
 		             receiverType: Number.
 
+self assert: method bytecodes second equals: 128.
+
 	newMethod := transformer getNewMethodOfDevirtualizing: candidate.
 
 
 	self assert:
 		(newMethod ast sendNodes first isKindOf: RBStaticMessageNode).
-
-	self class addSelector: newMethod selector withMethod: newMethod
+1 halt.
+	self assert: newMethod bytecodes second equals: 246.
+	
+	self class addSelector: newMethod selector withMethod: newMethod.
+	1 halt.
 ]
 
 { #category : 'tests' }

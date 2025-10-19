@@ -29,10 +29,16 @@ StaticCallSiteTransformer >> backupMethod: method [
 { #category : 'as yet unclassified' }
 StaticCallSiteTransformer >> compileAstWithStaticNodes: newAst [
 
+	| newMethod |
 	ASTCache default at: newAst compiledMethod put: newAst.
 
-	newAst generateMethod.
-	ASTCache default at: newAst compiledMethod put: newAst
+	newMethod := newAst generateMethod.
+	ASTCache default at: newAst compiledMethod put: newAst.
+	newMethod classBinding value
+		addSelector: newMethod selector
+		withMethod: newMethod.
+		
+
 ]
 
 { #category : 'as yet unclassified' }
@@ -48,6 +54,7 @@ StaticCallSiteTransformer >> getNewMethodOfDevirtualizing: candidate [
 
 	newMethod := newAst generateMethod.
 	ASTCache default at: newAst compiledMethod put: newAst.
+	newMethod classBinding addSelector: newMethod selector withMethod: newMethod.
 	^ newMethod
 ]
 
@@ -154,7 +161,6 @@ aMethod ast acceptVisitor: visitor. "" ^ aStaticCallCandidate callSite replaceWi
 	^ (aStaticCallCandidate callSite isBinary not and: [
 		   aStaticCallCandidate receiverType ~= 'temp' ])
 		  ifTrue: [
-			1 halt.
 			  newNode := (RBStaticMessageNode fromMessageNode:
 				              aStaticCallCandidate callSite) staticClass:
 				             aStaticCallCandidate receiverType.
