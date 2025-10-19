@@ -97,12 +97,12 @@ PolymorphicCallSitesTests >> testFilteringDevirutalisableSites [
 { #category : 'tests' }
 PolymorphicCallSitesTests >> testRefactorFakePoly [
 
-	| document traceRecordTree devirtualizableNodes candidate method newMethod transformer fullMessageList simulator optTime baselinetime |
+	| document traceRecordTree devirtualizableNodes candidate method newMethod transformer fullMessageList simulator optTime baselinetime baselinetime2 optTime2 |
 	document := MicrodownWithStaticCallBenchmarkSuite new
 		            createSmallDocument.
 		
 	baselinetime := [ Microdown parse: document ] timeToRun .
-
+	baselinetime2 := [ Microdown parse: document ] timeToRun .
 	simulator := DevirtualizableCallSites new.
 	simulator block: [ Microdown parse: document ].
 	simulator execute.		
@@ -113,16 +113,16 @@ PolymorphicCallSitesTests >> testRefactorFakePoly [
 		               recordedTypes: devirtualizableNodes asDictionary;
 		               yourself.
 	transformer	getNewMethodOfDevirtualizingAll.
-		
+	
 		optTime:= [ Microdown parse: document ] timeToRun .
-
+		optTime2:= [ Microdown parse: document ] timeToRun .
 	"devirtualizableNodes  do:[ :each | (each isMessage and:[ each receiver isMessage not ]) ifTrue:[self remove: each. self add: each. ] ].
 	"
 
 
 	transformer rollbackBackedUpAst.
 	
-	{baselinetime. optTime } inspect.
+	{baselinetime. baselinetime2. optTime . optTime2 } inspect.
 ]
 
 { #category : 'tests' }
@@ -148,7 +148,6 @@ PolymorphicCallSitesTests >> testRefactorFakePolyWithBench [
 	transformer := StaticCallSiteTransformer new
 		               recordedTypes: fullMessageList asDictionary;
 		               yourself.
-	self halt.
 	devirtualizableNodes := devirtualizableNodes asOrderedCollection.
 	devirtualizableNodes do: [ :each |
 		(each key isMessage and: [ each key receiver isMessage not ])
@@ -170,7 +169,8 @@ PolymorphicCallSitesTests >> testRefactorFakePolyWithBench [
 
 
 
-		newMethod := transformer getNewMethodOfDevirtualizing: candidate ].
+		newMethod := transformer getNewMethodOfDevirtualizing: candidate .
+].
 	opt := [ MicrodownParser parse: document ] timeToRun.
 	{	unopt.
 		opt } inspect.
