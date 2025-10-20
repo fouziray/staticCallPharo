@@ -15,7 +15,6 @@ BaselineOfStaticCallExp >> baseline: spec [
 				spec repository:
 						'github://fouziray/pharo-vm:staticSendFixTrampolineFromJitToInterpreter/smalltalksrc' ];
 			package: 'StaticCallExp';
-			package: 'StaticCallsFinder';
 			package: 'StaticCallExpBuilder'
 			with: [ spec requires: #( 'VMMaker' 'StaticCallExp' ) ];
 			package: 'StaticCallExpBuilder-Tests'
@@ -27,6 +26,7 @@ BaselineOfStaticCallExp >> baseline: spec [
 			package: 'PolymorphicCallSites' with: [
 				spec repository:
 				'github://scopeo-project/scopeo' ].
+			
 		spec
 			group: 'default'
 			with:
@@ -34,5 +34,8 @@ BaselineOfStaticCallExp >> baseline: spec [
 		spec
 			group: 'buildAVM'
 			with: #( 'StaticCallExpBuilder-Tests' 'StaticCallExp-Tests' ).
+		spec
+			group: 'min'
+			with: #(  'StaticCallExp-Tests' ).
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]

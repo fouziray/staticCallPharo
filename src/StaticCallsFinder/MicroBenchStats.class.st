@@ -11,6 +11,63 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+MicroBenchStats class >> benchParsingMicroDown [
+
+	<script>
+	| document simulator devirtualizableNodes transformer baselineParse optParse |
+	"before opt"
+	baselineParse := self reportResults:
+		                 (DocParsingBench
+			                  runOnly: #benchParseDocument
+			                  iterations: 30).
+	"after opt"
+	document := DocParsingBench smallDocument.
+	simulator := DevirtualizableCallSites new.
+	simulator block: [ Microdown parse: document ].
+	simulator execute.
+
+	devirtualizableNodes := simulator getAllCallSites.
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes: devirtualizableNodes asDictionary;
+		               yourself.
+	transformer getNewMethodOfDevirtualizingAll.
+	optParse := self reportResults: (DocParsingBench
+			             runOnly: #benchParseDocument
+			             iterations: 30).
+	transformer rollbackBackedUpAst.
+	^ {baselineParse , optParse} inspect
+]
+
+{ #category : 'as yet unclassified' }
+MicroBenchStats class >> benchParsingMicroDown2 [
+
+	<script>
+	| document simulator devirtualizableNodes transformer baselineParse optParse |
+
+	"after opt"
+	document := DocParsingBench smallDocument.
+	simulator := DevirtualizableCallSites new.
+	simulator block: [ Microdown parse: document ].
+	simulator execute.
+
+	devirtualizableNodes := simulator getAllCallSites.
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes: devirtualizableNodes asDictionary;
+		               yourself.
+	transformer getNewMethodOfDevirtualizingAll.
+	optParse := self reportResults: (DocParsingBench
+			             runOnly: #benchParseDocument
+			             iterations: 30).
+	transformer rollbackBackedUpAst.
+		"before opt"
+	baselineParse := self reportResults:
+		                 (DocParsingBench
+			                  runOnly: #benchParseDocument
+			                  iterations: 30).
+	^ {baselineParse , optParse} inspect
+]
+
+{ #category : 'as yet unclassified' }
 MicroBenchStats class >> benchSend64MsgMega [
 
 	<script>
@@ -171,7 +228,7 @@ MicroBenchStats >> reportResults: aResult [
 { #category : 'running' }
 MicroBenchStats >> setUp [
 
-	self warmUp.
+
 	program := BMicroVariedInput iterationNumber: 1000.
 
 	

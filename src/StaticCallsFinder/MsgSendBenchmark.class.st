@@ -25,6 +25,7 @@ MsgSendBenchmark >> initIcType [
 MsgSendBenchmark >> setUp [
 
  	self initIcType.
+		self warmUp. 
 	super setUp
 ]
 
