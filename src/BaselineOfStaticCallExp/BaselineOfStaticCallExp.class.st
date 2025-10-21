@@ -25,8 +25,13 @@ BaselineOfStaticCallExp >> baseline: spec [
 			with: [ spec requires: #( 'StaticCallExp' ) ];
 			package: 'PolymorphicCallSites' with: [
 				spec repository:
-				'github://scopeo-project/scopeo' ].
+				'github://scopeo-project/scopeo' ];
+			package: 'StaticCallsFinder' with: [
+				spec repository: 'github://smarr/SMark'
+				].
 			
+			
+				
 		spec
 			group: 'default'
 			with:
