@@ -11,6 +11,8 @@ BaselineOfStaticCallExp >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ "Packages"
 		spec
+			baseline: 'SMark'
+			with: [ spec repository: 'github://smarr/SMark' ];
 			baseline: 'VMMaker' with: [
 				spec repository:
 						'github://fouziray/pharo-vm:staticSendFixTrampolineFromJitToInterpreter/smalltalksrc' ];
@@ -23,15 +25,12 @@ BaselineOfStaticCallExp >> baseline: spec [
 			with: [ spec requires: #( 'StaticCallExp' ) ];
 			package: 'StaticCallExp-Tests'
 			with: [ spec requires: #( 'StaticCallExp' ) ];
-			package: 'PolymorphicCallSites' with: [
-				spec repository:
-				'github://scopeo-project/scopeo' ];
-			package: 'StaticCallsFinder' with: [
-				spec repository: 'github://smarr/SMark'
-				].
-			
-			
-				
+			package: 'PolymorphicCallSites'
+			with: [ spec repository: 'github://scopeo-project/scopeo' ];
+			package: 'StaticCallsFinder' with: [ spec requires: #( 'SMark' ) ].
+
+
+
 		spec
 			group: 'default'
 			with:
@@ -39,8 +38,6 @@ BaselineOfStaticCallExp >> baseline: spec [
 		spec
 			group: 'buildAVM'
 			with: #( 'StaticCallExpBuilder-Tests' 'StaticCallExp-Tests' ).
-		spec
-			group: 'min'
-			with: #(  'StaticCallExp-Tests' ).
+		spec group: 'min' with: #( 'StaticCallExp-Tests' ).
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
