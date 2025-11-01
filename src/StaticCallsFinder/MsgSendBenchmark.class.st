@@ -21,6 +21,12 @@ MsgSendBenchmark >> initIcType [
 	self subclassResponsibility
 ]
 
+{ #category : 'benchmarking' }
+MsgSendBenchmark >> problemSize [ 
+
+	^ 10000
+]
+
 { #category : 'running' }
 MsgSendBenchmark >> setUp [
 

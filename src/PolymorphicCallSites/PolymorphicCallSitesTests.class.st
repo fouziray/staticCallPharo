@@ -112,8 +112,9 @@ PolymorphicCallSitesTests >> testRefactorFakePoly [
 	transformer := StaticCallSiteTransformer new
 		               recordedTypes: devirtualizableNodes asDictionary;
 		               yourself.
+		1 halt.
 	transformer	getNewMethodOfDevirtualizingAll.
-	
+	1halt.
 		optTime:= [ Microdown parse: document ] timeToRun .
 		optTime2:= [ Microdown parse: document ] timeToRun .
 	"devirtualizableNodes  do:[ :each | (each isMessage and:[ each receiver isMessage not ]) ifTrue:[self remove: each. self add: each. ] ].
