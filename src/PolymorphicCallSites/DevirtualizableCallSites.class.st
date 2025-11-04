@@ -162,7 +162,7 @@ DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver a
 				yourself ]
 		]
 		ifAbsentPut: [ IdentityDictionary new
-			at: aMethod put: (IdentitySet new
+			at: aMethod put: (Bag new
 				add: aReceiver class;
 				yourself);
 			yourself
