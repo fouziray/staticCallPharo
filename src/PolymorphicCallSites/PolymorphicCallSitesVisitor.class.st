@@ -1,6 +1,6 @@
 Class {
 	#name : 'PolymorphicCallSitesVisitor',
-	#superclass : 'ScpExecutionRecordVisitor',
+	#superclass : 'CallSitesFrequencyVisitor',
 	#instVars : [
 		'messageExecutionsDictionary'
 	],
@@ -8,26 +8,18 @@ Class {
 	#package : 'PolymorphicCallSites'
 }
 
+{ #category : 'accessing' }
+PolymorphicCallSitesVisitor class >> filter: aListOfMessageReceiversAssociations [
+
+	^ self filterFakePoly: aListOfMessageReceiversAssociations
+]
+
 { #category : 'tests' }
 PolymorphicCallSitesVisitor class >> filterFakePoly: targetMethodsDict [
 
 	^ targetMethodsDict associations select: [ :messageTargetAndReceiver |
 		  messageTargetAndReceiver value keys size = 1 and: [
 			  messageTargetAndReceiver value values first asIdentitySet size > 1 ] ]
-]
-
-{ #category : 'tests' }
-PolymorphicCallSitesVisitor class >> getCallFrequencyForMessages: targetMethodsDict [
-
-	| dict |
-	dict := Dictionary new.
-
-	targetMethodsDict do: [ :messageTargetAndReceiver |
-	dict at: messageTargetAndReceiver  put: (messageTargetAndReceiver value values inject:0 into:[:sum :each | 
-		 (each isKindOf: Bag) ifTrue: [ sum + each  asDictionary values sum ] ifFalse: [ sum + 1 ] ]).
-	].
-
-	^ dict
 ]
 
 { #category : 'initialization' }
