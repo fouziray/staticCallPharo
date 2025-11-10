@@ -108,11 +108,10 @@ PolymorphicCallSitesTests >> testRefactorFakePoly [
 	simulator execute.		
 
 	devirtualizableNodes := simulator getAllCallSites.
-
+1 halt.
 	transformer := StaticCallSiteTransformer new
 		               recordedTypes: devirtualizableNodes asDictionary;
 		               yourself.
-		1 halt.
 	transformer	getNewMethodOfDevirtualizingAll.
 	1halt.
 		optTime:= [ Microdown parse: document ] timeToRun .
