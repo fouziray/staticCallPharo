@@ -22,6 +22,22 @@ PolymorphicCallSitesVisitor class >> filterFakePoly: targetMethodsDict [
 			  messageTargetAndReceiver value values first asIdentitySet size > 1 ] ]
 ]
 
+{ #category : 'serialize' }
+PolymorphicCallSitesVisitor class >> serializeMessage: aRBMessageNode [
+aRBMessageNode ifNil: [ ^ 'nil'].
+	^ aRBMessageNode methodNode compiledMethod classBinding value name
+	  , '/' , aRBMessageNode methodNode selector , '/'
+	  ,
+	  (aRBMessageNode methodNode sendNodes indexOf: aRBMessageNode)
+		  asString
+]
+
+{ #category : 'as yet unclassified' }
+PolymorphicCallSitesVisitor class >> transformSummaryToBeSerializable: aSummaryDict [
+
+	^ aSummaryDict associations collect: [ :a | (self serializeMessage: a key )-> (IdentityDictionary newFromKeys: (a value keys collect: [ :e | e className ,'/',e selector ] )  andValues: (a value values collect: [ :v | (Bag newFrom: (v collect:[:e | e className ]))])) ]
+]
+
 { #category : 'initialization' }
 PolymorphicCallSitesVisitor >> initialize [
 

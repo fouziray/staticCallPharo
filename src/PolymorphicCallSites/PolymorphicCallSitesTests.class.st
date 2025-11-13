@@ -8,6 +8,39 @@ Class {
 	#package : 'PolymorphicCallSites'
 }
 
+{ #category : 'deserializing' }
+PolymorphicCallSitesTests class >> getMessageFromIndex: aString [
+
+	| parts class method index |
+	parts := aString splitOn: '/'.
+	class := parts first asClassVariable.
+	method := (OpalCompiler new
+		           source: parts first;
+		           evaluate)  lookupSelector: parts second asSymbol.
+	method ifNil: [ ^ 'nil' ].
+	index := parts third.
+	^ method ast sendNodes at: index asInteger
+]
+
+{ #category : 'deserializing' }
+PolymorphicCallSitesTests class >> reviveClassesMethodMessages: aCollection [
+
+	^ aCollection collect: [ :e |
+		  e key
+			  ifNotNil: [
+				  (self getMessageFromIndex: e key) -> (IdentityDictionary
+					   newFromKeys: (e value keys collect: [ :methodPathString |
+							    ((methodPathString splitOn: '/') first
+								     asClassInEnvironment: self class environment)
+								    lookupSelector:
+								    (methodPathString splitOn: '/') second asSymbol ])
+					   andValues: (e value values collect: [ :v |
+							    Bag newFrom:
+								    (v collect: [ :className |
+									     OpalCompiler evaluate: className ]) ])) ]
+			  ifNil: [ nil ] ]
+]
+
 { #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> methodWithPolymorphicCallSiteNonDevirtualizable [
 
@@ -21,6 +54,15 @@ PolymorphicCallSitesTests >> methodWithPolymorphicCallSiteNonDevirtualizable [
 PolymorphicCallSitesTests >> methodWithPolymorphicCallSites [
 
 	{ Object new. 3. 4.0 } do: [:each | each class ]
+]
+
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> recoverVeritasCSVDataInto [
+	| object |
+	object := 'mydata.ston' asFileReference readStreamDo: [ :stream |
+    STON fromStream: stream ].
+
+	self reviveClassesMethodMessages: object.
 ]
 
 { #category : 'running' }
@@ -123,6 +165,29 @@ PolymorphicCallSitesTests >> testRefactorFakePoly [
 	transformer rollbackBackedUpAst.
 	
 	{baselinetime. baselinetime2. optTime . optTime2 } inspect.
+]
+
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> testRefactorFakePolyInVeritas [
+
+	| document devirtualizableNodes |
+	document := MicrodownWithStaticCallBenchmarkSuite new
+		            createSmallDocument.
+		
+	devirtualizableNodes := self recoverVeritasCSVDataInto.
+1 halt.
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes: devirtualizableNodes asDictionary;
+		               yourself.
+	transformer	getNewMethodOfDevirtualizingAll.
+	1halt.
+	
+	"devirtualizableNodes  do:[ :each | (each isMessage and:[ each receiver isMessage not ]) ifTrue:[self remove: each. self add: each. ] ].
+	"
+
+
+	transformer rollbackBackedUpAst.
+	
 ]
 
 { #category : 'tests' }
