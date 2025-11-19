@@ -170,15 +170,13 @@ PolymorphicCallSitesTests >> testRefactorFakePoly [
 { #category : 'veritas' }
 PolymorphicCallSitesTests >> testRefactorFakePolyInVeritas [
 
-	| document devirtualizableNodes |
-	document := MicrodownWithStaticCallBenchmarkSuite new
-		            createSmallDocument.
-		
-	devirtualizableNodes := self recoverVeritasCSVDataInto.
-1 halt.
+	| devirtualizableNodes |
+	devirtualizableNodes := DEVIRT_VERITAS1.
+	
 	transformer := StaticCallSiteTransformer new
-		               recordedTypes: devirtualizableNodes asDictionary;
-		               yourself.
+		               recordedTypes: (devirtualizableNodes select: [:e | e key methodNode compiledMethod classBinding value package name beginsWithAnyOf:{ 'DataFrame'. 'Neo' }]) asDictionary;
+		               yourself.	
+	1 halt.
 	transformer	getNewMethodOfDevirtualizingAll.
 	1halt.
 	

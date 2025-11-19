@@ -16,10 +16,11 @@ OCASTTranslator >> emitStaticMessageNode: aStaticMessageNode [
 			aStaticMessageNode staticClass isClass ifTrue: [
 				(Smalltalk globals classNamed:
 					 aStaticMessageNode staticClass className) ifNotNil: [
-				
-					methodBuilder sendStatic:
-						(aStaticMessageNode staticClass lookupSelector:
-							 (aStaticMessageNode selector substrings: '_') last asSymbol) ] ] ]
+					target:= (aStaticMessageNode staticClass lookupSelector:
+							 (aStaticMessageNode selector substrings: '_') last asSymbol).
+							target ifNil: [ methodBuilder send: aStaticMessageNode selector ]ifNotNil: 
+					[methodBuilder sendStatic: target ]
+						 ] ] ]
 		ifNil: [
 			"|targetResolver|
 			targetResolver := TargetResolver resolveSelector: aStaticMessageNode selector.
