@@ -277,6 +277,27 @@ PolymorphicCallSitesTests >> testRefactorTwoNestedCallsInOneMessage [
 	transformer rollbackBackedUpAst
 ]
 
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> testRefactorVeritasHoneyGinger [
+
+	| devirtualizableNodes |
+	devirtualizableNodes := STORE2.
+	
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes: devirtualizableNodes ;
+		               yourself.	
+	1 halt.
+	transformer	getNewMethodOfDevirtualizingAll.
+	1halt.
+	
+	"devirtualizableNodes  do:[ :each | (each isMessage and:[ each receiver isMessage not ]) ifTrue:[self remove: each. self add: each. ] ].
+	"
+
+
+	transformer rollbackBackedUpAst.
+	
+]
+
 { #category : 'tests' }
 PolymorphicCallSitesTests >> testTruePolymorphic [
 
