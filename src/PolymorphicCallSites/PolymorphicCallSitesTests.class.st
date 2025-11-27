@@ -168,6 +168,69 @@ PolymorphicCallSitesTests >> testRefactorFakePoly [
 ]
 
 { #category : 'veritas' }
+PolymorphicCallSitesTests >> testRefactorFakePolyInCormas [
+
+	| devirtualizableNodes |
+	devirtualizableNodes := STORECormasFakePoly.
+	
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes:(( devirtualizableNodes associations select: [:e | e key ifNotNil:[ e key methodNode compiledMethod classBinding value package name beginsWithAnyOf:{ 'Kernel' }] ifNil:[ false ] ] ) asDictionary );
+		               yourself.	
+
+	transformer	getNewMethodOfDevirtualizingAll.
+	1halt.
+	
+	"devirtualizableNodes  do:[ :each | (each isMessage and:[ each receiver isMessage not ]) ifTrue:[self remove: each. self add: each. ] ].
+	"
+
+
+	transformer rollbackBackedUpAst.
+	
+]
+
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> testRefactorFakePolyInTrivialCase [
+
+	| devirtualizableNodes |
+	devirtualizableNodes := STORECormasFakePoly.
+	
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes:(( devirtualizableNodes associations select: [:e | e key ifNotNil:[ e key methodNode compiledMethod classBinding value package name beginsWithAnyOf:{ 'Kernel' }] ifNil:[ false ] ] ) asDictionary );
+		               yourself.	
+
+	transformer	getNewMethodOfDevirtualizingAll.
+	1halt.
+	
+	"devirtualizableNodes  do:[ :each | (each isMessage and:[ each receiver isMessage not ]) ifTrue:[self remove: each. self add: each. ] ].
+	"
+
+
+	transformer rollbackBackedUpAst.
+	
+]
+
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> testRefactorFakePolyInTrivialCase1 [
+
+	| devirtualizableNodes |
+	devirtualizableNodes := TRIVIALCase1.
+	
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes: devirtualizableNodes asDictionary ;
+		               yourself.	
+
+	transformer	getNewMethodOfDevirtualizingAll.
+	1halt.
+	
+	"devirtualizableNodes  do:[ :each | (each isMessage and:[ each receiver isMessage not ]) ifTrue:[self remove: each. self add: each. ] ].
+	"
+
+
+	transformer rollbackBackedUpAst.
+	
+]
+
+{ #category : 'veritas' }
 PolymorphicCallSitesTests >> testRefactorFakePolyInVeritas [
 
 	| devirtualizableNodes |
@@ -321,6 +384,22 @@ targetMethodAssociationWithTypes :=(targetMethodsDict at: (self class >> #method
 self assert: targetMethodAssociationWithTypes value size equals: 1.
 
 self assert:  targetMethodAssociationWithTypes key equals: Object>>#defaultLabel.
+]
+
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> trivialCase1 [
+
+	{Object new. String new. Class . OrderedCollection newFrom: { 2. 3 . 5.3 } . 'sasaa'}  collect:[ :e | e printString ]
+
+
+]
+
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> trivialCase2 [
+
+	{Object new. String new. Class . 3 . 2.34 . 'sasaa'}  collect:[ :e | e class ]
+
+
 ]
 
 { #category : 'as yet unclassified' }

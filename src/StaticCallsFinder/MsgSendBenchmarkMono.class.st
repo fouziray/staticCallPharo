@@ -11,3 +11,11 @@ MsgSendBenchmarkMono >> initIcType [
 
 	icType := MonoIcSite with: self
 ]
+
+{ #category : 'veritas' }
+MsgSendBenchmarkMono >> trivialCase1 [
+
+	{Object new. String new. Class . OrderedCollection newFrom: { 2. 3 . 5.3 } . 'sasaa'}  collect:[ :e | e printString ]
+
+
+]

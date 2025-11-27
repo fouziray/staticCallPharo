@@ -8,14 +8,6 @@ Class {
 	#package : 'PolymorphicCallSites'
 }
 
-{ #category : 'instance creation' }
-RebenchResult class >> on: aResult [
-
-	           ^ self new
-		             result: aResult;
-		             yourself
-]
-
 { #category : 'printing' }
 RebenchResult >> printOn: aStream [
 

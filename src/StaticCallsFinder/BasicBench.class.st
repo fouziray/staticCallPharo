@@ -21,6 +21,20 @@ BasicBench class >> bench: message [
 ]
 
 { #category : 'benchmarking' }
+BasicBench class >> bench: message iterations: number [
+
+	| runs |
+	runs := (1 to: self iterations) collect: [ :i |
+		        [
+		        number timesRepeat: [
+			        MsgSendBenchmarkMono new
+				        setUp;
+				        perform: message ] ] timeToRun ].
+	
+	^ { runs average. (runs collect: #asMilliSeconds) stdev }
+]
+
+{ #category : 'benchmarking' }
 BasicBench class >> benchBaseline [
 
 	^ self bench: #benchSendsTo64Yourselves2
