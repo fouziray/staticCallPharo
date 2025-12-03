@@ -88,28 +88,32 @@ MicrodownWithStaticCallBenchmarkSuite >> appendTopCandidates: aStream [
 MicrodownWithStaticCallBenchmarkSuite >> applyOptimizations [
 	"Simulate applying static call optimizations"
 
-	| hotSpots backupMethods transformer newMethod |
+	| hotSpots backupMethods transformer |
 	hotSpots := results at: #candidates.
 	backupMethods := Dictionary new.
 	transformer := StaticCallSiteTransformer new.
 
 
 	hotSpots do: [ :candidate |
-		| method originalSource newAst newSource |
+		| method originalSource newAst newSource newMethod |
 		method := candidate method.
 		originalSource := method sourceCode.
-		backupMethods at: method put: originalSource.
+		method ast hasBlock ifFalse: [
+			backupMethods at: method put: originalSource.
 
-		newAst := transformer
-			          transformMethod: method
-			          forCandidate: candidate.
-		newMethod := newAst generateMethod.
+			newAst := transformer
+				          transformMethod: method
+				          forCandidate: candidate.
+			ASTCache default at: newAst compiledMethod put: newAst.
 
-		method methodClass
-			addSelectorSilently: newMethod selector
-			withMethod: newMethod.
+			newMethod := newAst generateMethod.
+			ASTCache default at: newAst compiledMethod put: newAst.
 
-		optimizedMethods add: candidate method ].
+			method methodClass
+				addSelectorSilently: newMethod selector
+				withMethod: newMethod.
+
+			optimizedMethods add: candidate method ] ].
 	results at: #backupMethods put: backupMethods.
 	results at: #optimizedMethodCount put: optimizedMethods size
 ]
@@ -326,13 +330,13 @@ MicrodownWithStaticCallBenchmarkSuite >> measureBaselinePerformance [
 	
 	documents keysAndValuesDo: [ :size :content |
 		| time parser |
-		parser := MicrodownParser.
+		parser := Microdown.
 		
 		"Warm up"
-		3 timesRepeat: [ MicrodownParser parse: content ].
+		"3 timesRepeat: [ parser parse: content ]."
 		
 		"Measure"
-		time := [ 10 timesRepeat: [ parser parse: content ] ] timeToRun.
+		time := [ 3 timesRepeat: [ parser parse: content ] ] timeToRun.
 		times at: size put: time / 10.0. "Average per parse"
 		
 		Transcript show: '  ', size asString, ': ', (time / 10.0) asString, 'ms average'; cr.
@@ -346,20 +350,18 @@ MicrodownWithStaticCallBenchmarkSuite >> measureBaselinePerformance [
 { #category : 'as yet unclassified' }
 MicrodownWithStaticCallBenchmarkSuite >> measureOptimizedPerformance [ 
 	"Measure performance with simulated optimizations"
-	| documents times improvementFactor |
+	| documents times improvementFactor parser |
 	documents := results at: #testDocuments.
 	times := Dictionary new.
+	improvementFactor :=Dictionary new.
 	
-	"Simulate 5-15% improvement based on static call density"
-	improvementFactor := self calculateImprovementFactor.
-	
-	Transcript show: 'Measuring optimized performance (simulated)...'; cr.
-	Transcript show: 'Expected improvement factor: ', improvementFactor asString; cr.
-	
+	parser := MicrodownParser.
 	documents keysAndValuesDo: [ :size :content |
-		| baseTime optimizedTime |
+		| baseTime optimizedTime time |
 		baseTime := (results at: #baselineTimes) at: size.
-		optimizedTime := baseTime * (1.0 - improvementFactor).
+		time := [ 3 timesRepeat: [ parser parse: content ] ] timeToRun.
+		times at: size put: time / 3.0. "Average per parse"
+		improvementFactor at: size put:  (baseTime - optimizedTime) / baseTime .
 		times at: size put: optimizedTime.
 		
 		Transcript show: '  ', size asString, ': ', optimizedTime asString, 'ms (', 
@@ -368,6 +370,7 @@ MicrodownWithStaticCallBenchmarkSuite >> measureOptimizedPerformance [
 	].
 	
 	results at: #optimizedTimes put: times.
+	results at: #improvementFactor put: improvementFactor.
 	optimizedTime := times at: #book ifAbsent: [ times values min ].
 
 ]
@@ -429,16 +432,13 @@ MicrodownWithStaticCallBenchmarkSuite >> rollbackOptimizations [
 	| backupMethods |
 	backupMethods := results at: #backupMethods ifAbsent: [ Dictionary new ].
 	
-	Transcript show: 'Rolling back ', backupMethods size asString, ' optimizations...'; cr.
+	
 	
 	backupMethods keysAndValuesDo: [ :method :originalSource |
 		[ 
 			method methodClass compile: originalSource classified: method protocol.
-			Transcript show: '  ✓ Restored: ', method methodClass name, '>>', method selector; cr.
-		] on: Error do: [ :error |
-			Transcript show: '   Failed to restore: ', method methodClass name, 
-			                 '>>', method selector, ' (', error messageText, ')'; cr.
-		].
+			
+		] 
 	].
 	
 	optimizedMethods := Set new.

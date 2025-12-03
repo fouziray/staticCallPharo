@@ -18,7 +18,7 @@ StaticCallVisitor >> analyzeReceiver: aReceiverNode [
 	(aReceiverNode isLiteralNode) ifTrue: [
 		^ #literal ].
 	aReceiverNode isGlobalVariable ifTrue: [ ^ #global ].
-	aReceiverNode isVariableNode ifTrue: [
+	aReceiverNode isVariable ifTrue: [
 		aReceiverNode name = 'self' ifTrue: [ ^ #self ].
 		aReceiverNode name = 'super' ifTrue: [ ^ #super ].
 		(aReceiverNode name endsWith: 'class') ifTrue: [ ^ #class ].
@@ -32,6 +32,12 @@ StaticCallVisitor >> candidates [
 	^ candidates
 
 
+]
+
+{ #category : 'as yet unclassified' }
+StaticCallVisitor >> evaluatePartial: aMessageNode [
+
+	1 halt.
 ]
 
 { #category : 'initialization' }
@@ -64,28 +70,32 @@ StaticCallVisitor >> method: aMethod [
 ]
 
 { #category : 'initialization' }
-StaticCallVisitor >> visitMessageNode: aMessageNode [ 
+StaticCallVisitor >> visitMessageNode: aMessageNode [
 	"Main visitor method for message nodes (method calls)"
-	| receiverType candidate |
-	
-	receiverType := self analyzeReceiver: aMessageNode receiver.
-	
-	"Create candidate if it looks promising"
-(	({ #self. #super . #class . #global. #literal } includes: receiverType) or: [
-	 (receiverType = #temp and: [ self hasStableType: aMessageNode receiver ])]) 
-		ifTrue: [
 
-			candidate := StaticCallCandidate new
-				callSite: aMessageNode;
-				selector: aMessageNode selector;
-				receiver: aMessageNode receiver;
-				receiverType: receiverType;
-				method: method;
-				yourself.
-			candidates add: candidate
-		].
-	
+	| receiverType candidate onlyDefinedUp |
+	receiverType := self analyzeReceiver: aMessageNode receiver.
+
+	"Create candidate if it looks promising"
+	(receiverType = #message) ifTrue: [ self evaluatePartial: aMessageNode receiver  ].
+	(({ #self. #super. #class. #global. #literal } includes: receiverType)
+		 or: [
+			 receiverType = #temp and: [
+				 self hasStableType: aMessageNode receiver ] ]) ifTrue: [
+			onlyDefinedUp := ((method classBinding value lookupSelector: aMessageNode selector) isNotNil) and:[ (method classBinding value allSubclasses anySatisfy: [ :subClass | subClass includesSelector: #processData ]) not].
+			
+			onlyDefinedUp ifTrue:[
+				candidate := StaticCallCandidate new
+			             callSite: aMessageNode;
+			             selector: aMessageNode selector;
+			             receiver: aMessageNode receiver;
+			             receiverType: receiverType;
+			             method: method;
+			             yourself.
+		candidates add: candidate
+				].
+		 ].
+
 	"Continue visiting children"
 	super visitMessageNode: aMessageNode
-
 ]
