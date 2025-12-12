@@ -136,6 +136,26 @@ PolymorphicCallSitesTests >> testFilteringDevirutalisableSites [
 	self assert: devirtualisable first value asArray first size > 1
 ]
 
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> testMooseDevirtualize [
+
+	|   devirtualizableNodes   |
+	
+	devirtualizableNodes := MOO.
+
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes: devirtualizableNodes asDictionary;
+		               yourself.
+	transformer	getNewMethodOfDevirtualizingAll.
+	1halt.
+	
+	"devirtualizableNodes  do:[ :each | (each isMessage and:[ each receiver isMessage not ]) ifTrue:[self remove: each. self add: each. ] ].
+	"
+RollbackImageStaticBytecodes action: [ transformer rollbackBackedUpAst ].
+	transformer rollbackBackedUpAst.
+	
+]
+
 { #category : 'tests' }
 PolymorphicCallSitesTests >> testRefactorFakePoly [
 
