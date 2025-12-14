@@ -147,12 +147,23 @@ PolymorphicCallSitesTests >> testMooseDevirtualize [
 		               recordedTypes: devirtualizableNodes asDictionary;
 		               yourself.
 	transformer	getNewMethodOfDevirtualizingAll.
+		RollbackImageStaticBytecodes action: [ transformer rollbackBackedUpAst ].
 	1halt.
 	
 	"devirtualizableNodes  do:[ :each | (each isMessage and:[ each receiver isMessage not ]) ifTrue:[self remove: each. self add: each. ] ].
 	"
-RollbackImageStaticBytecodes action: [ transformer rollbackBackedUpAst ].
+
 	transformer rollbackBackedUpAst.
+	
+]
+
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> testMooseIsDevirtualized [
+
+	|   devirtualizableNodes   |
+	
+	devirtualizableNodes := MOO.
+	self assert: (((MOO collect:#key ) collect:#methodNode) select: #hasStaticCall ) size > 0 .
 	
 ]
 
