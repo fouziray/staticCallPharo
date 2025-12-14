@@ -167,6 +167,16 @@ PolymorphicCallSitesTests >> testMooseIsDevirtualized [
 	
 ]
 
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> testMooseIsRevirtualized [
+
+	|   devirtualizableNodes   |
+	
+	devirtualizableNodes := MOO.
+	self assert: (((MOO collect:#key ) collect:#methodNode) select: #hasStaticCall ) size = 0 .
+	
+]
+
 { #category : 'tests' }
 PolymorphicCallSitesTests >> testRefactorFakePoly [
 
