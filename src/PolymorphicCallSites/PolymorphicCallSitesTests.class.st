@@ -171,8 +171,12 @@ PolymorphicCallSitesTests >> testMooseIsDevirtualized [
 PolymorphicCallSitesTests >> testMooseIsRevirtualized [
 
 	|   devirtualizableNodes   |
-	
+	RollbackImageStaticBytecodes default rollbackAction.
 	devirtualizableNodes := MOO.
+	RollbackImageStaticBytecodes default rollbackAst: (((MOO collect:#key ) collect:#methodNode) select: #hasStaticCall ).
+	
+	
+	RollbackImageStaticBytecodes default replaceSMsgWithNormal.
 	self assert: (((MOO collect:#key ) collect:#methodNode) select: #hasStaticCall ) size = 0 .
 	
 ]

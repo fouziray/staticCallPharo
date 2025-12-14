@@ -31,6 +31,20 @@ RBStaticMessageNode >> acceptVisitor: aProgramNodeVisitor [
 	^ aProgramNodeVisitor visitStaticMessageNode: self
 ]
 
+{ #category : 'instance creation' }
+RBStaticMessageNode >> fromSelfCreateMessageNode [
+
+	|  newMessageNode |
+	newMessageNode := RBMessageNode new.
+
+	"Copy all instance variables from superclass"
+	RBMessageNode allInstVarNames do: [ :varName |
+		newMessageNode
+			instVarNamed: varName
+			put: (self instVarNamed: varName) ].
+	^ newMessageNode
+]
+
 { #category : 'testing' }
 RBStaticMessageNode >> isStaticCall [
 
