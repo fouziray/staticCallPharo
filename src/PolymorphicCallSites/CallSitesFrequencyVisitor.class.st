@@ -53,12 +53,14 @@ CallSitesFrequencyVisitor class >> countFrequencyOfMessage: associations [
 CallSitesFrequencyVisitor class >> doPieChart: aDictionary [
 
 	| frequencyPerCallNature typeOfMessageAndCount |
+	1 halt.
 	frequencyPerCallNature := Dictionary new.
 	aDictionary associations do: [ :each |
-		typeOfMessageAndCount := self callNatureOf: each key.
+		typeOfMessageAndCount := self callNatureOf: each .
 		frequencyPerCallNature
 			at: typeOfMessageAndCount key
 			put: typeOfMessageAndCount value ].
+	
 	^ frequencyPerCallNature
 ]
 

@@ -10,5 +10,5 @@ Class {
 MonoIcSite >> setUp [
 
 	self reinitCaller.
-	3 timesRepeat: [ self caller send: Object ]
+	3 timesRepeat: [ self caller performSend: Object ]
 ]

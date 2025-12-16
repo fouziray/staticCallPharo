@@ -12,11 +12,11 @@ MegaIcSite >> setUp [
 	self reinitCaller.
 	3 timesRepeat: [
 		caller
-			send: Object;
-			send: Set;
-			send: 1;
-			send: Object new;
-			send: 'ejejee';
-			send: String;
-			send: true ]
+			performSend: Object;
+			performSend: Set;
+			performSend: 1;
+			performSend: Object new;
+			performSend: 'ejejee';
+			performSend: String;
+			performSend: true ]
 ]

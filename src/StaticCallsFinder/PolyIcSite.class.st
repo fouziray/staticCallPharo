@@ -10,5 +10,5 @@ Class {
 PolyIcSite >> setUp [
 
 	self reinitCaller.
-	3 timesRepeat:  [caller send: Object; send: Set; send: 1 ].
+	3 timesRepeat:  [caller performSend: Object; performSend: Set; performSend: 1 ].
 ]

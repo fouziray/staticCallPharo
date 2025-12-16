@@ -166,7 +166,7 @@ MicroBenchStats >> benchMyFactorialStatic [
 { #category : 'benchmarking' }
 MicroBenchStats >> benchSendsTo64Yourselves [
 
-	1 to:  (program iteration  last) do: [ :e | icCaller send: Object ]
+	1 to:  (program iteration  last) do: [ :e | icCaller performSend: Object ]
 ]
 
 { #category : 'benchmarking' }
@@ -184,7 +184,7 @@ MicroBenchStats >> benchSendsTo64Yourselves3 [
 { #category : 'benchmarking' }
 MicroBenchStats >> benchSendsTo64YourselvesStatic [
 
-	1 to: program iteration last do: [ :e | icCaller sendSStatic: Object ]
+	1 to: program iteration last do: [ :e | icCaller performSend: Object ]
 ]
 
 { #category : 'benchmarking' }
@@ -212,6 +212,14 @@ MicroBenchStats >> defaultNumberOfProcesses [
 { #category : 'script entry' }
 MicroBenchStats >> defaultProblemSize [
     ^ 30
+]
+
+{ #category : 'running' }
+MicroBenchStats >> enableStaticCall [	
+
+	 icCaller := SCaller new .
+
+	
 ]
 
 { #category : 'running' }
