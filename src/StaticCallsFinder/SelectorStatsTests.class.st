@@ -25,13 +25,18 @@ SelectorStatsTests >> testDevirtualizableCallSitesByPackage [
 
 { #category : 'tests' }
 SelectorStatsTests >> testDevirtualizableCallSitesByPackage2 [
-	|expectedStats|
+	|expectedStats resultsByPack|
+	resultsByPack := Dictionary new.
+	
 	PackageOrganizer default packageNamesDo: [ :e | 
+	.
 	expectedStats := statisticsClass devirtualizableCallSitesOfPackage:
 		(PackageOrganizer default packageNamed: e).
-		self assert: expectedStats values flattened size isZero . 
+		expectedStats values flattened size isZero ifFalse: [  resultsByPack at: e put:  expectedStats values flattened ].
+		 
 	
 		].
+	self assert: resultsByPack values flattened size isZero.
 ]
 
 { #category : 'tests' }
