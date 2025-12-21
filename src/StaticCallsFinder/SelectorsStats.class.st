@@ -11,6 +11,38 @@ Class {
 	#tag : 'core'
 }
 
+{ #category : 'devirtualizable' }
+SelectorsStats >> devirtualizableCallSitesOfPackage: aPackage [
+
+	| a |
+	a := Dictionary new.
+	aPackage methods do: [ :key |
+		a
+			at: key
+			put: [ Set newFrom: (self findDevCallsIn: key) ]
+			 ].
+	^ a
+]
+
+{ #category : 'devirtualizable' }
+SelectorsStats >> dialDownToNoRedefined: aListOfMessagesWithSelfAsReceiver [
+	
+	| msgRedefStats devirtualizables|
+	
+	msgRedefStats := MessageRedefStats new .
+	devirtualizables:= aListOfMessagesWithSelfAsReceiver
+							 reject:[:message |
+									(message selector implementors select: [ :i | 
+												(i classBinding value subclasses select:[:subClass | 
+													subClass directlyDefinesMethod: message selector  ]) isNotEmpty  ]) isNotEmpty ].
+	" to enhance the precision: 
+			associating a call tree to call sites until this phase of comparison with implementations. 
+			The implementation that have nothing to do with the call tree are then not considered when they have redefinitions. 
+			"
+	msgRedefStats devirtualizables: devirtualizables.
+	^ msgRedefStats
+]
+
 { #category : 'initialization' }
 SelectorsStats >> evaluate: aNode [
     ^ aNode acceptVisitor: self
@@ -22,6 +54,19 @@ SelectorsStats >> evaluateWrapInLiteralNode: aRBSequenceNode [
 	result:= self evaluate: aRBSequenceNode .
 	(result isKindOf: RBProgramNode) ifFalse: [ result:= RBLiteralNode value: result ].
 	^ result
+]
+
+{ #category : 'as yet unclassified' }
+SelectorsStats >> findDevCallsIn: aCompiledMethod [
+	
+	| dialedDown |
+	
+	dialedDown := self dialDownToNoRedefined:
+		 (aCompiledMethod  ast sendNodes select: [ :messageNode |
+		 messageNode receiver isSelfVariable  ]).
+	
+	^ dialedDown devirtualizables
+	
 ]
 
 { #category : 'as yet unclassified' }
