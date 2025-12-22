@@ -12,16 +12,22 @@ Class {
 }
 
 { #category : 'devirtualizable' }
-SelectorsStats >> devirtualizableCallSitesOfPackage: aPackage [
+SelectorsStats >> devirtualizableCallSitesForMethods: methods [
 
 	| a |
 	a := Dictionary new.
-	aPackage methods do: [ :key |
-		a
-			at: key
-			put: [ Set newFrom: (self findDevCallsIn: key) ]
-			 ].
+
+	methods do: [ :key |
+		a at: key put:  (Set newFrom: (self findDevCallsIn: key))  ].
 	^ a
+]
+
+{ #category : 'devirtualizable' }
+SelectorsStats >> devirtualizableCallSitesOfPackage: aPackage [
+
+	^ self devirtualizableCallSitesForMethods: aPackage methods. 
+	
+	
 ]
 
 { #category : 'devirtualizable' }
@@ -34,7 +40,7 @@ SelectorsStats >> dialDownToNoRedefined: aListOfMessagesWithSelfAsReceiver [
 							 reject:[:message |
 									(message selector implementors select: [ :i | 
 												(i classBinding value subclasses select:[:subClass | 
-													subClass directlyDefinesMethod: message selector  ]) isNotEmpty  ]) isNotEmpty ].
+													subClass includesSelector: message selector  ]) isNotEmpty  ]) isNotEmpty ].
 	" to enhance the precision: 
 			associating a call tree to call sites until this phase of comparison with implementations. 
 			The implementation that have nothing to do with the call tree are then not considered when they have redefinitions. 

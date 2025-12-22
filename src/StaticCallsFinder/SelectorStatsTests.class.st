@@ -29,7 +29,7 @@ SelectorStatsTests >> testDevirtualizableCallSitesByPackage2 [
 	resultsByPack := Dictionary new.
 	
 	PackageOrganizer default packageNamesDo: [ :e | 
-	.
+	
 	expectedStats := statisticsClass devirtualizableCallSitesOfPackage:
 		(PackageOrganizer default packageNamed: e).
 		expectedStats values flattened size isZero ifFalse: [  resultsByPack at: e put:  expectedStats values flattened ].
@@ -47,4 +47,35 @@ SelectorStatsTests >> testDevirtualizableCallSitesBySpecificScenario [
 		How: do Union of all classes in the nodes of the tree, then implementors needs to be amongst this set (or in their super classes ?).
 		
 		"
+]
+
+{ #category : 'tests' }
+SelectorStatsTests >> testDevirtualizableSmallExample [
+
+	| tempClass instance result |
+	tempClass := Object classInstaller make: [ :builder |
+		             builder
+			             superclass: Object;
+			             name: #DevirtCallFixture;
+			             slotsFromString: '';
+			             sharedVariablesFromString: '';
+			             package: 'StaticCallsFinder';
+			             environment: Object environment ].
+
+	tempClass compile: 'foufou
+    ^ 42'.
+	tempClass compile: 'callDevirtualizable
+    ^ self foufou '.
+
+
+	[
+	| expectedStats resultsByPack |
+	resultsByPack := Dictionary new.
+
+	expectedStats := statisticsClass devirtualizableCallSitesForMethods:
+		                 { (tempClass methodNamed: #callDevirtualizable) }.
+	self
+		assert: expectedStats values flattened first selector 
+		equals: #foufou ] ensure: [
+		tempClass removeFromSystem ]
 ]
