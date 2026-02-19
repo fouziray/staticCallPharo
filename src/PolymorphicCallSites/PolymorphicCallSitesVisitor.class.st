@@ -8,6 +8,13 @@ Class {
 	#package : 'PolymorphicCallSites'
 }
 
+{ #category : 'tests' }
+PolymorphicCallSitesVisitor class >> boilDownToMonos: targetMethodsDict [
+
+	^ targetMethodsDict associations select: [ :messageTargetAndReceiver |
+		  messageTargetAndReceiver value keys size = 1 ]
+]
+
 { #category : 'accessing' }
 PolymorphicCallSitesVisitor class >> filter: aListOfMessageReceiversAssociations [
 

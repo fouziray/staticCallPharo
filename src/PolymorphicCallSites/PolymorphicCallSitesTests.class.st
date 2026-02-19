@@ -71,6 +71,20 @@ PolymorphicCallSitesTests >> tearDown [
 	transformer ifNotNil:[:e | e rollbackBackedUpAst]
 ]
 
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> testCappucinoStatic [
+
+	| devirtualizableNodes |
+	devirtualizableNodes :=  Capuccino  select:[:e |  e key isNotNil and:[ e key methodNode isNotNil]].
+	
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes:  (devirtualizableNodes) asDictionary;
+		               yourself.	
+1 halt.
+	transformer	graduallyDevirtualize .
+		
+]
+
 { #category : 'tests' }
 PolymorphicCallSitesTests >> testFalsePolymorphicIsMonoMorphic [
 
@@ -390,11 +404,11 @@ PolymorphicCallSitesTests >> testRefactorVeritasHoneyGinger [
 
 	| devirtualizableNodes |
 	devirtualizableNodes := STORE2.
-	
+	devirtualizableNodes := devirtualizableNodes select: [ :e | e key methodNode compiledMethod classBinding value package name = 'HoneyGinger' ].
 	transformer := StaticCallSiteTransformer new
-		               recordedTypes: devirtualizableNodes ;
+		               recordedTypes: devirtualizableNodes asDictionary ;
 		               yourself.	
-	1 halt.
+	
 	transformer	getNewMethodOfDevirtualizingAll.
 	1halt.
 	
