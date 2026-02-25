@@ -6,7 +6,8 @@ Class {
 		'currentScope',
 		'method',
 		'messageNode',
-		'receiverType'
+		'receiverType',
+		'interproceduralVisitor'
 	],
 	#category : 'StaticCallsFinder-core',
 	#package : 'StaticCallsFinder',
@@ -77,6 +78,17 @@ StaticCallVisitor >> initialize [
 
 ]
 
+{ #category : 'visiting' }
+StaticCallVisitor >> interproceduralVisitor [ 
+^ interproceduralVisitor 
+]
+
+{ #category : 'visiting' }
+StaticCallVisitor >> interproceduralVisitor: aDevirtualizeAnalyzer [
+
+	interproceduralVisitor := aDevirtualizeAnalyzer
+]
+
 { #category : 'initialization' }
 StaticCallVisitor >> method: aMethod [ 
 	method := aMethod
@@ -90,7 +102,10 @@ StaticCallVisitor >> visitArrayNode: anArrayNode [
 
 	onlyDefinedUp := ( (receiverType := Array lookupSelector: messageNode selector) isNotNil) and:[ (Array allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
 			
-	onlyDefinedUp ifTrue:[ self addCandidate ].
+	onlyDefinedUp ifTrue:[ self addCandidate.
+		
+		
+	interproceduralVisitor trackVariable: anArrayNode  ].
 ]
 
 { #category : 'visiting' }
@@ -105,7 +120,10 @@ StaticCallVisitor >> visitGlobalVariableNode: aGloabl [
 
 onlyDefinedUp := (( receiverType := aGloabl binding value classSide lookupSelector: messageNode selector) isNotNil) and:[ (aGloabl binding value classSide allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
 	
-	onlyDefinedUp ifTrue: [ self addCandidate ]
+	onlyDefinedUp ifTrue: [ self addCandidate .
+		
+		
+	interproceduralVisitor trackVariable: aGloabl ]
 ]
 
 { #category : 'visiting' }
@@ -114,7 +132,8 @@ StaticCallVisitor >> visitLiteralValueNode: aLiteral [
 | onlyDefinedUp |
 onlyDefinedUp := ((receiverType := aLiteral value class lookupSelector: messageNode selector) isNotNil) and:[ (aLiteral value class allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
 
-onlyDefinedUp ifTrue: [ self addCandidate ]
+onlyDefinedUp ifTrue: [ self addCandidate 
+	]
 ]
 
 { #category : 'initialization' }
@@ -144,8 +163,12 @@ StaticCallVisitor >> visitMessageNode: aMessageNode [
 { #category : 'visiting' }
 StaticCallVisitor >> visitSelfNode: aSelfNode [
 	| onlyDefinedUp |
+	
 	onlyDefinedUp := ((receiverType:= method classBinding value lookupSelector: messageNode selector) isNotNil) and:[ (method classBinding value allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
-			onlyDefinedUp ifTrue:[self addCandidate ]
+			onlyDefinedUp ifTrue:[self addCandidate.
+				
+	interproceduralVisitor trackVariable: aSelfNode  ].
+			
 ]
 
 { #category : 'visiting' }
@@ -153,5 +176,14 @@ StaticCallVisitor >> visitSuperNode: aNode [
 
 | onlyDefinedUp |
 	onlyDefinedUp := ( (receiverType := method classBinding value superclass lookupSelector: messageNode selector) isNotNil) and:[ (method classBinding value withAllSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
-	onlyDefinedUp ifTrue:[self addCandidate ]
+	onlyDefinedUp ifTrue:[self addCandidate.
+		
+	interproceduralVisitor trackVariable: aNode  ]
+]
+
+{ #category : 'visiting' }
+StaticCallVisitor >> visitVariableNode: aVariableNode [
+1 halt.
+interproceduralVisitor markVariableAsEscaped: aVariableNode 
+	
 ]

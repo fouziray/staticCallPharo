@@ -3,7 +3,8 @@ Class {
 	#superclass : 'TestCase',
 	#instVars : [
 		'analyzer',
-		'visitor'
+		'visitor',
+		'interproceduralVisitor'
 	],
 	#category : 'StaticCallsFinder-tests',
 	#package : 'StaticCallsFinder',
@@ -46,6 +47,23 @@ StaticCallDetectionTest >> setUp [
 	analyzer := StaticCallAnalyzer new.
 	visitor := StaticCallVisitor new.
 
+]
+
+{ #category : 'tests' }
+StaticCallDetectionTest >> testMixPointsto [
+	"Test message with literal receiver (high static call potential)"
+	| method ast literalMessageNode |
+	
+	method :=  MockSCDTest class >> #sampleMethodWithSuperReceiver.
+	ast := method parseTree.
+	
+	interproceduralVisitor := DevirtualizeAnalyzer new. 
+	
+	interproceduralVisitor perMethodSCall: visitor .
+	interproceduralVisitor pass: method.
+	self assert: visitor candidates isNotEmpty.
+	self assert: visitor candidates first receiverType equals: StaticCallDetectionTest class .
+	self assert: interproceduralVisitor ctxListLog size equals: 2
 ]
 
 { #category : 'tests' }
