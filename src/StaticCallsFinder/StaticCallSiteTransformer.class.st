@@ -1,6 +1,6 @@
 Class {
 	#name : 'StaticCallSiteTransformer',
-	#superclass : 'RBProgramNodeVisitor',
+	#superclass : 'OCProgramNodeVisitor',
 	#instVars : [
 		'backupMethods',
 		'recordedTypes',

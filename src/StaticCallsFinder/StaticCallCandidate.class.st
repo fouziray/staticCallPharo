@@ -118,11 +118,11 @@ StaticCallCandidate >> receiverType: aSymbol [
 				
 				|classSideMethods instSideMethods|
 			
-				instSideMethods := self receiver binding value lookupSelector:self receiver parent selector.
+				instSideMethods := self receiver binding value lookupSelector: self receiver parent selector.
 				classSideMethods := self receiver binding value class lookupSelector:self receiver parent selector .
-				(instSideMethods isNotNil or:[classSideMethods isNotNil ]) ifTrue: [  ].
-				receiverType := self receiver binding value lookupSelector:
- #readFrom: ].
+		
+				receiverType := (instSideMethods ifNil: [ classSideMethods ]) classBinding value.
+				].
 aSymbol = #variable ifTrue:[
 		receiverType :=  (self receiver value class lookupSelector: selector)  classBinding value.
 		1 halt.

@@ -1,15 +1,30 @@
 Class {
 	#name : 'StaticCallVisitor',
-	#superclass : 'RBProgramNodeVisitor',
+	#superclass : 'OCProgramNodeVisitor',
 	#instVars : [
 		'candidates',
 		'currentScope',
-		'method'
+		'method',
+		'messageNode',
+		'receiverType'
 	],
 	#category : 'StaticCallsFinder-core',
 	#package : 'StaticCallsFinder',
 	#tag : 'core'
 }
+
+{ #category : 'adding' }
+StaticCallVisitor >> addCandidate [
+|candidate|
+candidate := SCandidate new
+			             callSite: messageNode;
+			             selector: messageNode selector;
+			             receiver: messageNode receiver;
+			             receiverType: receiverType;
+			             method: method;
+			             yourself.
+		candidates add: candidate
+]
 
 { #category : 'initialization' }
 StaticCallVisitor >> analyzeReceiver: aReceiverNode [
@@ -69,32 +84,74 @@ StaticCallVisitor >> method: aMethod [
 
 ]
 
+{ #category : 'visiting' }
+StaticCallVisitor >> visitArrayNode: anArrayNode [
+	| onlyDefinedUp |
+
+	onlyDefinedUp := ( (receiverType := Array lookupSelector: messageNode selector) isNotNil) and:[ (Array allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
+			
+	onlyDefinedUp ifTrue:[ self addCandidate ].
+]
+
+{ #category : 'visiting' }
+StaticCallVisitor >> visitBlockNode: aBlockNode [
+
+]
+
+{ #category : 'visiting - variables' }
+StaticCallVisitor >> visitGlobalVariableNode: aGloabl [
+
+| onlyDefinedUp |
+
+onlyDefinedUp := (( receiverType := aGloabl binding value classSide lookupSelector: messageNode selector) isNotNil) and:[ (aGloabl binding value classSide allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
+	
+	onlyDefinedUp ifTrue: [ self addCandidate ]
+]
+
+{ #category : 'visiting' }
+StaticCallVisitor >> visitLiteralValueNode: aLiteral [
+
+| onlyDefinedUp |
+onlyDefinedUp := ((receiverType := aLiteral value class lookupSelector: messageNode selector) isNotNil) and:[ (aLiteral value class allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
+
+onlyDefinedUp ifTrue: [ self addCandidate ]
+]
+
 { #category : 'initialization' }
 StaticCallVisitor >> visitMessageNode: aMessageNode [
 
-	| receiverType candidate onlyDefinedUp |
-	receiverType := self analyzeReceiver: aMessageNode receiver.
+	|  candidate onlyDefinedUp |
 
+	receiverType := self analyzeReceiver: aMessageNode receiver.
+	messageNode:= aMessageNode.
+	aMessageNode receiver acceptVisitor: self.	
+	
 	"Create candidate if it looks promising"
 	(receiverType = #message) ifTrue: [ self evaluatePartial: aMessageNode receiver  ].
 	(({ #self. #super. #class. #global. #literal } includes: receiverType)
 		 or: [
 			 receiverType = #temp and: [
 				 self hasStableType: aMessageNode receiver ] ]) ifTrue: [
-			onlyDefinedUp := ((method classBinding value lookupSelector: aMessageNode selector) isNotNil) and:[ (method classBinding value allSubclasses anySatisfy: [ :subClass | subClass includesSelector: aMessageNode selector ]) not].
 			
-			onlyDefinedUp ifTrue:[
-				candidate := StaticCallCandidate new
-			             callSite: aMessageNode;
-			             selector: aMessageNode selector;
-			             receiver: aMessageNode receiver;
-			             receiverType: receiverType;
-			             method: method;
-			             yourself.
-		candidates add: candidate
-				].
+			"onlyDefinedUp := ((method classBinding value lookupSelector: aMessageNode selector) isNotNil) and:[ (method classBinding value allSubclasses anySatisfy: [ :subClass | subClass includesSelector: aMessageNode selector ]) not].
+			"
 		 ].
 
 	"Continue visiting children"
 	super visitMessageNode: aMessageNode
+]
+
+{ #category : 'visiting' }
+StaticCallVisitor >> visitSelfNode: aSelfNode [
+	| onlyDefinedUp |
+	onlyDefinedUp := ((receiverType:= method classBinding value lookupSelector: messageNode selector) isNotNil) and:[ (method classBinding value allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
+			onlyDefinedUp ifTrue:[self addCandidate ]
+]
+
+{ #category : 'visiting' }
+StaticCallVisitor >> visitSuperNode: aNode [
+
+| onlyDefinedUp |
+	onlyDefinedUp := ( (receiverType := method classBinding value superclass lookupSelector: messageNode selector) isNotNil) and:[ (method classBinding value withAllSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
+	onlyDefinedUp ifTrue:[self addCandidate ]
 ]
