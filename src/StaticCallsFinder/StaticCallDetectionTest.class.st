@@ -61,8 +61,9 @@ StaticCallDetectionTest >> testMixPointsto [
 	
 	interproceduralVisitor perMethodSCall: visitor .
 	interproceduralVisitor pass: method.
-	self assert: visitor candidates isNotEmpty.
+	self assert: visitor candidates asSet isNotEmpty.
 	self assert: visitor candidates first receiverType equals: StaticCallDetectionTest class .
+	self assert: visitor candidates second receiverType equals: SmallInteger . 
 	self assert: interproceduralVisitor ctxListLog size equals: 2
 ]
 

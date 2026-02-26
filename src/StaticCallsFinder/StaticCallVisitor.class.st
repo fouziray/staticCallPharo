@@ -157,7 +157,14 @@ StaticCallVisitor >> visitMessageNode: aMessageNode [
 		 ].
 
 	"Continue visiting children"
-	super visitMessageNode: aMessageNode
+	self visitMessageNodeArgumentsOnly: aMessageNode
+]
+
+{ #category : 'visiting' }
+StaticCallVisitor >> visitMessageNodeArgumentsOnly: aMessageNode [ 
+	
+	self visitNode: aMessageNode selectorNode.
+	aMessageNode arguments do: [ :each | self visitNode: each ]
 ]
 
 { #category : 'visiting' }
