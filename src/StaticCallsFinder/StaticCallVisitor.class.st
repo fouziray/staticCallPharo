@@ -117,13 +117,15 @@ StaticCallVisitor >> visitBlockNode: aBlockNode [
 StaticCallVisitor >> visitGlobalVariableNode: aGloabl [
 
 | onlyDefinedUp |
-
-onlyDefinedUp := (( receiverType := aGloabl binding value classSide lookupSelector: messageNode selector) isNotNil) and:[ (aGloabl binding value classSide allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
+aGloabl binding value ifNotNil:[
+	onlyDefinedUp := (( receiverType := aGloabl binding value classSide lookupSelector: messageNode selector) isNotNil) and:[ (aGloabl binding value classSide allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
 	
 	onlyDefinedUp ifTrue: [ self addCandidate .
 		
 		
 	interproceduralVisitor trackVariable: aGloabl ]
+	].
+
 ]
 
 { #category : 'visiting' }
@@ -170,11 +172,14 @@ StaticCallVisitor >> visitMessageNodeArgumentsOnly: aMessageNode [
 { #category : 'visiting' }
 StaticCallVisitor >> visitSelfNode: aSelfNode [
 	| onlyDefinedUp |
-	
-	onlyDefinedUp := ((receiverType:= method classBinding value lookupSelector: messageNode selector) isNotNil) and:[ (method classBinding value allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
+	messageNode ifNotNil: [ 
+		onlyDefinedUp := ((receiverType:= method classBinding value lookupSelector: messageNode selector) isNotNil) and:[ (method classBinding value allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
 			onlyDefinedUp ifTrue:[self addCandidate.
 				
 	interproceduralVisitor trackVariable: aSelfNode  ].
+		 ].
+	
+	
 			
 ]
 
@@ -190,7 +195,8 @@ StaticCallVisitor >> visitSuperNode: aNode [
 
 { #category : 'visiting' }
 StaticCallVisitor >> visitVariableNode: aVariableNode [
-1 halt.
-interproceduralVisitor markVariableAsEscaped: aVariableNode 
-	
+
+| var |
+((var := interproceduralVisitor findVariableByName: aVariableNode) isNotNil and:[var  hasType]  ) ifTrue:[ 1 halt.  ].
+
 ]

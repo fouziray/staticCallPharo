@@ -154,3 +154,22 @@ StaticCallDetectionTest >> testVisitMessageNodeWithSuperReceiver [
 	self assert: visitor candidates isNotEmpty.
 	self assert: visitor candidates first receiverType equals: StaticCallDetectionTest class 
 ]
+
+{ #category : 'tests' }
+StaticCallDetectionTest >> testpointsToType [
+	"Test message with literal receiver (high static call potential)"
+	| method ast literalMessageNode |
+	
+	method :=  FixtureEscapeAnalysis
+		>> #twoImplementationShouldTreatOnlySelfRelated.
+	ast := method parseTree.
+	
+	interproceduralVisitor := DevirtualizeAnalyzer new. 
+	
+	interproceduralVisitor perMethodSCall: visitor .
+	interproceduralVisitor pass: method.
+	self assert: visitor candidates asSet isNotEmpty.
+	self assert: (visitor candidates collect:#receiverType) asSet asArray first  equals: FixtureEscapeAnalysis .
+
+	self assert: interproceduralVisitor ctxListLog size equals: 6
+]
