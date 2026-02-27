@@ -123,7 +123,7 @@ aGloabl binding value ifNotNil:[
 	onlyDefinedUp ifTrue: [ self addCandidate .
 		
 		
-	interproceduralVisitor trackVariable: aGloabl ]
+	(interproceduralVisitor trackVariable: aGloabl) associatedNode: aGloabl  ]
 	].
 
 ]
@@ -132,10 +132,12 @@ aGloabl binding value ifNotNil:[
 StaticCallVisitor >> visitLiteralValueNode: aLiteral [
 
 | onlyDefinedUp |
+aLiteral parent isMessage ifTrue:[
 onlyDefinedUp := ((receiverType := aLiteral value class lookupSelector: messageNode selector) isNotNil) and:[ (aLiteral value class allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
 
 onlyDefinedUp ifTrue: [ self addCandidate 
 	]
+]
 ]
 
 { #category : 'initialization' }
@@ -195,8 +197,25 @@ StaticCallVisitor >> visitSuperNode: aNode [
 
 { #category : 'visiting' }
 StaticCallVisitor >> visitVariableNode: aVariableNode [
-
+"When the ast is updated look back with local analyzer into current variable if it is a receiver of a message "
 | var |
-((var := interproceduralVisitor findVariableByName: aVariableNode) isNotNil and:[var  hasType]  ) ifTrue:[ 1 halt.  ].
+
+(var := interproceduralVisitor findVariableByName: aVariableNode) ifNotNil: [  
+	aVariableNode parent isMessage ifTrue:[ (var  hasType not ) ifTrue: [ 
+		
+		interproceduralVisitor appendMessageWithReceiver: { aVariableNode. var }.
+		]
+	ifFalse:[
+		| onlyDefinedUp |
+		messageNode ifNotNil: [ 
+		
+		onlyDefinedUp := ((receiverType := var type value lookupSelector: messageNode selector) isNotNil) and:[ (var type allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
+			
+			onlyDefinedUp ifTrue:[self addCandidate.
+				].
+		 ].
+		].]
+
+	]  
 
 ]

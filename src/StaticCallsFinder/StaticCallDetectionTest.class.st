@@ -47,6 +47,8 @@ StaticCallDetectionTest >> setUp [
 	analyzer := StaticCallAnalyzer new.
 	visitor := StaticCallVisitor new.
 
+
+	interproceduralVisitor := DevirtualizeAnalyzer new. 
 ]
 
 { #category : 'tests' }
@@ -76,7 +78,11 @@ StaticCallDetectionTest >> testVisitMessageNodeWithArrayReceiver [
 	ast := method parseTree.
 	literalMessageNode := ast sendNodes first.
 	visitor method: method.
-	ast acceptVisitor: visitor.
+	interproceduralVisitor := DevirtualizeAnalyzer new. 
+	interproceduralVisitor perMethodSCall: visitor.
+ 	interproceduralVisitor pass: method.
+
+	
 	self assert: visitor candidates isNotEmpty.
 	self assert: visitor candidates first receiverType equals: SequenceableCollection 
 ]
@@ -107,8 +113,8 @@ StaticCallDetectionTest >> testVisitMessageNodeWithClassReceiver [
 	
 	visitor method: method.
 	"visitor visitMessageNode: literalMessageNode."
-	ast acceptVisitor: visitor.
-	
+	interproceduralVisitor perMethodSCall: visitor.
+ 	interproceduralVisitor pass: method.
 	self assert: visitor candidates isNotEmpty.
 	self assert: visitor candidates first receiverType equals: Integer class
 ]
@@ -136,7 +142,9 @@ StaticCallDetectionTest >> testVisitMessageNodeWithSelfReceiver [
 	ast := method parseTree.
 	literalMessageNode := ast sendNodes first.
 	visitor method: method.
-	ast acceptVisitor: visitor.
+	interproceduralVisitor := DevirtualizeAnalyzer new. 
+	interproceduralVisitor perMethodSCall: visitor.
+ 	interproceduralVisitor pass: method.
 	self assert: visitor candidates isNotEmpty.
 	self assert: visitor candidates first receiverType equals: StaticCallDetectionTest class 
 ]
@@ -150,7 +158,8 @@ StaticCallDetectionTest >> testVisitMessageNodeWithSuperReceiver [
 	ast := method parseTree.
 	literalMessageNode := ast sendNodes first.
 	visitor method: method.
-	ast acceptVisitor: visitor.
+	interproceduralVisitor perMethodSCall: visitor.
+ 	interproceduralVisitor pass: method.
 	self assert: visitor candidates isNotEmpty.
 	self assert: visitor candidates first receiverType equals: StaticCallDetectionTest class 
 ]
@@ -164,12 +173,29 @@ StaticCallDetectionTest >> testpointsToType [
 		>> #twoImplementationShouldTreatOnlySelfRelated.
 	ast := method parseTree.
 	
-	interproceduralVisitor := DevirtualizeAnalyzer new. 
-	
+	visitor method: method.
 	interproceduralVisitor perMethodSCall: visitor .
 	interproceduralVisitor pass: method.
 	self assert: visitor candidates asSet isNotEmpty.
 	self assert: (visitor candidates collect:#receiverType) asSet asArray first  equals: FixtureEscapeAnalysis .
 
 	self assert: interproceduralVisitor ctxListLog size equals: 6
+]
+
+{ #category : 'tests' }
+StaticCallDetectionTest >> testpointsToTypeAssignment [
+	"Test message with literal receiver (high static call potential)"
+	| method ast literalMessageNode |
+	
+	method :=  FixtureEscapeAnalysis >> #staticTypeExample.
+	ast := method parseTree.
+	
+	interproceduralVisitor := DevirtualizeAnalyzer new. 
+	
+	interproceduralVisitor perMethodSCall: visitor .
+	interproceduralVisitor pass: method.
+	self assert: visitor candidates asSet size equals: 2 .
+	self assert: (visitor candidates collect: #receiverType) asSet asArray first  equals: FixtureEscapeAnalysis .
+
+	self assert: interproceduralVisitor ctxListLog size equals: 2
 ]
