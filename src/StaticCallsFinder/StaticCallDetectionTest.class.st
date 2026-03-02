@@ -30,6 +30,12 @@ StaticCallDetectionTest class >> sampleMethodWithClassReceiver [
 ]
 
 { #category : 'as yet unclassified' }
+StaticCallDetectionTest class >> sampleMethodWithGlobalReceiver [
+
+	^ SmalltalkImage current.
+]
+
+{ #category : 'as yet unclassified' }
 StaticCallDetectionTest class >> sampleMethodWithLiteralReceiver [
 
 	^ 3 asFloat.
@@ -112,6 +118,22 @@ StaticCallDetectionTest >> testVisitMessageNodeWithClassReceiver [
 	literalMessageNode := ast sendNodes first.
 	
 	visitor method: method.
+	"visitor visitMessageNode: literalMessageNode."
+	interproceduralVisitor perMethodSCall: visitor.
+ 	interproceduralVisitor pass: method.
+	self assert: visitor candidates isNotEmpty.
+	self assert: visitor candidates first receiverType equals: Integer class
+]
+
+{ #category : 'tests' }
+StaticCallDetectionTest >> testVisitMessageNodeWithGlobalReceiver [ 
+	"Test message with literal receiver (high static call potential)"
+	| method ast literalMessageNode |
+	
+	method :=  StaticCallDetectionTest class >> #sampleMethodWithGlobalReceiver.
+	
+	
+	"visitor method: method."
 	"visitor visitMessageNode: literalMessageNode."
 	interproceduralVisitor perMethodSCall: visitor.
  	interproceduralVisitor pass: method.

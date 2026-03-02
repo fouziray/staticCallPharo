@@ -118,7 +118,7 @@ StaticCallVisitor >> visitGlobalVariableNode: aGloabl [
 
 | onlyDefinedUp |
 aGloabl binding value ifNotNil:[
-	onlyDefinedUp := (( receiverType := aGloabl binding value classSide lookupSelector: messageNode selector) isNotNil) and:[ (aGloabl binding value classSide allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
+	onlyDefinedUp := (( receiverType := aGloabl binding value class  lookupSelector: messageNode selector) isNotNil) and:[ (aGloabl binding value class allSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
 	
 	onlyDefinedUp ifTrue: [ self addCandidate .
 		
@@ -189,10 +189,12 @@ StaticCallVisitor >> visitSelfNode: aSelfNode [
 StaticCallVisitor >> visitSuperNode: aNode [
 
 | onlyDefinedUp |
+method classBinding value isTrait ifFalse: [
 	onlyDefinedUp := ( (receiverType := method classBinding value superclass lookupSelector: messageNode selector) isNotNil) and:[ (method classBinding value withAllSubclasses anySatisfy: [ :subClass | subClass includesSelector: messageNode selector ]) not].
 	onlyDefinedUp ifTrue:[self addCandidate.
 		
 	interproceduralVisitor trackVariable: aNode  ]
+].
 ]
 
 { #category : 'visiting' }
