@@ -29,6 +29,16 @@ PolymorphicCallSitesVisitor class >> filterFakePoly: targetMethodsDict [
 			  messageTargetAndReceiver value values first asIdentitySet size > 1 ] ]
 ]
 
+{ #category : 'as yet unclassified' }
+PolymorphicCallSitesVisitor class >> rateOfDevirtualizable: aCollection [ 
+	| total devirtualizable |
+	total :=(( aCollection values select:[:c | c size = 1]) collect: [:e | e values flattened size]) sum.
+	devirtualizable:=
+(((( self filterFakePoly: aCollection )collect:#value)  select:[:c | c size = 1]) collect: [:e | e values flattened size]) sum.
+	
+	^ (devirtualizable / total) * 100.
+]
+
 { #category : 'serialize' }
 PolymorphicCallSitesVisitor class >> serializeMessage: aRBMessageNode [
 aRBMessageNode ifNil: [ ^ 'nil'].
