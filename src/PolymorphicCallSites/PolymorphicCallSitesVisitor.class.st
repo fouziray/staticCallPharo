@@ -8,6 +8,13 @@ Class {
 	#package : 'PolymorphicCallSites'
 }
 
+{ #category : 'tests' }
+PolymorphicCallSitesVisitor class >> boilDownToMonos: targetMethodsDict [
+
+	^ targetMethodsDict associations select: [ :messageTargetAndReceiver |
+		  messageTargetAndReceiver value keys size = 1 ]
+]
+
 { #category : 'accessing' }
 PolymorphicCallSitesVisitor class >> filter: aListOfMessageReceiversAssociations [
 
@@ -20,6 +27,16 @@ PolymorphicCallSitesVisitor class >> filterFakePoly: targetMethodsDict [
 	^ targetMethodsDict associations select: [ :messageTargetAndReceiver |
 		  messageTargetAndReceiver value keys size = 1 and: [
 			  messageTargetAndReceiver value values first asIdentitySet size > 1 ] ]
+]
+
+{ #category : 'as yet unclassified' }
+PolymorphicCallSitesVisitor class >> rateOfDevirtualizable: aCollection [ 
+	| total devirtualizable |
+	total :=(( aCollection values select:[:c | c size = 1]) collect: [:e | e values flattened size]) sum.
+	devirtualizable:=
+(((( self filterFakePoly: aCollection )collect:#value)  select:[:c | c size = 1]) collect: [:e | e values flattened size]) sum.
+	
+	^ (devirtualizable / total) * 100.
 ]
 
 { #category : 'serialize' }

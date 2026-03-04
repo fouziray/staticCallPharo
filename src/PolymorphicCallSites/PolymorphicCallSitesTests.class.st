@@ -22,6 +22,29 @@ PolymorphicCallSitesTests class >> getMessageFromIndex: aString [
 	^ method ast sendNodes at: index asInteger
 ]
 
+{ #category : 'as yet unclassified' }
+PolymorphicCallSitesTests class >> getRateOfDevirtualizableInDifferentPrograms [
+|result  devirtualizableNodes simulator  program |
+	
+	result := OrderedCollection new.
+	program := {[  RSAlpharoExample new example01Basic  ].
+[  RSKiviatExample new example01Basic   ].
+[  RSLegendExamples new example01Basic   ].
+[  RSPieExamples new example01Basic   ]
+}.
+program do:[:pro | 
+	simulator := DevirtualizableCallSites new.
+	simulator block: pro.
+	simulator execute.		
+
+	devirtualizableNodes := simulator getAllCallSites.
+	result add: (PolymorphicCallSitesVisitor rateOfDevirtualizable: devirtualizableNodes) asFloat .
+	].
+
+	self assert: (PolymorphicCallSitesVisitor rateOfDevirtualizable: devirtualizableNodes) asFloat rounded equals: 9
+	
+]
+
 { #category : 'deserializing' }
 PolymorphicCallSitesTests class >> reviveClassesMethodMessages: aCollection [
 
@@ -69,6 +92,20 @@ PolymorphicCallSitesTests >> recoverVeritasCSVDataInto [
 PolymorphicCallSitesTests >> tearDown [
 
 	transformer ifNotNil:[:e | e rollbackBackedUpAst]
+]
+
+{ #category : 'veritas' }
+PolymorphicCallSitesTests >> testCappucinoStatic [
+
+	| devirtualizableNodes |
+	devirtualizableNodes :=  (Capuccino associations select:[:e |  e key isNotNil and:[ e key methodNode isNotNil]]) reject: [:e | e key methodNode compiledMethod classBinding value package name beginsWithAnyOf: {'Morph'. 'Spec'. 'Kernel' . 'Color'. 'Random'. 'System' . 'VariablesLibrary' . 'Collections-Abstract' . 'NumberParser' . 'Graphics'. 'Announcement' . 'Collections'. 'Commander'. 'Keymapping'.  'NewValue'. 'Numer'. 'Rubric'. 'TaskIt'. 'Tool-Registry'. 'RTree'. 'Text'. 'Sort'. 'Athens'. 'Fonts'. 'NewTools'. 'Polymorph'. 'Roassal-SVG'}  ].
+	
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes:  (devirtualizableNodes) asDictionary;
+		               yourself.	
+1 halt.
+	transformer	graduallyDevirtualizeAndReplace .
+		
 ]
 
 { #category : 'tests' }
@@ -390,11 +427,11 @@ PolymorphicCallSitesTests >> testRefactorVeritasHoneyGinger [
 
 	| devirtualizableNodes |
 	devirtualizableNodes := STORE2.
-	
+	devirtualizableNodes := devirtualizableNodes select: [ :e | e key methodNode compiledMethod classBinding value package name = 'HoneyGinger' ].
 	transformer := StaticCallSiteTransformer new
-		               recordedTypes: devirtualizableNodes ;
+		               recordedTypes: devirtualizableNodes asDictionary ;
 		               yourself.	
-	1 halt.
+	
 	transformer	getNewMethodOfDevirtualizingAll.
 	1halt.
 	
@@ -404,6 +441,18 @@ PolymorphicCallSitesTests >> testRefactorVeritasHoneyGinger [
 
 	transformer rollbackBackedUpAst.
 	
+]
+
+{ #category : 'tests' }
+PolymorphicCallSitesTests >> testTraceThenFilter [
+|  devirtualizableNodes simulator  |
+
+	simulator := DevirtualizableCallSites new.
+	simulator block: [ RSAlpharoExample new example01Basic ].
+	simulator execute.		
+
+	devirtualizableNodes := simulator getAllCallSites.
+	self assert: (PolymorphicCallSitesVisitor rateOfDevirtualizable: devirtualizableNodes) asFloat rounded equals: 9
 ]
 
 { #category : 'tests' }

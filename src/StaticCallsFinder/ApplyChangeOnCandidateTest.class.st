@@ -49,16 +49,16 @@ ApplyChangeOnCandidateTest >> testApplyChangeOntodo [
 	| newAst candidate newMethod originalSource |
 	method := ApplyChangeOnCandidateTest >> #example01.
 	originalSource := method sourceCode.
-	method ast hasBlock ifFalse: [
-		1 halt.
+	"method ast hasBlock ifFalse: [
+		"
 			backupMethods at: method put: originalSource.
 	candidate := StaticCallCandidate
 		             method: method
-		             callSite: (method ast allChildren at: 21)
+		             callSite: (method ast allChildren at: 4)
 		             selector: method selector
-		             receiver: (method ast allChildren at: 21) receiver
+		             receiver: (method ast allChildren at: 4) receiver
 		             receiverType: Number.
-	newAst := transformer transformMethod: method forCandidate: candidate.
+	newAst := transformer transformMethodNode: method forCandidate: candidate.
 	
 	ASTCache default at: newAst compiledMethod put: newAst.
 	
@@ -66,12 +66,39 @@ ApplyChangeOnCandidateTest >> testApplyChangeOntodo [
 
 	ASTCache default at: newAst compiledMethod put: newAst.
 
-	self assert: ((newMethod ast allChildren at:20) isKindOf: RBStaticMessageNode ).
+	self assert: ((newMethod ast allChildren at:4) isKindOf: RBStaticMessageNode ).
 	
-	self class
+	"self class
 		addSelectorSilently: newMethod selector
 		withMethod: newMethod.
-		] ifTrue: [  1 halt ]
+		""]ifTrue: [  1 halt ]"
+]
+
+{ #category : 'tests' }
+ApplyChangeOnCandidateTest >> testApplyChangeOntodoWrappedWithUnopt [
+
+	| newAst candidate newMethod originalSource |
+	method := ApplyChangeOnCandidateTest >> #example01.
+	originalSource := method sourceCode.
+	"method ast hasBlock ifFalse: [
+		"
+			backupMethods at: method put: originalSource.
+	candidate := StaticCallCandidate
+		             method: method
+		             callSite: (method ast allChildren at: 4)
+		             selector: method selector
+		             receiver: (method ast allChildren at: 4) receiver
+		             receiverType: Number.
+	newAst := transformer transformFirstWrappingStatementOfMessage: method forCandidate: candidate.
+	
+	ASTCache default at: newAst compiledMethod put: newAst.
+	newAst doSemanticAnalysis.
+	newMethod := newAst generateMethod.
+
+	ASTCache default at: newAst compiledMethod put: newAst.
+
+	self assert: (((newMethod ast allChildren select:#isMessage ) select:#isStaticCall) isNotEmpty ).
+	
 ]
 
 { #category : 'tests' }

@@ -25,6 +25,13 @@ RollbackImageStaticBytecodes class >> default [
 ]
 
 { #category : 'as yet unclassified' }
+RollbackImageStaticBytecodes >> replaceMsgs: staticMessagesList [
+
+	staticMessagesList do: [ :e |
+		e becomeForward: e fromSelfCreateMessageNode ]
+]
+
+{ #category : 'as yet unclassified' }
 RollbackImageStaticBytecodes >> replaceSMsgWithNormal [
 
 	RBStaticMessageNode allInstancesDo: [ :e |
