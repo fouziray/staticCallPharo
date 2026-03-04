@@ -214,6 +214,18 @@ MicroBenchStats >> defaultProblemSize [
     ^ 30
 ]
 
+{ #category : 'accessing' }
+MicroBenchStats >> program [
+
+	^ program
+]
+
+{ #category : 'accessing' }
+MicroBenchStats >> program: anObject [
+
+	program := anObject
+]
+
 { #category : 'running' }
 MicroBenchStats >> reinitCaller [
 
