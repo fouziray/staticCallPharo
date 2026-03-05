@@ -3,7 +3,10 @@ Class {
 	#superclass : 'SMarkSuite',
 	#instVars : [
 		'program',
-		'icCaller'
+		'icCaller',
+		'icType',
+		'iterations',
+		'receivers'
 	],
 	#category : 'StaticCallsFinder-Benchmarks',
 	#package : 'StaticCallsFinder',
@@ -172,13 +175,19 @@ MicroBenchStats >> benchSendsTo64Yourselves [
 { #category : 'benchmarking' }
 MicroBenchStats >> benchSendsTo64Yourselves2 [
 
-	1 to: program iteration last do: [ :e | icCaller send: String ]
+	1 to: program iteration last do: [ :e | icCaller send: Object ]
 ]
 
 { #category : 'benchmarking' }
 MicroBenchStats >> benchSendsTo64Yourselves3 [
 
 	1 to: program iteration last do: [ :e | icCaller send: 23 ]
+]
+
+{ #category : 'benchmarking' }
+MicroBenchStats >> benchSendsTo64YourselvesBestCase [
+
+	1 to:  (program iteration  last) do: [ :e | icCaller send: Set ]
 ]
 
 { #category : 'benchmarking' }
@@ -190,13 +199,27 @@ MicroBenchStats >> benchSendsTo64YourselvesStatic [
 { #category : 'benchmarking' }
 MicroBenchStats >> benchSendsTo64YourselvesStatic2 [
 
-	1 to: program iteration last do: [ :e | icCaller sendSStatic: String ]
+	1 to: program iteration last do: [ :e | icCaller sendSStatic: Object ]
 ]
 
 { #category : 'benchmarking' }
 MicroBenchStats >> benchSendsTo64YourselvesStatic3 [
 
 	1 to: program iteration last do: [ :e | icCaller sendSStatic: 23 ]
+]
+
+{ #category : 'alternating Types' }
+MicroBenchStats >> benchWithAlternatingTypes [
+
+
+	1 to:  (iterations) do: [ :e | icCaller send: receivers next ]
+]
+
+{ #category : 'alternating Types' }
+MicroBenchStats >> benchWithAlternatingTypesStatic [
+
+
+	1 to:  (iterations) do: [ :e | icCaller sendSStatic: receivers next ]
 ]
 
 { #category : 'script entry' }
@@ -212,6 +235,23 @@ MicroBenchStats >> defaultNumberOfProcesses [
 { #category : 'script entry' }
 MicroBenchStats >> defaultProblemSize [
     ^ 30
+]
+
+{ #category : 'accessing' }
+MicroBenchStats >> iterations [
+
+	^ iterations
+]
+
+{ #category : 'accessing' }
+MicroBenchStats >> iterations: anObject [
+
+	iterations := anObject.
+
+	
+	receivers := (OrderedCollection newFrom:  icType receivers).
+	(iterations / icType receivers size)asInteger timesRepeat: [ receivers  addAll: icType receivers ].
+	receivers := ReadStream on: receivers.
 ]
 
 { #category : 'accessing' }
@@ -243,7 +283,7 @@ MicroBenchStats >> setUp [
 
 	program := BMicroVariedInput iterationNumber: 1000.
 
-	
+	iterations:= 1000.
 ]
 
 { #category : 'benchmarking' }
@@ -270,4 +310,22 @@ MicroBenchStats >> setUpIcPoly [
 			send: Object;
 			send: Set;
 			send: 1 ]
+]
+
+{ #category : 'as yet unclassified' }
+MicroBenchStats >> timesToRun: aBenchName [
+	^ [self perform: aBenchName] microsecondsToRun asInteger asString
+
+]
+
+{ #category : 'benchmarking' }
+MicroBenchStats >> yourselfIterations [
+
+	1 to: iterations do: [ :e | icCaller send: Object ]
+]
+
+{ #category : 'benchmarking' }
+MicroBenchStats >> yourselfIterationsStatic [
+
+	1 to: iterations do: [ :e | icCaller sendSStatic: Object ]
 ]

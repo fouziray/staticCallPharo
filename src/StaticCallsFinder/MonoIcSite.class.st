@@ -9,6 +9,7 @@ Class {
 { #category : 'benchmarking' }
 MonoIcSite >> setUp [
 
+receivers := {Object} asOrderedCollection .
 	self reinitCaller.
 	3 timesRepeat: [ self caller send: Object ]
 ]

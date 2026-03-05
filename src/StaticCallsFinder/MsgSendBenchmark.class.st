@@ -1,9 +1,6 @@
 Class {
 	#name : 'MsgSendBenchmark',
 	#superclass : 'MicroBenchStats',
-	#instVars : [
-		'icType'
-	],
 	#category : 'StaticCallsFinder-Benchmarks',
 	#package : 'StaticCallsFinder',
 	#tag : 'Benchmarks'

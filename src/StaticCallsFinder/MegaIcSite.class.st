@@ -9,6 +9,7 @@ Class {
 { #category : 'running' }
 MegaIcSite >> setUp [
 
+receivers := {Object . Set . 1 .Object new.  'ejejee' . String. true} asOrderedCollection .
 	self reinitCaller.
 	3 timesRepeat: [
 		caller

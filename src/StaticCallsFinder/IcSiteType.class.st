@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'caller',
-		'suite'
+		'suite',
+		'receivers'
 	],
 	#category : 'StaticCallsFinder-Benchmarks',
 	#package : 'StaticCallsFinder',
@@ -20,6 +21,18 @@ IcSiteType class >> with: aSuite [
 IcSiteType >> caller [
 
 	^ suite caller
+]
+
+{ #category : 'accessing' }
+IcSiteType >> receivers [
+
+	^ receivers
+]
+
+{ #category : 'accessing' }
+IcSiteType >> receivers: anObject [
+
+	receivers := anObject
 ]
 
 { #category : 'running' }
