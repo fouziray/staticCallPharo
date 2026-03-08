@@ -9,6 +9,13 @@ Class {
 { #category : 'benchmarking' }
 PolyIcSite >> setUp [
 
-	self reinitCaller.
-	3 timesRepeat:  [caller send: Object; send: Set; send: 1 ].
+	           self reinitCaller.
+	           3 timesRepeat: [
+		           caller
+			           send: Set;
+			           send: 1;
+			           send: OrderedCollection new;
+			           send: 1.0;
+			           send: 'toto';
+			           send: Object ]
 ]
