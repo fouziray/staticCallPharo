@@ -20,6 +20,42 @@ Class {
 	#package : 'PolymorphicCallSites'
 }
 
+{ #category : 'as yet unclassified' }
+DevirtualizableCallSites class >> benchMarksToExecute [
+
+	^ self roassalBenchs , self honneyGingerBenchs 
+]
+
+{ #category : 'as yet unclassified' }
+DevirtualizableCallSites class >> executeBenchmarks [
+
+<script>
+	
+| programs simulator devirtualizableNodes result |
+
+programs := self benchMarksToExecute asDictionary.
+
+programs associations do: [ :assoc | 
+ 	| key value blockReturn |. 
+	key := assoc key.
+	value := assoc value.
+
+	simulator := self new.
+	simulator block: value.
+	blockReturn := simulator execute.		
+	
+	(blockReturn isKindOf: Morph) ifTrue: [ 
+		blockReturn containingWindow ifNotNil: #close
+	].
+			
+	devirtualizableNodes := simulator getAllCallSites.
+	result := ProgramModel new name: key fromRaw: value -> devirtualizableNodes.
+	(key asFileReference withExtension: 'ston')
+		writeStreamDo: [:s | STON put: result onStream: s].
+] displayingProgress: [:assoc | assoc key].
+
+]
+
 { #category : 'parameters' }
 DevirtualizableCallSites class >> from: aBlock [
 
@@ -98,7 +134,7 @@ DevirtualizableCallSites >> execute [
 
 	| method receiver |	
 	
-	method := (block home compiler compile: block sourceNode body formattedCode).
+	method := (block home compiler compile: '^ ' , block sourceNode body formattedCode).
 	receiver := block home receiver.
 	
 	instrumentation compiler: block home compiler.
