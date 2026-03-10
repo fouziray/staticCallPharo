@@ -2,7 +2,8 @@ Class {
 	#name : 'PolymorphicCallSitesVisitor',
 	#superclass : 'CallSitesFrequencyVisitor',
 	#instVars : [
-		'messageExecutionsDictionary'
+		'messageExecutionsDictionary',
+		'messageToTrace'
 	],
 	#classInstVars : [
 		'index'
@@ -28,8 +29,8 @@ PolymorphicCallSitesVisitor class >> filter: aListOfMessageReceiversAssociations
 PolymorphicCallSitesVisitor class >> filterFakePoly: targetMethodsDict [
 
 	^ targetMethodsDict associations select: [ :messageTargetAndReceiver |
-		  messageTargetAndReceiver value keys size = 1 and: [
-			  messageTargetAndReceiver value values first asIdentitySet size > 1 ] ]
+		  messageTargetAndReceiver value keys asSet size = 1 and: [
+			  messageTargetAndReceiver value values flattened asIdentitySet size > 1 ] ]
 ]
 
 { #category : 'formatting' }
@@ -66,29 +67,34 @@ PolymorphicCallSitesVisitor class >> rateOfDevirtualizable: aCollection [
 
 { #category : 'as yet unclassified' }
 PolymorphicCallSitesVisitor class >> rateOfDevirtualizableWith: aCollection [ 
-	| total devirtualizable totalSites filtered staticSites monoStaticable polyStaticable singleImplementation singleImplementationBlock monoSingleImplementation polyStaticableSingleImplementation monoSingleImplementationStatic singleImplementationDynamicStatic megaStaticable |
+	| total devirtualizable totalSites filtered staticSites monoStaticable polyStaticable singleImplementation singleImplementationBlock monoSingleImplementation polyStaticableSingleImplementation monoSingleImplementationStatic singleImplementationDynamicStatic megaStaticable monoStaticable2 |
 	
 	total :=(( aCollection values ) collect: [:e | e values flattened size]) sum.
 	totalSites:= (aCollection keys reject: #isNil) size.
-	
-	devirtualizable:=
-( ((( filtered:= self filterFakePoly: aCollection )collect:#value)  select:[:c | c size = 1]) collect: [:e | e values flattened size]) sum.
+
+	devirtualizable  := ( ((( filtered := self filterFakePoly: aCollection )collect:#value)  "select:[:c | c size = 1]") collect: [:e | e values flattened size]) sum. 
+
 staticSites:= filtered collect: #key.
 
 
-monoStaticable:= (filtered value) select:[ :e| e value asSet size=1 ].
-singleImplementationBlock := [:e| e key selector implementors size=1].
-monoSingleImplementationStatic := monoStaticable select: singleImplementationBlock.
-polyStaticable := (filtered ) select:[ :e| (e value asSet size > 1) and: [ (e value asSet size) < 7 ] ].
+monoStaticable := (filtered value) select:[ :e| e value asSet  size=1 ]. "this needs to be changed. fetch methods single target with single type"
 
-megaStaticable := (filtered ) select:[ :e| (e value asSet size > 6) ].
+monoStaticable2:= (aCollection copyWithoutAll: filtered)  select: [ :e | e value keys asSet size =1 and: [e value values asSet size =1]].
+ singleImplementationBlock := [:e| 
+	self assert: e size = 1.
+	e keys anyOne selector implementors size=1].
+monoSingleImplementationStatic := monoStaticable2 select: singleImplementationBlock.
+1 halt.
+polyStaticable := (filtered ) select:[ :e| (e value values flattened asSet size > 1) and: [ (e value asSet size) < 7 ] ].
+
+megaStaticable := (filtered ) select:[ :e| (e value values flattened asSet size > 6) ].
 
 polyStaticableSingleImplementation := (polyStaticable union: megaStaticable) select: singleImplementationBlock .
 
 singleImplementationDynamicStatic := (polyStaticableSingleImplementation) select: singleImplementationBlock.
 
 
-	^ {'Ratio of dev to total calls:'->(((devirtualizable / total) * 100 asFloat round:2) asString,'%'  ). 'static sites' ->{staticSites size. staticSites}.  'Total of sites:'-> totalSites . 'staticable mono'->{ monoStaticable size. monoStaticable }. 'staticable poly' -> { polyStaticable size . polyStaticable }. 'staticable mega '-> {megaStaticable size. megaStaticable}. 'staticable mono single'->{ monoSingleImplementationStatic size. monoSingleImplementationStatic} . 'staticable poly/mega single' -> { singleImplementationDynamicStatic size. singleImplementationDynamicStatic } }
+	^ {'Ratio of dev to total calls:'->(((devirtualizable / total) * 100 asFloat round:2) asString,'%'  ). 'static sites' ->{staticSites size. staticSites}.  'Total of sites:'-> totalSites . 'staticable mono'->{ monoStaticable2 size. monoStaticable2 }. 'staticable poly' -> { polyStaticable size . polyStaticable }. 'staticable mega '-> {megaStaticable size. megaStaticable}. 'staticable mono single'->{ monoSingleImplementationStatic size. monoSingleImplementationStatic} . 'staticable poly/mega single' -> { singleImplementationDynamicStatic size. singleImplementationDynamicStatic } }
 ]
 
 { #category : 'serialize' }
@@ -111,7 +117,8 @@ PolymorphicCallSitesVisitor class >> transformSummaryToBeSerializable: aSummaryD
 PolymorphicCallSitesVisitor >> initialize [
 
 	"message send node -> IdentityDictionary(executed compiled method -> Collection( method call receiver))"
-	messageExecutionsDictionary := IdentityDictionary new
+	messageExecutionsDictionary := IdentityDictionary new.
+	messageToTrace := Dictionary new.
 ]
 
 { #category : 'accessing' }
@@ -120,10 +127,16 @@ PolymorphicCallSitesVisitor >> messageExecutionsDictionary [
 	^ messageExecutionsDictionary
 ]
 
+{ #category : 'as yet unclassified' }
+PolymorphicCallSitesVisitor >> recordTraceMessage [
+	^messageToTrace .
+]
+
 { #category : 'visiting' }
 PolymorphicCallSitesVisitor >> visitMethodTrace: aScpMethodTrace [
 
 	aScpMethodTrace parent ifNotNil: [ :message |
+		messageToTrace at: message node put: aScpMethodTrace.
 		messageExecutionsDictionary
 			at: message node
 			ifPresent: [ :d |

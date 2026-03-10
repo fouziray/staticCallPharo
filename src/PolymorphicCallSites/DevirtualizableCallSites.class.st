@@ -31,6 +31,41 @@ DevirtualizableCallSites class >> from: aBlock [
 		calls
 ]
 
+{ #category : 'as yet unclassified' }
+DevirtualizableCallSites class >> honneyGingerBenchs [
+	
+^ { 
+'HGSimulator impossibeRiverPressureMap' -> [ HGSimulator impossibeRiverPressureMap  ].
+'HGSimulator lagoonRefractionWorld' -> [ HGSimulator lagoonRefractionWorld  ].
+'HGSimulator sandbox4000' -> [ HGSimulator sandbox4000 ].
+'HGSimulator sandbox4000' -> [ HGSimulator capuccinoPower ].
+'HGSimulator rockAtMouse2' -> [ HGSimulator rockAtMouse2 ].
+'HGSimulator rainyWindow' -> [ HGSimulator rainyWindow ].
+'HGSimulator lagoonSmokeyWorld' -> [ HGSimulator lagoonSmokeyWorld ].
+'HGSimulator sandtrap3D' -> [ HGSimulator sandtrap3D ].
+'HGSimulator waterImageViewer' -> [ HGSimulator waterImageViewer ].
+'HGSimulator splashPressureBorderline' -> [ HGSimulator splashPressureBorderline ].
+'HGSimulator raftingDots' -> [ HGSimulator raftingDots ].
+'HGSimulator arrestingWire5' -> [ HGSimulator arrestingWire5 ].""
+'HGSimulator ramen' -> [ HGSimulator ramen ].
+'HGSimulator watershowPressureMap'->[ HGSimulator watershowPressureMap ].
+'HGSimulator impossibeRiverDots' -> [ HGSimulator impossibeRiverDots ].
+'HGSimulator capuccino' -> [ HGSimulator capuccino ].
+'HGSimulator nattoViewer' -> [ HGSimulator nattoViewer ].
+ }
+]
+
+{ #category : 'as yet unclassified' }
+DevirtualizableCallSites class >> roassalBenchs [
+
+^ {
+'Roassal RSAlpharoExample example01Basic' ->[  RSAlpharoExample new example01Basic  ].
+'Roassal RSKiviatExample example01Basic'->[  RSKiviatExample new example01Basic   ].
+'Roassal RSLegendExamples example01Basic' -> [  RSLegendExamples new example01Basic   ].
+'Roassal RSPieExamples example01Basic ' -> [  RSPieExamples new example01Basic   ].
+ }	
+]
+
 { #category : 'accessing' }
 DevirtualizableCallSites >> block: aBlock [
 
@@ -154,14 +189,18 @@ DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver a
                  arguments: aArguments) }
    	].
 
+
+	(aNode isNotNil and: [ aNode methodNode isNil ]) 
+		ifTrue: [ ^ aReceiver withArgs: arguments executeMethod: aMethod ].
+
 	callsites at: aNode 
 		ifPresent: [ :m | m at: aMethod 
 			ifPresent: [ :r | r add: aReceiver class ]
-			ifAbsentPut: [ IdentitySet new
+			ifAbsentPut: [ Bag new
 				add: aReceiver class;
 				yourself ]
 		]
-		ifAbsentPut: [ IdentityDictionary new
+		ifAbsentPut: [ Dictionary new
 			at: aMethod put: (Bag new
 				add: aReceiver class;
 				yourself);
@@ -176,6 +215,7 @@ DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver a
 DevirtualizableCallSites >> message: aNode sender: aSender receiver: aReceiver arguments: aArguments [
 
 	<noInstrumentation>
+	
 	| method class |
 	
 	class := aNode isSuperSend
