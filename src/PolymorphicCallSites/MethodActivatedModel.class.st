@@ -18,6 +18,12 @@ MethodActivatedModel class >> fromRaw: anAssociation [
 		yourself
 ]
 
+{ #category : 'accessing' }
+MethodActivatedModel >> compiledMethodName [
+
+	^ compiledMethodName
+]
+
 { #category : 'instance creation' }
 MethodActivatedModel >> fromRaw: anAssociation [ 
 	

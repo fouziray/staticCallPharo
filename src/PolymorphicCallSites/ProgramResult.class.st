@@ -17,7 +17,9 @@ Class {
 		'spuriousMegaSites',
 		'spuriousCalls',
 		'spuriousPolyCalls',
-		'spuriousMegaCalls'
+		'spuriousMegaCalls',
+		'numberOfSingleImplementationPoly',
+		'numberOfSingleImplementationMega'
 	],
 	#category : 'PolymorphicCallSites-Objects',
 	#package : 'PolymorphicCallSites',
@@ -75,7 +77,9 @@ ProgramResult >> calculateCalls [
 		                     sum: [ :e |
 		                     self
 			                     numberOfCallsFor:
-			                     e ]
+			                     e ].
+	numberOfSingleImplementationPoly:= self polyCallSitesSingleImplementation size.
+	numberOfSingleImplementationMega := self megaCallSitesSingleImplementation size.
 ]
 
 { #category : 'as yet unclassified' }
@@ -147,6 +151,12 @@ ProgramResult >> megaCallSites [
 ]
 
 { #category : 'as yet unclassified' }
+ProgramResult >> megaCallSitesSingleImplementation [
+
+	^ (self megaCallSites select: [:e | e selector ifNotNil:[:e | e asSymbol implementors size =1  ]ifNil:[false]])
+]
+
+{ #category : 'as yet unclassified' }
 ProgramResult >> monoCallSites [
 
 	^ (self callSites select: [:e | self isMonoMorphicCallSite: e])
@@ -168,4 +178,39 @@ ProgramResult >> numberOfReceiverClasses: aCallSiteModel [
 ProgramResult >> polyCallSites [
 
 	^ (self callSites select: [:e | self isPolyMorphicCallSite: e])
+]
+
+{ #category : 'as yet unclassified' }
+ProgramResult >> polyCallSitesSingleImplementation [
+
+	^ (self polyCallSites select: [:e | e selector ifNotNil:[:e | e asSymbol implementors size =1 ] ifNil:[false]]) 
+]
+
+{ #category : 'printing' }
+ProgramResult >> printOn: aStream [
+
+                              "super printOn: aStream."
+						
+                               aStream
+											nextPutAll: programName ;
+                                  nextPutAll: ' & ';
+                                  nextPutAll: numberCallSites asString;
+                                  nextPutAll: ' & ';
+                                  nextPutAll:
+                                     numberOfMonoCallSites asString;
+                                  nextPutAll: ' & ';
+                                  nextPutAll:
+                                     numberOfPolyCallSites asString ,' (', numberOfSingleImplementationPoly asString ,')';
+                                  nextPutAll: ' & ';
+                                  nextPutAll:
+                                     numberOfMegaCallSites asString,' (',numberOfSingleImplementationMega asString ,')';
+                                  nextPutAll: ' & ';
+                                  nextPutAll:
+                                     spuriousCallSites asString;
+                                  nextPutAll: ' & ';
+                                  nextPutAll:
+                                     ((spuriousCalls / numberCalls
+                                      * 100) asFloat round:2) asString;
+                                  nextPutAll: '\\ ';
+                                  nextPutAll: ' '
 ]

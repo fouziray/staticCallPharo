@@ -9,7 +9,8 @@ Class {
 		'source',
 		'bytecodeStart',
 		'bytecodeEnd',
-		'methodsActivated'
+		'methodsActivated',
+		'selector'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -22,6 +23,11 @@ CallSiteModel class >> fromRaw: aCollection [
 	^ self new
 		fromRaw: aCollection;
 		yourself
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> fetchSelector [
+	^ methodsActivated first compiledMethodName copyAfterLast: $#
 ]
 
 { #category : 'instance creation' }
@@ -46,7 +52,8 @@ CallSiteModel >> fillKey: 	aCollection [
 CallSiteModel >> fromRaw: aCollection [ 
 	
 	self fillKey: aCollection.
-	methodsActivated := aCollection value associations collect: [ :e | MethodActivatedModel fromRaw: e ]
+	methodsActivated := aCollection value associations collect: [ :e | MethodActivatedModel fromRaw: e ].
+	selector := self fetchSelector.
 ]
 
 { #category : 'accessing' }
@@ -65,4 +72,9 @@ CallSiteModel >> numberOfDifferentMethods [
 CallSiteModel >> numberOfReceiverClasses [
 	
 	^ methodsActivated sum: [ :m | m numberOfReceiverClasses ]
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> selector [
+	^ selector
 ]

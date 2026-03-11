@@ -20,7 +20,7 @@ ResultModel class >> from: aCollection [
 { #category : 'instance creation' }
 ResultModel >> fromRaw: aCollection [ 
 	
-	programs := aCollection collect: [ :e | ProgramModel fromRaw: e ]
+	programs := aCollection collect: [ :e |  ProgramModel fromRaw: e ]
 ]
 
 { #category : 'accessing' }

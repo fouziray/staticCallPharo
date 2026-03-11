@@ -27,6 +27,14 @@ DevirtualizableCallSites class >> benchMarksToExecute [
 ]
 
 { #category : 'as yet unclassified' }
+DevirtualizableCallSites class >> blocBenchs [
+
+^ {
+'Bloc VeritasBloc' -> [  VeritasBloc new run   ].
+ }	
+]
+
+{ #category : 'as yet unclassified' }
 DevirtualizableCallSites class >> executeBenchmarks [
 
 <script>
@@ -89,6 +97,22 @@ DevirtualizableCallSites class >> honneyGingerBenchs [
 'HGSimulator capuccino' -> [ HGSimulator capuccino ].
 'HGSimulator nattoViewer' -> [ HGSimulator nattoViewer ].
  }
+]
+
+{ #category : 'as yet unclassified' }
+DevirtualizableCallSites class >> mooseBenchs [
+
+^ {
+'Moose VeritasMoose' -> [  VeritasMoose new run   ].
+ }	
+]
+
+{ #category : 'as yet unclassified' }
+DevirtualizableCallSites class >> rewriterBenchs [
+
+^ {
+'Rewriter VeritasRewriter' -> [  VeritasRewriterTransformer new run   ].
+ }	
 ]
 
 { #category : 'as yet unclassified' }
