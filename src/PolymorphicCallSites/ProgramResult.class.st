@@ -49,37 +49,26 @@ ProgramResult >> calculateCalls [
 
 	numberCallSites := self callSites size.
 
-	numberOfMonoCallSites := self
-		                         monoCallSites
-		                         size.
+	numberOfMonoCallSites := self monoCallSites size.
 
-	numberOfPolyCallSites := self
-		                         polyCallSites
-		                         size.
+	numberOfPolyCallSites := self polyCallSites size.
 
-	numberOfMegaCallSites := self
-		                         megaCallSites
-		                         size.
+	numberOfMegaCallSites := self megaCallSites size.
 
-	numberCalls := self callSites sum: [ :e |
-		               self numberOfCallsFor: e ].
-	numberOfMonoCalls := self monoCallSites
-		                     sum: [ :e |
-		                     self
-			                     numberOfCallsFor:
-			                     e ].
-	numberOfPolyCalls := self polyCallSites
-		                     sum: [ :e |
-		                     self
-			                     numberOfCallsFor:
-			                     e ].
-	numberOfMegaCalls := self megaCallSites
-		                     sum: [ :e |
-		                     self
-			                     numberOfCallsFor:
-			                     e ].
-	numberOfSingleImplementationPoly:= self polyCallSitesSingleImplementation size.
-	numberOfSingleImplementationMega := self megaCallSitesSingleImplementation size.
+	numberCalls := self callSites sum: [ :e | self numberOfCallsFor: e ].
+	numberOfMonoCalls := self monoCallSites sum: [ :e |
+		                     self numberOfCallsFor: e ].
+	numberOfPolyCalls := self polyCallSites sum: [ :e |
+		                     self numberOfCallsFor: e ].
+	numberOfMegaCalls := self megaCallSites sum: [ :e |
+		                     self numberOfCallsFor: e ].
+
+"	numberOfSingleImplementationPoly := self
+		                                    polyCallSitesSingleImplementation
+		                                    size.
+	numberOfSingleImplementationMega := self
+		                                    megaCallSitesSingleImplementation
+		                                    size"
 ]
 
 { #category : 'as yet unclassified' }
@@ -105,6 +94,64 @@ ProgramResult >> calculateSpurious [
 ProgramResult >> callSites [
 
 	^ originalData callSites
+]
+
+{ #category : 'printing' }
+ProgramResult >> generateLatexOn1: aStream [
+	"super printOn: aStream."
+
+	self putLatex: programName on: aStream. self nextFieldOn: aStream.
+	self putLatex: numberCallSites asStringWithCommas on: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: numberOfMonoCallSites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: numberOfPolyCallSites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: numberOfMegaCallSites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+
+	self putLatexWithPercentage: spuriousCallSites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: spuriousPolySites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: spuriousMegaSites total: numberCallSites On: aStream. self nextRowOn: aStream.
+
+]
+
+{ #category : 'printing' }
+ProgramResult >> generateLatexOn2: aStream [
+	"super printOn: aStream."
+
+	self putLatex: programName on: aStream. self nextFieldOn: aStream.
+
+	self putLatex: numberCalls  asStringWithCommas on: aStream. self nextFieldOn: aStream.
+	self putPercentage: numberOfMonoCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
+	self putPercentage: numberOfPolyCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
+	self putPercentage: numberOfMegaCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
+
+	self putPercentage: spuriousCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
+	self putPercentage: spuriousPolyCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
+	self putPercentage: spuriousMegaCalls total: numberCalls On: aStream. self nextRowOn: aStream.
+	
+]
+
+{ #category : 'printing' }
+ProgramResult >> generateLatexOn: aStream [
+	"super printOn: aStream."
+
+	self putLatex: programName on: aStream. self nextFieldOn: aStream.
+	self putLatex: numberCallSites on: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: numberOfMonoCallSites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: numberOfPolyCallSites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: numberOfMegaCallSites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+
+	self putLatexWithPercentage: spuriousCallSites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: spuriousPolySites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: spuriousMegaSites total: numberCallSites On: aStream. self nextFieldOn: aStream.
+
+	self putLatex: numberCalls on: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: numberOfMonoCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: numberOfPolyCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: numberOfMegaCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
+
+	self putLatexWithPercentage: spuriousCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: spuriousPolyCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
+	self putLatexWithPercentage: spuriousMegaCalls total: numberCalls On: aStream. self nextRowOn: aStream.
+	
 ]
 
 { #category : 'initialization' }
@@ -163,6 +210,20 @@ ProgramResult >> monoCallSites [
 ]
 
 { #category : 'as yet unclassified' }
+ProgramResult >> nextFieldOn: aWriteStream [ 
+	
+	aWriteStream nextPutAll: ' & '
+]
+
+{ #category : 'as yet unclassified' }
+ProgramResult >> nextRowOn: aWriteStream [ 
+	
+	aWriteStream 
+		nextPutAll: ' \\ ';
+		crlf
+]
+
+{ #category : 'as yet unclassified' }
 ProgramResult >> numberOfCallsFor: aCallSiteModel [ 
 	
 	^ aCallSiteModel numberOfCalls 
@@ -188,29 +249,56 @@ ProgramResult >> polyCallSitesSingleImplementation [
 
 { #category : 'printing' }
 ProgramResult >> printOn: aStream [
+	"super printOn: aStream."
 
-                              "super printOn: aStream."
-						
-                               aStream
-											nextPutAll: programName ;
-                                  nextPutAll: ' & ';
-                                  nextPutAll: numberCallSites asString;
-                                  nextPutAll: ' & ';
-                                  nextPutAll:
-                                     numberOfMonoCallSites asString;
-                                  nextPutAll: ' & ';
-                                  nextPutAll:
-                                     numberOfPolyCallSites asString ,' (', numberOfSingleImplementationPoly asString ,')';
-                                  nextPutAll: ' & ';
-                                  nextPutAll:
-                                     numberOfMegaCallSites asString,' (',numberOfSingleImplementationMega asString ,')';
-                                  nextPutAll: ' & ';
-                                  nextPutAll:
-                                     spuriousCallSites asString;
-                                  nextPutAll: ' & ';
-                                  nextPutAll:
-                                     ((spuriousCalls / numberCalls
-                                      * 100) asFloat round:2) asString;
-                                  nextPutAll: '\\ ';
-                                  nextPutAll: ' '
+	aStream
+		nextPutAll: programName;
+		nextPutAll: ' & ';
+		nextPutAll: numberCallSites asString;
+		nextPutAll: ' & ';
+		nextPutAll: numberOfMonoCallSites asString;
+		nextPutAll: ' & ';
+		nextPutAll: numberOfPolyCallSites asString , ' ('
+			, numberOfSingleImplementationPoly asString , ')';
+		nextPutAll: ' & ';
+		nextPutAll: numberOfMegaCallSites asString , ' ('
+			, numberOfSingleImplementationMega asString , ')';
+		nextPutAll: ' & ';
+		nextPutAll: spuriousCallSites asString;
+		nextPutAll: ' & ';
+		nextPutAll:
+			((spuriousCalls / numberCalls * 100) asFloat round: 2) asString;
+		nextPutAll: '\\ ';
+		nextPutAll: ' '
+]
+
+{ #category : 'accessing' }
+ProgramResult >> programName [
+	^ programName
+]
+
+{ #category : 'as yet unclassified' }
+ProgramResult >> putLatex: anObject on: aWriteStream [ 
+	
+	aWriteStream nextPutAll: anObject asString
+]
+
+{ #category : 'as yet unclassified' }
+ProgramResult >> putLatexWithPercentage: aValue total: total On: aWriteStream [ 
+	
+	aWriteStream 
+		nextPutAll: aValue asStringWithCommas;
+		nextPutAll: '~( ' ;
+		nextPutAll: ((aValue / total * 100.0) round: 2) asString;
+		nextPutAll: ' \%)'
+		
+]
+
+{ #category : 'as yet unclassified' }
+ProgramResult >> putPercentage: aValue total: total On: aWriteStream [ 
+	
+	aWriteStream 
+		nextPutAll: ((aValue / total * 100.0) round: 2) asString;
+		nextPutAll: ' \%'
+		
 ]
