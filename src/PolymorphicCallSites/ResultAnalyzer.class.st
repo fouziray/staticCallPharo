@@ -17,6 +17,27 @@ ResultAnalyzer class >> analyze: aCollection [
 		yourself
 ]
 
+{ #category : 'testing' }
+ResultAnalyzer class >> analyzeAllFilesIn: aDirectory [
+
+	<script: 'self analyzeAllFilesIn: ''/Users/admin/dev/papers/2026-scall_mplr26/Paper/data/tracePrograms'''>
+
+	| programs resultModel |
+
+	programs := aDirectory 
+		            asFileReference allFiles collect: [ :e |
+		            e readStreamDo: [ :s | STON fromStream: s ] ].
+
+	resultModel := ResultModel new
+		               programs: programs;
+		               yourself.
+
+	1halt.
+
+	(ResultAnalyzer analyze: resultModel) generateLatex1.
+	(ResultAnalyzer analyze: resultModel) generateLatex2
+]
+
 { #category : 'adding' }
 ResultAnalyzer >> addColumnName: anObject on: aWriteStream [ 
 
