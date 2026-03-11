@@ -1,0 +1,4218 @@
+
+VM Error Thu Mar  5 15:55:39 2026
+
+
+/Users/faouziray/Documents/XP/Pharo/images/againWithVM/pharo-local/iceberg/fouziray/JIT2/build/dist/Pharo.app/Contents/MacOS/Pharo
+PharoVM version:5.0-Pharo 10.3.0-bb546bfdb built on Feb  6 2026 14:39:36 Compiler: Apple LLVM 14.0.3 (clang-1403.0.22.14.1) Apple LLVM 14.0.3 (clang-1403.0.22.14.1) [Production Spur 64-bit VM]
+Built from: CoInterpreter VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ With:StackToRegisterMappingCogit VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ Revision: bb546bfdb - Commit: bb546bfdb - Date: 2026-02-06 14:35:39 +0100
+
+C stack backtrace & registers:
+	 x00 0x0000000000000000 x01 0x00000001034c78af x02 0x0000000120012fa0 x03 0x0000000000000003
+	 x04 0xf840879daa1d03fc x05 0x000000016cf5ed00 x06 0x000000010344149c x07 0x00000003200bdab4
+	 x08 0x00000003200bde0d x09 0x0000000320049b58 x10 0xfffffffffffb6678 x11 0xffffffffffffffe3
+	 x12 0x00000003200bda18 x13 0x000000016cf5ee10 x14 0x000000010342162c x15 0x00000001034df000
+	 x16 0x000000016cf5ed48 x17 0x000000016cf5ed90 x18 0x000000016cf5ed70 x19 0x000000016cf5ec48
+	 x20 0x00000001034c78a9 x21 0x0000000000000003 x22 0x000001000351eac8 x23 0x000001000352ac38
+	 x24 0x00000003200bdab4 x25 0x00000001034de000 x26 0x0000000103578508 x27 0xfffffffffffb6674
+	 x28 0x00000003200bdab0  FP 0x000000016cf5ec90  LR 0x497b0001034c613c  SP 0x000000016cf5ec40
+	  PC 0x0000000000000000  STATE 0x0000000000000000
+*0   ???                                 0x0000000000000000 0x0 + 0
+1   libPharoVMCore.dylib                0x00000001034c5ca8 reportStackState + 212
+2   libPharoVMCore.dylib                0x00000001034c5b6c doReport + 144
+3   libPharoVMCore.dylib                0x00000001034c6154 printStatusAfterError + 52
+4   ???                                 0x0000000000000000 0x0 + 0
+5   libPharoVMCore.dylib                0x000000010344149c indexForSelectorinat + 180
+6   libPharoVMCore.dylib                0x000000010342162c compactCogCompiledCode + 2368
+7   libPharoVMCore.dylib                0x00000001034ba794 commenceCogCompiledCodeCompaction + 204
+8   libPharoVMCore.dylib                0x0000000103470498 checkForEventsMayContextSwitch + 108
+9   ???                                 0x0000000000000000 0x0 + 0
+
+
+All Smalltalk process stacks (active first):
+Process      0x100093a8ed0 priority 40
+       0x30001dbe8 I [] in FreeTypeCache>atFont:charCode:type:scale:ifAbsentPut: 0x100087251b0: a(n) FreeTypeCache
+       0x30001dc18 M FullBlockClosure(BlockClosure)>on:do: 0x361351f88: a(n) FullBlockClosure
+       0x30001dc68 M [] in Semaphore>(nil) 0x100087266f8: a(n) Semaphore
+       0x30001dcb0 M FullBlockClosure(BlockClosure)>ensure: 0x3613520b0: a(n) FullBlockClosure
+       0x30001dd00 I Semaphore>criticalReleasingOnError: 0x100087266f8: a(n) Semaphore
+       0x30001dd50 I FreeTypeCache>atFont:charCode:type:scale:ifAbsentPut: 0x100087251b0: a(n) FreeTypeCache
+       0x30001ddb8 I FreeTypeFont>glyphOf:colorValue:mono:subpixelPosition:scale: 0x10008725358: a(n) FreeTypeFont
+       0x30001de20 I FreeTypeFont>glyphOf:colorValue:mono:subpixelPosition: 0x10008725358: a(n) FreeTypeFont
+       0x30001dec0 I FreeTypeFont>widthOfString:from:to: 0x10008725358: a(n) FreeTypeFont
+       0x30001df18 I FreeTypeFont(AbstractFont)>widthOfString: 0x10008725358: a(n) FreeTypeFont
+       0x30001df60 I LogicalFont>widthOfString: 0x100010fc6d8: a(n) LogicalFont
+       0x30001dfa0 M LabelMorph>(nil) 0x36134e960: a(n) LabelMorph
+       0x30001dfe0 M LabelMorph>(nil) 0x36134e960: a(n) LabelMorph
+       0x300031a28 I LabelMorph(StringMorph)>contents: 0x36134e960: a(n) LabelMorph
+       0x300031a78 I PharoLightTheme(UITheme)>windowLabelForText: 0x10008791608: a(n) PharoLightTheme
+       0x300031ac0 I PharoLightTheme(UITheme)>windowLabelFor: 0x10008791608: a(n) PharoLightTheme
+       0x300031b08 I SpWindow(SystemWindow)>initializeLabelArea 0x36134d730: a(n) SpWindow
+       0x300031b48 I SpWindow(SystemWindow)>initialize 0x36134d730: a(n) SpWindow
+       0x300031b88 I SpWindow(StandardWindow)>initialize 0x36134d730: a(n) SpWindow
+       0x300031bb8 M (Behavior)>new 0x100012142e8: a(n) 
+       0x300031bf8 I SpMorphicWindowAdapter>buildWidget 0x36134d6d0: a(n) SpMorphicWindowAdapter
+       0x300031c40 I SpMorphicWindowAdapter(SpAbstractAdapter)>adapt: 0x36134d6d0: a(n) SpMorphicWindowAdapter
+       0x300031c88 I SpMorphicWindowAdapter(SpAbstractMorphicAdapter)>adapt: 0x36134d6d0: a(n) SpMorphicWindowAdapter
+       0x300031ce8 I SpAbstractWidgetLayout>adapt:bindings: 0x36134d3e0: a(n) SpAbstractWidgetLayout
+       0x300031d40 I SpAbstractWidgetLayout>buildAdapterFor:bindings: 0x36134d3e0: a(n) SpAbstractWidgetLayout
+       0x300031d98 I SpWindowPresenter>buildWindowWithLayout:presenterLayout: 0x361342780: a(n) SpWindowPresenter
+       0x300031de8 I SpWindowPresenter>basicBuildWithSpecLayout: 0x361342780: a(n) SpWindowPresenter
+       0x300031e28 M [] in SpWindowPresenter>(nil) 0x361342780: a(n) SpWindowPresenter
+       0x300031e70 M [] in SpBindings>(nil) 0x1000240f480: a(n) SpBindings
+       0x300031eb8 M FullBlockClosure(BlockClosure)>ensure: 0x36134d368: a(n) FullBlockClosure
+       0x300031f00 M SpBindings>(nil) 0x1000240f480: a(n) SpBindings
+       0x300031f40 M SpBindings class>(nil) 0x1000111f530: a(n) SpBindings class
+       0x300031f90 I SpWindowPresenter>buildWithSpecLayout: 0x361342780: a(n) SpWindowPresenter
+       0x300031fd8 I SpWindowPresenter>openWithLayout: 0x361342780: a(n) SpWindowPresenter
+       0x300005848 I SpWindowPresenter>openWith: 0x361342780: a(n) SpWindowPresenter
+       0x300005890 I SpWindowPresenter>open 0x361342780: a(n) SpWindowPresenter
+       0x3000058d0 I StInspectorPresenter(SpAbstractPresenter)>open 0x361300dc0: a(n) StInspectorPresenter
+       0x300005910 I >openOn: 0x10001dcc410: a(n) 
+       0x300005958 I >inspect: 0x10001dcc410: a(n) 
+       0x3000059a0 I SystemNavigation>inspect: 0x3613009e0: a(n) SystemNavigation
+       0x3000059e8 I SpCodeInspectItCommand>inspectObject: 0x1000857dcd0: a(n) SpCodeInspectItCommand
+       0x300005a30 I [] in SpCodeInspectItCommand>execute 0x1000857dcd0: a(n) SpCodeInspectItCommand
+       0x300005a78 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluate:andDo: 0x1000857dcd0: a(n) SpCodeInspectItCommand
+       0x300005ad0 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluateSelectionAndDo: 0x1000857dcd0: a(n) SpCodeInspectItCommand
+       0x300005b18 I SpCodeInspectItCommand>execute 0x1000857dcd0: a(n) SpCodeInspectItCommand
+       0x300005b48 M SpCommand>(nil) 0x1000857b8c0: a(n) SpCommand
+       0x300005b78 M [] in SpToolCurrentApplicationCommand>(nil) 0x10008579ef0: a(n) SpToolCurrentApplicationCommand
+       0x300005bc0 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300005c08 M FullBlockClosure(BlockClosure)>ensure: 0x360fbc790: a(n) FullBlockClosure
+       0x300005c50 M SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300005c90 M SpToolCurrentApplication class>(nil) 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300005cd0 M SpToolCurrentApplicationCommand>(nil) 0x10008579ef0: a(n) SpToolCurrentApplicationCommand
+       0x300005d00 M [] in SpToolCurrentApplicationCommand>(nil) 0x10008577d38: a(n) SpToolCurrentApplicationCommand
+       0x300005d48 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300005d90 M FullBlockClosure(BlockClosure)>ensure: 0x360fbc580: a(n) FullBlockClosure
+       0x300005de8 I SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300005e38 I SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300005e88 I SpToolCurrentApplicationCommand>execute 0x10008577d38: a(n) SpToolCurrentApplicationCommand
+       0x300005ec0 M [] in SpKMCategoryBuilder>(nil) 0x10008577160: a(n) SpKMCategoryBuilder
+       0x300005ef0 M FullBlockClosure>(nil) 0x10008574e80: a(n) FullBlockClosure
+       0x300005f28 M FullBlockClosure>(nil) 0x10008574e80: a(n) FullBlockClosure
+       0x300005f78 I FullBlockClosure(BlockClosure)>cull:cull:cull: 0x10008574e80: a(n) FullBlockClosure
+       0x300005fd0 I KMCategoryBinding>completeMatch:buffer: 0x360fb89c0: a(n) KMCategoryBinding
+       0x300037b60 M [] in KMKeymap>(nil) 0x10008573748: a(n) KMKeymap
+       0x300037bb0 M Array(SequenceableCollection)>do: 0x360fb8d00: a(n) Array
+       0x300037c00 I KMKeymap>notifyCompleteMatchTo:buffer: 0x10008573748: a(n) KMKeymap
+       0x300037c40 M KMKeymap>(nil) 0x10008573748: a(n) KMKeymap
+       0x300037ca0 M [] in KMCategory>(nil) 0x100084bdc38: a(n) KMCategory
+       0x300037cf8 M Set>(nil) 0x360fba8f0: a(n) Set
+       0x300037d30 M KMCategory>(nil) 0x100084bdc38: a(n) KMCategory
+       0x300037d78 M KMCategoryBinding>(nil) 0x360fb89c0: a(n) KMCategoryBinding
+       0x300037dc8 M [] in KMDispatcher>(nil) 0x100084b9bf8: a(n) KMDispatcher
+       0x300037e18 M OrderedCollection>(nil) 0x360fb89e0: a(n) OrderedCollection
+       0x300037e50 M KMDispatcher>(nil) 0x100084b9bf8: a(n) KMDispatcher
+       0x300037e88 M KMTarget>(nil) 0x100084bdc08: a(n) KMTarget
+       0x300037ec8 M [] in KMDispatchChain>(nil) 0x360fb5c00: a(n) KMDispatchChain
+       0x300037f18 I KMDispatchChain>do: 0x360fb5c00: a(n) KMDispatchChain
+       0x300037f60 I KMDispatchChain>dispatch: 0x360fb5c00: a(n) KMDispatchChain
+       0x300037fa0 M KMDispatcher(KMCategory)>onMatchWith:notify:andDo: 0x100084b9bf8: a(n) KMDispatcher
+       0x300037fd8 M RubEditingArea>(nil) 0x1000858b378: a(n) RubEditingArea
+       0x3000219b0 I RubEditingArea(Morph)>handleKeystrokeWithKeymappings: 0x1000858b378: a(n) RubEditingArea
+       0x3000219e8 M KMShortcutHandler>(nil) 0x10002027a18: a(n) KMShortcutHandler
+       0x300021a40 I RubEditingArea(Morph)>handleKeyDown: 0x1000858b378: a(n) RubEditingArea
+       0x300021a88 I RubEditingArea(RubAbstractTextArea)>handleKeyDown: 0x1000858b378: a(n) RubEditingArea
+       0x300021ac0 M KeyboardEvent>sentTo: 0x360fb5680: a(n) KeyboardEvent
+       0x300021af8 M RubEditingArea(Morph)>handleEvent: 0x1000858b378: a(n) RubEditingArea
+       0x300021b30 M RubEditingArea>(nil) 0x1000858b378: a(n) RubEditingArea
+       0x300021b80 M [] in HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x300021bb0 M FullBlockClosure(BlockClosure)>on:do: 0x360fb57c0: a(n) FullBlockClosure
+       0x300021bf8 M WorldMorph>(nil) 0x10000f6db28: a(n) WorldMorph
+       0x300021c48 M HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x300021c98 M HandMorph>sendEvent:focus:clear: 0x1000101b550: a(n) HandMorph
+       0x300021ce0 M HandMorph>sendKeyboardEvent: 0x1000101b550: a(n) HandMorph
+       0x300021d38 M HandMorph>handleEvent: 0x1000101b550: a(n) HandMorph
+       0x300021d78 M [] in OSWindowMorphicEventHandler>dispatchMorphicEvent: 0x10008726aa8: a(n) OSWindowMorphicEventHandler
+       0x300021db8 M WorldState>runStepMethodsIn: 0x10000fd85e8: a(n) WorldState
+       0x300021df0 M WorldMorph>runStepMethods 0x10000f6db28: a(n) WorldMorph
+       0x300021e20 M WorldState>doOneCycleFor: 0x10000fd85e8: a(n) WorldState
+       0x300021e58 M WorldMorph>doOneCycleNow 0x10000f6db28: a(n) WorldMorph
+       0x300021e88 M WorldMorph>doOneCycle 0x10000f6db28: a(n) WorldMorph
+       0x300021ec0 M [] in WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x300021f08 M FullBlockClosure(BlockClosure)>ensure: 0x360fb45c8: a(n) FullBlockClosure
+       0x300021f40 M WorldState class>doDrawCycleWith: 0x100009c3750: a(n) WorldState class
+       0x300021f78 M WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x300021fa8 M MorphicRenderLoop>doOneCycle 0x1000946ce70: a(n) MorphicRenderLoop
+       0x300021fd8 M MorphicRenderLoop>doOneCycleWhile: 0x1000946ce70: a(n) MorphicRenderLoop
+     0x100093cd7a8 s [] in MorphicUIManager>spawnNewProcess
+     0x1000946cf60 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+processes at priority 10
+Process      0x1000d08f6a0 priority 10
+       0x30002ff60 M ProcessorScheduler class>idleProcess 0x10000016f58: a(n) ProcessorScheduler class
+       0x30002ffa0 I [] in ProcessorScheduler class>startUp 0x10000016f58: a(n) ProcessorScheduler class
+       0x30002ffe0 I [] in FullBlockClosure>newProcess 0x1000d0baf08: a(n) FullBlockClosure
+
+suspended processes
+Process      0x10008724370 priority 50
+       0x30001bfe0 M FinalizationProcess class>finalizationProcess 0x1000001eff8: a(n) FinalizationProcess class
+     0x1000889f4d8 s [] in FinalizationProcess class>restartFinalizationProcess
+     0x10008725720 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10002a0a070 priority 80
+       0x30000bf98 M DelayMicrosecondTicker>waitForUserSignalled:orExpired: 0x10000490cc0: a(n) DelayMicrosecondTicker
+       0x30000bfe0 M [] in DelaySemaphoreScheduler>runBackendLoopAtTimingPriority 0x100004853a0: a(n) DelaySemaphoreScheduler
+     0x10002f52510 s FullBlockClosure(BlockClosure)>ensure:
+     0x10002ab8ec0 s DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+     0x10002f342d0 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>startTimerEventLoopPriority:
+     0x10002ab8f78 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000212db08 priority 40
+     0x1000213abe8 s AtomicSharedQueue>waitForNewItems
+     0x10002162b30 s AtomicSharedQueue>next
+     0x10002123c18 s TKTWorkerProcess>privateNextTask
+     0x10002118ce8 s TKTWorkerProcess>workerLoop
+     0x10002115de8 s MessageSend>value
+     0x10002115f38 s [] in TKTPharoProcessProvider>createProcessDoing:named:
+     0x10002116150 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100034bf010 priority 31
+     0x1000d2fd478 s AtomicSharedQueue>waitForNewItems
+     0x1000d45da00 s AtomicSharedQueue>next
+     0x1000327b948 s ClyDataSourceUpdateScheduler>processQueue
+     0x1000327d688 s [] in ClyDataSourceUpdateScheduler>ensureRunning
+     0x1000327e948 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fabf98 priority 70
+     0x10003fac0c0 s [] in TFCallbackQueue>forkCallbackProcess
+     0x10003fac310 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fbe698 priority 79
+       0x300007ed8 M [] in DelayWaitTimeout>(nil) 0x3603731f0: a(n) DelayWaitTimeout
+       0x300007f20 M FullBlockClosure(BlockClosure)>ensure: 0x360373c98: a(n) FullBlockClosure
+       0x300007f58 M DelayWaitTimeout>(nil) 0x3603731f0: a(n) DelayWaitTimeout
+       0x300007f90 M Semaphore>(nil) 0x10003fbe678: a(n) Semaphore
+       0x300007fe0 I TestExecutionEnvironment>watchDogLoop 0x10003fc0468: a(n) TestExecutionEnvironment
+     0x10003fc3928 s [] in TestExecutionEnvironment>startWatchDog
+     0x10003fc3a70 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10004daf2a0 priority 79
+       0x30000ded8 M [] in DelayWaitTimeout>(nil) 0x360373180: a(n) DelayWaitTimeout
+       0x30000df20 M FullBlockClosure(BlockClosure)>ensure: 0x360373da0: a(n) FullBlockClosure
+       0x30000df58 M DelayWaitTimeout>(nil) 0x360373180: a(n) DelayWaitTimeout
+       0x30000df90 M Semaphore>(nil) 0x10004daf280: a(n) Semaphore
+       0x30000dfe0 I TestExecutionEnvironment>watchDogLoop 0x10004dbb6a8: a(n) TestExecutionEnvironment
+     0x100050b9d10 s [] in TestExecutionEnvironment>startWatchDog
+     0x100050c3bc8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000d08f648 priority 60
+     0x1000d0b3c10 s SmalltalkImage>lowSpaceWatcher
+     0x1000d0ceac0 s [] in SmalltalkImage>installLowSpaceWatcher
+     0x1000d0b44b0 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process        0x360361c48 priority 40
+       0x30003dee0 M [] in Delay>wait 0x3603731c0: a(n) Delay
+       0x30003df28 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x360375dd8: a(n) FullBlockClosure
+       0x30003df60 M Delay>wait 0x3603731c0: a(n) Delay
+       0x30003dfa0 I Duration>wait 0x360375ee0: a(n) Duration
+       0x30003dfe0 I [] in StPlaygroundPage>spawnFlushProcess 0x1000869a070: a(n) StPlaygroundPage
+       0x360375fd8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000d08f770 priority 60
+       0x300013ea0 M [] in Delay>wait 0x36131b480: a(n) Delay
+       0x300013ee8 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x36131b6f8: a(n) FullBlockClosure
+       0x300013f20 M Delay>wait 0x36131b480: a(n) Delay
+       0x300013f60 M OSSDL2Driver>eventLoopProcessWithoutPlugin 0x10008724d80: a(n) OSSDL2Driver
+       0x300013fa0 I [] in OSSDL2Driver>setupEventLoop 0x10008724d80: a(n) OSSDL2Driver
+       0x300013fe0 I [] in FullBlockClosure>newProcess 0x1000d0b4380: a(n) FullBlockClosure
+
+Most recent primitives
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+object:instVarAt:
+basicNew
+wait
+basicIdentityHash
+fullCheck
+fullCheck
+signal
+**StackOverflow**
+value
+class
+basicNew
+class
+class
+class
+stringHash:initialHash:
+class
+basicIdentityHash
+at:
+value:
+value:
+basicNew
+includes:
+isEmpty
+basicNew:
+basicAt:put:
+basicNew
+@
+@
+class
+at:ifAbsentPut:
+at:ifAbsentPut:
+stringHash:initialHash:
+basicNew
+basicNew
+class
+class
+basicNew
+**StackOverflow**
+**StackOverflow**
+@
+@
+class
+@
+@
+isEmpty
+basicNew
+basicIdentityHash
+at:
+perform:
+basicNew
+transparent
+**StackOverflow**
+
+
+stringHash:initialHash:
+basicNew
+**StackOverflow**
+basicNew:
+at:put:
+at:put:
+at:put:
+at:put:
+asFloat
+fractionPart
+truncated
+species
+species
+**StackOverflow**
+
+
+stringHash:initialHash:
+color:
+**StackOverflow**
+=
+=
+bitShift:
+bitShift:
+bitShift:
+bitShift:
+bitShift:
+bitShift:
+bitShift:
+bitAnd:
+bitAnd:
+bitOr:
+bitOr:
+bitOr:
+bitOr:
+/
+*
+*
+<=
+-
+<
+<
+*
+*
+*
+*
+*
+*
+*
+*
+*
++
++
++
++
++
+basicNew
+@
+@
+class
+**StackOverflow**
+
+
+stringHash:initialHash:
+transparent
+isEmpty
+basicNew
+value
+changed
+**StackOverflow**
+scanFor:
+scanFor:
+stringHash:initialHash:
+at:
+new:
+at:
+at:
+hash
+=
+=
+=
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+asCharacter
+asCharacter
+asCharacter
+at:
+truncated
+fractionPart
+rounded
+rounded
+truncated
+asInteger
+valueNoContextSwitch
+wait
+value
+**CompactCode**
+
+stack page bytes 8192 available headroom 5576 minimum unused headroom 5888
+
+	(VM Error)
+
+Segmentation fault: 11 Thu Mar  5 15:55:39 2026
+
+
+/Users/faouziray/Documents/XP/Pharo/images/againWithVM/pharo-local/iceberg/fouziray/JIT2/build/dist/Pharo.app/Contents/MacOS/Pharo
+PharoVM version:5.0-Pharo 10.3.0-bb546bfdb built on Feb  6 2026 14:39:36 Compiler: Apple LLVM 14.0.3 (clang-1403.0.22.14.1) Apple LLVM 14.0.3 (clang-1403.0.22.14.1) [Production Spur 64-bit VM]
+Built from: CoInterpreter VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ With:StackToRegisterMappingCogit VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ Revision: bb546bfdb - Commit: bb546bfdb - Date: 2026-02-06 14:35:39 +0100
+
+C stack backtrace & registers:
+	 x00 0x000000020360bb6c x01 0x0000000000000000 x02 0x00000000000120a8 x03 0x000000016cf5e005
+	 x04 0x00000001034ccbe7 x05 0x000000016cf5e550 x06 0x000000000000000a x07 0x0000000000000000
+	 x08 0x000000020360bb6c x09 0x0000000203616190 x10 0x0000000000000002 x11 0x00000000fffffffd
+	 x12 0x0000010000000000 x13 0x0000000000000000 x14 0x0000000000000000 x15 0x0000000000000000
+	 x16 0x000000019b8bebd4 x17 0x000000020d976b28 x18 0x0000000000000000 x19 0x00000001034c789d
+	 x20 0x00000001034c78a9 x21 0x0000000000000003 x22 0x000001000351eac8 x23 0x000001000352ac38
+	 x24 0x00000003200bdab4 x25 0x00000001034de000 x26 0x0000000103578508 x27 0xfffffffffffb6674
+	 x28 0x00000003200bdab0  FP 0x000000016cf5ecc0  LR 0x0000000000000000  SP 0x000000016cf5eca0
+	  PC 0x0000000000000000  STATE 0x0000000020001000
+*0   ???                                 0x0000000000000000 0x0 + 0
+1   libPharoVMCore.dylib                0x00000001034c5ca8 reportStackState + 212
+2   libPharoVMCore.dylib                0x00000001034c5b6c doReport + 144
+3   libPharoVMCore.dylib                0x00000001034c5e6c sigsegv + 28
+4   libsystem_platform.dylib            0x000000019b92f584 _sigtramp + 56
+5   ???                                 0x0000000000000000 0x0 + 0
+6   libPharoVMCore.dylib                0x000000010344149c indexForSelectorinat + 180
+7   libPharoVMCore.dylib                0x000000010342162c compactCogCompiledCode + 2368
+8   libPharoVMCore.dylib                0x00000001034ba794 commenceCogCompiledCodeCompaction + 204
+9   libPharoVMCore.dylib                0x0000000103470498 checkForEventsMayContextSwitch + 108
+10  ???                                 0x0000000000000000 0x0 + 0
+
+
+All Smalltalk process stacks (active first):
+Process      0x100093a8ed0 priority 40
+       0x30001dbe8 I [] in FreeTypeCache>atFont:charCode:type:scale:ifAbsentPut: 0x100087251b0: a(n) FreeTypeCache
+       0x30001dc18 M FullBlockClosure(BlockClosure)>on:do: 0x361351f88: a(n) FullBlockClosure
+       0x30001dc68 M [] in Semaphore>(nil) 0x100087266f8: a(n) Semaphore
+       0x30001dcb0 M FullBlockClosure(BlockClosure)>ensure: 0x3613520b0: a(n) FullBlockClosure
+       0x30001dd00 I Semaphore>criticalReleasingOnError: 0x100087266f8: a(n) Semaphore
+       0x30001dd50 I FreeTypeCache>atFont:charCode:type:scale:ifAbsentPut: 0x100087251b0: a(n) FreeTypeCache
+       0x30001ddb8 I FreeTypeFont>glyphOf:colorValue:mono:subpixelPosition:scale: 0x10008725358: a(n) FreeTypeFont
+       0x30001de20 I FreeTypeFont>glyphOf:colorValue:mono:subpixelPosition: 0x10008725358: a(n) FreeTypeFont
+       0x30001dec0 I FreeTypeFont>widthOfString:from:to: 0x10008725358: a(n) FreeTypeFont
+       0x30001df18 I FreeTypeFont(AbstractFont)>widthOfString: 0x10008725358: a(n) FreeTypeFont
+       0x30001df60 I LogicalFont>widthOfString: 0x100010fc6d8: a(n) LogicalFont
+       0x30001dfa0 M LabelMorph>(nil) 0x36134e960: a(n) LabelMorph
+       0x30001dfe0 M LabelMorph>(nil) 0x36134e960: a(n) LabelMorph
+       0x300031a28 I LabelMorph(StringMorph)>contents: 0x36134e960: a(n) LabelMorph
+       0x300031a78 I PharoLightTheme(UITheme)>windowLabelForText: 0x10008791608: a(n) PharoLightTheme
+       0x300031ac0 I PharoLightTheme(UITheme)>windowLabelFor: 0x10008791608: a(n) PharoLightTheme
+       0x300031b08 I SpWindow(SystemWindow)>initializeLabelArea 0x36134d730: a(n) SpWindow
+       0x300031b48 I SpWindow(SystemWindow)>initialize 0x36134d730: a(n) SpWindow
+       0x300031b88 I SpWindow(StandardWindow)>initialize 0x36134d730: a(n) SpWindow
+       0x300031bb8 M (Behavior)>new 0x100012142e8: a(n) 
+       0x300031bf8 I SpMorphicWindowAdapter>buildWidget 0x36134d6d0: a(n) SpMorphicWindowAdapter
+       0x300031c40 I SpMorphicWindowAdapter(SpAbstractAdapter)>adapt: 0x36134d6d0: a(n) SpMorphicWindowAdapter
+       0x300031c88 I SpMorphicWindowAdapter(SpAbstractMorphicAdapter)>adapt: 0x36134d6d0: a(n) SpMorphicWindowAdapter
+       0x300031ce8 I SpAbstractWidgetLayout>adapt:bindings: 0x36134d3e0: a(n) SpAbstractWidgetLayout
+       0x300031d40 I SpAbstractWidgetLayout>buildAdapterFor:bindings: 0x36134d3e0: a(n) SpAbstractWidgetLayout
+       0x300031d98 I SpWindowPresenter>buildWindowWithLayout:presenterLayout: 0x361342780: a(n) SpWindowPresenter
+       0x300031de8 I SpWindowPresenter>basicBuildWithSpecLayout: 0x361342780: a(n) SpWindowPresenter
+       0x300031e28 M [] in SpWindowPresenter>(nil) 0x361342780: a(n) SpWindowPresenter
+       0x300031e70 M [] in SpBindings>(nil) 0x1000240f480: a(n) SpBindings
+       0x300031eb8 M FullBlockClosure(BlockClosure)>ensure: 0x36134d368: a(n) FullBlockClosure
+       0x300031f00 M SpBindings>(nil) 0x1000240f480: a(n) SpBindings
+       0x300031f40 M SpBindings class>(nil) 0x1000111f530: a(n) SpBindings class
+       0x300031f90 I SpWindowPresenter>buildWithSpecLayout: 0x361342780: a(n) SpWindowPresenter
+       0x300031fd8 I SpWindowPresenter>openWithLayout: 0x361342780: a(n) SpWindowPresenter
+       0x300005848 I SpWindowPresenter>openWith: 0x361342780: a(n) SpWindowPresenter
+       0x300005890 I SpWindowPresenter>open 0x361342780: a(n) SpWindowPresenter
+       0x3000058d0 I StInspectorPresenter(SpAbstractPresenter)>open 0x361300dc0: a(n) StInspectorPresenter
+       0x300005910 I >openOn: 0x10001dcc410: a(n) 
+       0x300005958 I >inspect: 0x10001dcc410: a(n) 
+       0x3000059a0 I SystemNavigation>inspect: 0x3613009e0: a(n) SystemNavigation
+       0x3000059e8 I SpCodeInspectItCommand>inspectObject: 0x1000857dcd0: a(n) SpCodeInspectItCommand
+       0x300005a30 I [] in SpCodeInspectItCommand>execute 0x1000857dcd0: a(n) SpCodeInspectItCommand
+       0x300005a78 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluate:andDo: 0x1000857dcd0: a(n) SpCodeInspectItCommand
+       0x300005ad0 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluateSelectionAndDo: 0x1000857dcd0: a(n) SpCodeInspectItCommand
+       0x300005b18 I SpCodeInspectItCommand>execute 0x1000857dcd0: a(n) SpCodeInspectItCommand
+       0x300005b48 M SpCommand>(nil) 0x1000857b8c0: a(n) SpCommand
+       0x300005b78 M [] in SpToolCurrentApplicationCommand>(nil) 0x10008579ef0: a(n) SpToolCurrentApplicationCommand
+       0x300005bc0 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300005c08 M FullBlockClosure(BlockClosure)>ensure: 0x360fbc790: a(n) FullBlockClosure
+       0x300005c50 M SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300005c90 M SpToolCurrentApplication class>(nil) 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300005cd0 M SpToolCurrentApplicationCommand>(nil) 0x10008579ef0: a(n) SpToolCurrentApplicationCommand
+       0x300005d00 M [] in SpToolCurrentApplicationCommand>(nil) 0x10008577d38: a(n) SpToolCurrentApplicationCommand
+       0x300005d48 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300005d90 M FullBlockClosure(BlockClosure)>ensure: 0x360fbc580: a(n) FullBlockClosure
+       0x300005de8 I SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300005e38 I SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300005e88 I SpToolCurrentApplicationCommand>execute 0x10008577d38: a(n) SpToolCurrentApplicationCommand
+       0x300005ec0 M [] in SpKMCategoryBuilder>(nil) 0x10008577160: a(n) SpKMCategoryBuilder
+       0x300005ef0 M FullBlockClosure>(nil) 0x10008574e80: a(n) FullBlockClosure
+       0x300005f28 M FullBlockClosure>(nil) 0x10008574e80: a(n) FullBlockClosure
+       0x300005f78 I FullBlockClosure(BlockClosure)>cull:cull:cull: 0x10008574e80: a(n) FullBlockClosure
+       0x300005fd0 I KMCategoryBinding>completeMatch:buffer: 0x360fb89c0: a(n) KMCategoryBinding
+       0x300037b60 M [] in KMKeymap>(nil) 0x10008573748: a(n) KMKeymap
+       0x300037bb0 M Array(SequenceableCollection)>do: 0x360fb8d00: a(n) Array
+       0x300037c00 I KMKeymap>notifyCompleteMatchTo:buffer: 0x10008573748: a(n) KMKeymap
+       0x300037c40 M KMKeymap>(nil) 0x10008573748: a(n) KMKeymap
+       0x300037ca0 M [] in KMCategory>(nil) 0x100084bdc38: a(n) KMCategory
+       0x300037cf8 M Set>(nil) 0x360fba8f0: a(n) Set
+       0x300037d30 M KMCategory>(nil) 0x100084bdc38: a(n) KMCategory
+       0x300037d78 M KMCategoryBinding>(nil) 0x360fb89c0: a(n) KMCategoryBinding
+       0x300037dc8 M [] in KMDispatcher>(nil) 0x100084b9bf8: a(n) KMDispatcher
+       0x300037e18 M OrderedCollection>(nil) 0x360fb89e0: a(n) OrderedCollection
+       0x300037e50 M KMDispatcher>(nil) 0x100084b9bf8: a(n) KMDispatcher
+       0x300037e88 M KMTarget>(nil) 0x100084bdc08: a(n) KMTarget
+       0x300037ec8 M [] in KMDispatchChain>(nil) 0x360fb5c00: a(n) KMDispatchChain
+       0x300037f18 I KMDispatchChain>do: 0x360fb5c00: a(n) KMDispatchChain
+       0x300037f60 I KMDispatchChain>dispatch: 0x360fb5c00: a(n) KMDispatchChain
+       0x300037fa0 M KMDispatcher(KMCategory)>onMatchWith:notify:andDo: 0x100084b9bf8: a(n) KMDispatcher
+       0x300037fd8 M RubEditingArea>(nil) 0x1000858b378: a(n) RubEditingArea
+       0x3000219b0 I RubEditingArea(Morph)>handleKeystrokeWithKeymappings: 0x1000858b378: a(n) RubEditingArea
+       0x3000219e8 M KMShortcutHandler>(nil) 0x10002027a18: a(n) KMShortcutHandler
+       0x300021a40 I RubEditingArea(Morph)>handleKeyDown: 0x1000858b378: a(n) RubEditingArea
+       0x300021a88 I RubEditingArea(RubAbstractTextArea)>handleKeyDown: 0x1000858b378: a(n) RubEditingArea
+       0x300021ac0 M KeyboardEvent>sentTo: 0x360fb5680: a(n) KeyboardEvent
+       0x300021af8 M RubEditingArea(Morph)>handleEvent: 0x1000858b378: a(n) RubEditingArea
+       0x300021b30 M RubEditingArea>(nil) 0x1000858b378: a(n) RubEditingArea
+       0x300021b80 M [] in HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x300021bb0 M FullBlockClosure(BlockClosure)>on:do: 0x360fb57c0: a(n) FullBlockClosure
+       0x300021bf8 M WorldMorph>(nil) 0x10000f6db28: a(n) WorldMorph
+       0x300021c48 M HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x300021c98 M HandMorph>sendEvent:focus:clear: 0x1000101b550: a(n) HandMorph
+       0x300021ce0 M HandMorph>sendKeyboardEvent: 0x1000101b550: a(n) HandMorph
+       0x300021d38 M HandMorph>handleEvent: 0x1000101b550: a(n) HandMorph
+       0x300021d78 M [] in OSWindowMorphicEventHandler>dispatchMorphicEvent: 0x10008726aa8: a(n) OSWindowMorphicEventHandler
+       0x300021db8 M WorldState>runStepMethodsIn: 0x10000fd85e8: a(n) WorldState
+       0x300021df0 M WorldMorph>runStepMethods 0x10000f6db28: a(n) WorldMorph
+       0x300021e20 M WorldState>doOneCycleFor: 0x10000fd85e8: a(n) WorldState
+       0x300021e58 M WorldMorph>doOneCycleNow 0x10000f6db28: a(n) WorldMorph
+       0x300021e88 M WorldMorph>doOneCycle 0x10000f6db28: a(n) WorldMorph
+       0x300021ec0 M [] in WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x300021f08 M FullBlockClosure(BlockClosure)>ensure: 0x360fb45c8: a(n) FullBlockClosure
+       0x300021f40 M WorldState class>doDrawCycleWith: 0x100009c3750: a(n) WorldState class
+       0x300021f78 M WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x300021fa8 M MorphicRenderLoop>doOneCycle 0x1000946ce70: a(n) MorphicRenderLoop
+       0x300021fd8 M MorphicRenderLoop>doOneCycleWhile: 0x1000946ce70: a(n) MorphicRenderLoop
+     0x100093cd7a8 s [] in MorphicUIManager>spawnNewProcess
+     0x1000946cf60 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+processes at priority 10
+Process      0x1000d08f6a0 priority 10
+       0x30002ff60 M ProcessorScheduler class>idleProcess 0x10000016f58: a(n) ProcessorScheduler class
+       0x30002ffa0 I [] in ProcessorScheduler class>startUp 0x10000016f58: a(n) ProcessorScheduler class
+       0x30002ffe0 I [] in FullBlockClosure>newProcess 0x1000d0baf08: a(n) FullBlockClosure
+
+suspended processes
+Process      0x10008724370 priority 50
+       0x30001bfe0 M FinalizationProcess class>finalizationProcess 0x1000001eff8: a(n) FinalizationProcess class
+     0x1000889f4d8 s [] in FinalizationProcess class>restartFinalizationProcess
+     0x10008725720 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10002a0a070 priority 80
+       0x30000bf98 M DelayMicrosecondTicker>waitForUserSignalled:orExpired: 0x10000490cc0: a(n) DelayMicrosecondTicker
+       0x30000bfe0 M [] in DelaySemaphoreScheduler>runBackendLoopAtTimingPriority 0x100004853a0: a(n) DelaySemaphoreScheduler
+     0x10002f52510 s FullBlockClosure(BlockClosure)>ensure:
+     0x10002ab8ec0 s DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+     0x10002f342d0 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>startTimerEventLoopPriority:
+     0x10002ab8f78 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000212db08 priority 40
+     0x1000213abe8 s AtomicSharedQueue>waitForNewItems
+     0x10002162b30 s AtomicSharedQueue>next
+     0x10002123c18 s TKTWorkerProcess>privateNextTask
+     0x10002118ce8 s TKTWorkerProcess>workerLoop
+     0x10002115de8 s MessageSend>value
+     0x10002115f38 s [] in TKTPharoProcessProvider>createProcessDoing:named:
+     0x10002116150 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100034bf010 priority 31
+     0x1000d2fd478 s AtomicSharedQueue>waitForNewItems
+     0x1000d45da00 s AtomicSharedQueue>next
+     0x1000327b948 s ClyDataSourceUpdateScheduler>processQueue
+     0x1000327d688 s [] in ClyDataSourceUpdateScheduler>ensureRunning
+     0x1000327e948 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fabf98 priority 70
+     0x10003fac0c0 s [] in TFCallbackQueue>forkCallbackProcess
+     0x10003fac310 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fbe698 priority 79
+       0x300007ed8 M [] in DelayWaitTimeout>(nil) 0x3603731f0: a(n) DelayWaitTimeout
+       0x300007f20 M FullBlockClosure(BlockClosure)>ensure: 0x360373c98: a(n) FullBlockClosure
+       0x300007f58 M DelayWaitTimeout>(nil) 0x3603731f0: a(n) DelayWaitTimeout
+       0x300007f90 M Semaphore>(nil) 0x10003fbe678: a(n) Semaphore
+       0x300007fe0 I TestExecutionEnvironment>watchDogLoop 0x10003fc0468: a(n) TestExecutionEnvironment
+     0x10003fc3928 s [] in TestExecutionEnvironment>startWatchDog
+     0x10003fc3a70 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10004daf2a0 priority 79
+       0x30000ded8 M [] in DelayWaitTimeout>(nil) 0x360373180: a(n) DelayWaitTimeout
+       0x30000df20 M FullBlockClosure(BlockClosure)>ensure: 0x360373da0: a(n) FullBlockClosure
+       0x30000df58 M DelayWaitTimeout>(nil) 0x360373180: a(n) DelayWaitTimeout
+       0x30000df90 M Semaphore>(nil) 0x10004daf280: a(n) Semaphore
+       0x30000dfe0 I TestExecutionEnvironment>watchDogLoop 0x10004dbb6a8: a(n) TestExecutionEnvironment
+     0x100050b9d10 s [] in TestExecutionEnvironment>startWatchDog
+     0x100050c3bc8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000d08f648 priority 60
+     0x1000d0b3c10 s SmalltalkImage>lowSpaceWatcher
+     0x1000d0ceac0 s [] in SmalltalkImage>installLowSpaceWatcher
+     0x1000d0b44b0 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process        0x360361c48 priority 40
+       0x30003dee0 M [] in Delay>wait 0x3603731c0: a(n) Delay
+       0x30003df28 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x360375dd8: a(n) FullBlockClosure
+       0x30003df60 M Delay>wait 0x3603731c0: a(n) Delay
+       0x30003dfa0 I Duration>wait 0x360375ee0: a(n) Duration
+       0x30003dfe0 I [] in StPlaygroundPage>spawnFlushProcess 0x1000869a070: a(n) StPlaygroundPage
+       0x360375fd8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000d08f770 priority 60
+       0x300013ea0 M [] in Delay>wait 0x36131b480: a(n) Delay
+       0x300013ee8 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x36131b6f8: a(n) FullBlockClosure
+       0x300013f20 M Delay>wait 0x36131b480: a(n) Delay
+       0x300013f60 M OSSDL2Driver>eventLoopProcessWithoutPlugin 0x10008724d80: a(n) OSSDL2Driver
+       0x300013fa0 I [] in OSSDL2Driver>setupEventLoop 0x10008724d80: a(n) OSSDL2Driver
+       0x300013fe0 I [] in FullBlockClosure>newProcess 0x1000d0b4380: a(n) FullBlockClosure
+
+Most recent primitives
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+property:whenChangedDo:
+object:instVarAt:
+basicNew
+wait
+basicIdentityHash
+fullCheck
+fullCheck
+signal
+**StackOverflow**
+value
+class
+basicNew
+class
+class
+class
+stringHash:initialHash:
+class
+basicIdentityHash
+at:
+value:
+value:
+basicNew
+includes:
+isEmpty
+basicNew:
+basicAt:put:
+basicNew
+@
+@
+class
+at:ifAbsentPut:
+at:ifAbsentPut:
+stringHash:initialHash:
+basicNew
+basicNew
+class
+class
+basicNew
+**StackOverflow**
+**StackOverflow**
+@
+@
+class
+@
+@
+isEmpty
+basicNew
+basicIdentityHash
+at:
+perform:
+basicNew
+transparent
+**StackOverflow**
+
+
+stringHash:initialHash:
+basicNew
+**StackOverflow**
+basicNew:
+at:put:
+at:put:
+at:put:
+at:put:
+asFloat
+fractionPart
+truncated
+species
+species
+**StackOverflow**
+
+
+stringHash:initialHash:
+color:
+**StackOverflow**
+=
+=
+bitShift:
+bitShift:
+bitShift:
+bitShift:
+bitShift:
+bitShift:
+bitShift:
+bitAnd:
+bitAnd:
+bitOr:
+bitOr:
+bitOr:
+bitOr:
+/
+*
+*
+<=
+-
+<
+<
+*
+*
+*
+*
+*
+*
+*
+*
+*
++
++
++
++
++
+basicNew
+@
+@
+class
+**StackOverflow**
+
+
+stringHash:initialHash:
+transparent
+isEmpty
+basicNew
+value
+changed
+**StackOverflow**
+scanFor:
+scanFor:
+stringHash:initialHash:
+at:
+new:
+at:
+at:
+hash
+=
+=
+=
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+at:
+at:
+widthAndKernedWidthOfLeft:right:into:
+widthAndKernedWidthOfLeft:right:into:
+asCharacter
+asCharacter
+asCharacter
+at:
+truncated
+fractionPart
+rounded
+rounded
+truncated
+asInteger
+valueNoContextSwitch
+wait
+value
+**CompactCode**
+
+stack page bytes 8192 available headroom 5576 minimum unused headroom 5888
+
+	(Segmentation fault: 11)
+
+VM Error Thu Mar  5 15:56:17 2026
+
+
+/Users/faouziray/Documents/XP/Pharo/images/againWithVM/pharo-local/iceberg/fouziray/JIT2/build/dist/Pharo.app/Contents/MacOS/Pharo
+PharoVM version:5.0-Pharo 10.3.0-bb546bfdb built on Feb  6 2026 14:39:36 Compiler: Apple LLVM 14.0.3 (clang-1403.0.22.14.1) Apple LLVM 14.0.3 (clang-1403.0.22.14.1) [Production Spur 64-bit VM]
+Built from: CoInterpreter VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ With:StackToRegisterMappingCogit VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ Revision: bb546bfdb - Commit: bb546bfdb - Date: 2026-02-06 14:35:39 +0100
+
+C stack backtrace & registers:
+	 x00 0x0000000000000000 x01 0x0000000104ebf8af x02 0x000000000000000a x03 0x0000000000000003
+	 x04 0xd280001600000100 x05 0x000000016b566ca0 x06 0x0000000104e3949c x07 0x00000003200cb1fc
+	 x08 0x00000003200cb555 x09 0x000000032004af18 x10 0xfffffffffffb52b8 x11 0x0000000000000000
+	 x12 0x00000003200cb160 x13 0x000000016b566db0 x14 0x0000000104e1962c x15 0x0000000104ed7090
+	 x16 0x000000016b566ce8 x17 0x000000016b566d30 x18 0x000000016b566d10 x19 0x000000016b566be8
+	 x20 0x0000000104ebf8a9 x21 0x0000000000000003 x22 0x000001000351eac8 x23 0x000001000352ac38
+	 x24 0x00000003200cb1fc x25 0x0000000104ed6000 x26 0x0000000104f70508 x27 0xfffffffffffb52b4
+	 x28 0x00000003200cb1f8  FP 0x000000016b566c30  LR 0x9421000104ebe13c  SP 0x000000016b566be0
+	  PC 0x0000000000000000  STATE 0x0000000000000000
+*0   ???                                 0x0000000000000000 0x0 + 0
+1   libPharoVMCore.dylib                0x0000000104ebdca8 reportStackState + 212
+2   libPharoVMCore.dylib                0x0000000104ebdb6c doReport + 144
+3   libPharoVMCore.dylib                0x0000000104ebe154 printStatusAfterError + 52
+4   ???                                 0x0000000000000000 0x0 + 0
+5   libPharoVMCore.dylib                0x0000000104e3949c indexForSelectorinat + 180
+6   libPharoVMCore.dylib                0x0000000104e1962c compactCogCompiledCode + 2368
+7   libPharoVMCore.dylib                0x0000000104eb2794 commenceCogCompiledCodeCompaction + 204
+8   libPharoVMCore.dylib                0x0000000104e68498 checkForEventsMayContextSwitch + 108
+9   ???                                 0x0000000000000000 0x0 + 0
+
+
+All Smalltalk process stacks (active first):
+Process      0x100091131a0 priority 40
+       0x300033b98 I [] in SpCommand>configureAsButtonOfClass: 0x3611979f0: a(n) SpCommand
+       0x300033bd0 M SpCommand>(nil) 0x3611979f0: a(n) SpCommand
+       0x300033c08 M SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033c40 M SpCommand>(nil) 0x3611979f0: a(n) SpCommand
+       0x300033c78 M [] in SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033cd8 M OrderedCollection>(nil) 0x361194038: a(n) OrderedCollection
+       0x300033d10 M SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033d48 M SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033d80 M SpCommandGroup>(nil) 0x3611940b0: a(n) SpCommandGroup
+       0x300033db8 M [] in SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033e18 M OrderedCollection>(nil) 0x361191230: a(n) OrderedCollection
+       0x300033e50 M SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033e88 M SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033ec0 M SpCommandGroup>(nil) 0x3611912a8: a(n) SpCommandGroup
+       0x300033f08 I SpToolbarPresenterBuilder(CmVisitor)>visit: 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033f50 I SpToolbarPresenter>fillWith: 0x36118b310: a(n) SpToolbarPresenter
+       0x300033f98 I StHeaderBar>toolbarActions: 0x3611837a8: a(n) StHeaderBar
+       0x300033fe0 I StObjectInspectorPresenter>updateHeaderBar 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017b38 I StObjectInspectorPresenter>refresh 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017b78 I StObjectInspectorPresenter>updatePresenter 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017bb8 I StObjectInspectorPresenter(SpPresenter)>initializePrivateHooks 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017c00 I StObjectInspectorPresenter(SpPresenter)>initialize 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017c40 I StObjectInspectorPresenter>initialize 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017c88 I ()>newApplication:owner:model: 0x10001dcc660: a(n) 
+       0x300017ce0 I ()>owner:on: 0x10001dcc660: a(n) 
+       0x300017d30 I StInspectorPresenter(SpPresenter)>instantiate:on: 0x361179970: a(n) StInspectorPresenter
+       0x300017d88 I StInspectorPresenter>newInspectorFor: 0x361179970: a(n) StInspectorPresenter
+       0x300017dd0 I [] in StInspectorPresenter>initializePresenters 0x361179970: a(n) StInspectorPresenter
+       0x300017e18 I SpMillerColumnPresenter>newPresenterFor: 0x36117b7f8: a(n) SpMillerColumnPresenter
+       0x300017e68 I SpMillerColumnPresenter>pushModel: 0x36117b7f8: a(n) SpMillerColumnPresenter
+       0x300017eb0 I SpMillerColumnPresenter>setRootModel: 0x36117b7f8: a(n) SpMillerColumnPresenter
+       0x300017f00 I StInspectorPresenter>initializePresenters 0x361179970: a(n) StInspectorPresenter
+       0x300017f40 I StInspectorPresenter(SpPresenter)>initializePrivateHooks 0x361179970: a(n) StInspectorPresenter
+       0x300017f88 I StInspectorPresenter(SpPresenter)>initialize 0x361179970: a(n) StInspectorPresenter
+       0x300017fd0 I ()>newApplication:model: 0x10001dcc410: a(n) 
+       0x300027918 I ()>on: 0x10001dcc410: a(n) 
+       0x300027960 I >onObject: 0x10001dcc410: a(n) 
+       0x3000279a8 I >openOn: 0x10001dcc410: a(n) 
+       0x3000279f0 I >inspect: 0x10001dcc410: a(n) 
+       0x300027a38 I SystemNavigation>inspect: 0x361179648: a(n) SystemNavigation
+       0x300027a80 I SpCodeInspectItCommand>inspectObject: 0x10008501e78: a(n) SpCodeInspectItCommand
+       0x300027ac8 I [] in SpCodeInspectItCommand>execute 0x10008501e78: a(n) SpCodeInspectItCommand
+       0x300027b10 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluate:andDo: 0x10008501e78: a(n) SpCodeInspectItCommand
+       0x300027b68 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluateSelectionAndDo: 0x10008501e78: a(n) SpCodeInspectItCommand
+       0x300027bb0 I SpCodeInspectItCommand>execute 0x10008501e78: a(n) SpCodeInspectItCommand
+       0x300027be0 M SpCommand>(nil) 0x100084ffa68: a(n) SpCommand
+       0x300027c10 M [] in SpToolCurrentApplicationCommand>(nil) 0x100084fe098: a(n) SpToolCurrentApplicationCommand
+       0x300027c58 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300027ca0 M FullBlockClosure(BlockClosure)>ensure: 0x360e24f28: a(n) FullBlockClosure
+       0x300027ce8 M SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300027d28 M SpToolCurrentApplication class>(nil) 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300027d68 M SpToolCurrentApplicationCommand>(nil) 0x100084fe098: a(n) SpToolCurrentApplicationCommand
+       0x300027d98 M [] in SpToolCurrentApplicationCommand>(nil) 0x100084fbee0: a(n) SpToolCurrentApplicationCommand
+       0x300027de0 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300027e28 M FullBlockClosure(BlockClosure)>ensure: 0x360e24d18: a(n) FullBlockClosure
+       0x300027e80 I SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300027ed0 I SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300027f20 I SpToolCurrentApplicationCommand>execute 0x100084fbee0: a(n) SpToolCurrentApplicationCommand
+       0x300027f58 M [] in SpKMCategoryBuilder>(nil) 0x100084fb308: a(n) SpKMCategoryBuilder
+       0x300027f88 M FullBlockClosure>(nil) 0x100084f9028: a(n) FullBlockClosure
+       0x300027fd0 I FullBlockClosure(BlockClosure)>cull:cull: 0x100084f9028: a(n) FullBlockClosure
+       0x30000dad0 I FullBlockClosure(BlockClosure)>cull:cull:cull: 0x100084f9028: a(n) FullBlockClosure
+       0x30000db28 I KMCategoryBinding>completeMatch:buffer: 0x360e21210: a(n) KMCategoryBinding
+       0x30000db70 M [] in KMKeymap>(nil) 0x100084f78f0: a(n) KMKeymap
+       0x30000dbc0 M Array(SequenceableCollection)>do: 0x360e21550: a(n) Array
+       0x30000dc10 I KMKeymap>notifyCompleteMatchTo:buffer: 0x100084f78f0: a(n) KMKeymap
+       0x30000dc50 M KMKeymap>(nil) 0x100084f78f0: a(n) KMKeymap
+       0x30000dcb0 M [] in KMCategory>(nil) 0x10008441ee8: a(n) KMCategory
+       0x30000dd08 M Set>(nil) 0x360e22fd0: a(n) Set
+       0x30000dd40 M KMCategory>(nil) 0x10008441ee8: a(n) KMCategory
+       0x30000dd88 M KMCategoryBinding>(nil) 0x360e21210: a(n) KMCategoryBinding
+       0x30000ddd8 M [] in KMDispatcher>(nil) 0x1000843ded8: a(n) KMDispatcher
+       0x30000de28 M OrderedCollection>do: 0x360e21230: a(n) OrderedCollection
+       0x30000de60 M KMDispatcher>(nil) 0x1000843ded8: a(n) KMDispatcher
+       0x30000de98 M KMTarget>(nil) 0x10008441eb8: a(n) KMTarget
+       0x30000ded8 M [] in KMDispatchChain>(nil) 0x360e1e5c0: a(n) KMDispatchChain
+       0x30000df28 I KMDispatchChain>do: 0x360e1e5c0: a(n) KMDispatchChain
+       0x30000df60 M KMDispatchChain>(nil) 0x360e1e5c0: a(n) KMDispatchChain
+       0x30000dfa0 M KMDispatcher>(nil) 0x1000843ded8: a(n) KMDispatcher
+       0x30000dfd8 M RubEditingArea>(nil) 0x1000850f520: a(n) RubEditingArea
+       0x30001d9d0 I RubEditingArea(Morph)>handleKeystrokeWithKeymappings: 0x1000850f520: a(n) RubEditingArea
+       0x30001da08 M KMShortcutHandler>handleKeystroke:inMorph: 0x10002027a18: a(n) KMShortcutHandler
+       0x30001da50 M RubEditingArea(Morph)>handleKeyDown: 0x1000850f520: a(n) RubEditingArea
+       0x30001da88 M RubEditingArea(RubAbstractTextArea)>handleKeyDown: 0x1000850f520: a(n) RubEditingArea
+       0x30001dac0 M KeyboardEvent>sentTo: 0x360e1e040: a(n) KeyboardEvent
+       0x30001daf8 M RubEditingArea(Morph)>handleEvent: 0x1000850f520: a(n) RubEditingArea
+       0x30001db30 M RubEditingArea(Morph)>handleFocusEvent: 0x1000850f520: a(n) RubEditingArea
+       0x30001db80 M [] in HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x30001dbb0 M FullBlockClosure(BlockClosure)>on:do: 0x360e1e180: a(n) FullBlockClosure
+       0x30001dbf8 M WorldMorph>becomeActiveDuring: 0x10000f6db28: a(n) WorldMorph
+       0x30001dc48 M HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x30001dc98 M HandMorph>sendEvent:focus:clear: 0x1000101b550: a(n) HandMorph
+       0x30001dce0 M HandMorph>sendKeyboardEvent: 0x1000101b550: a(n) HandMorph
+       0x30001dd38 M HandMorph>handleEvent: 0x1000101b550: a(n) HandMorph
+       0x30001dd78 M [] in OSWindowMorphicEventHandler>dispatchMorphicEvent: 0x100096d5590: a(n) OSWindowMorphicEventHandler
+       0x30001ddb8 M WorldState>runStepMethodsIn: 0x10000fd85e8: a(n) WorldState
+       0x30001ddf0 M WorldMorph>runStepMethods 0x10000f6db28: a(n) WorldMorph
+       0x30001de20 M WorldState>doOneCycleFor: 0x10000fd85e8: a(n) WorldState
+       0x30001de58 M WorldMorph>doOneCycleNow 0x10000f6db28: a(n) WorldMorph
+       0x30001de88 M WorldMorph>doOneCycle 0x10000f6db28: a(n) WorldMorph
+       0x30001dec0 M [] in WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x30001df08 M FullBlockClosure(BlockClosure)>ensure: 0x360e1ce10: a(n) FullBlockClosure
+       0x30001df40 M WorldState class>doDrawCycleWith: 0x100009c3750: a(n) WorldState class
+       0x30001df78 M WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x30001dfa8 M MorphicRenderLoop>doOneCycle 0x100091ac048: a(n) MorphicRenderLoop
+       0x30001dfd8 M MorphicRenderLoop>doOneCycleWhile: 0x100091ac048: a(n) MorphicRenderLoop
+     0x10009135d18 s [] in MorphicUIManager>spawnNewProcess
+     0x100091ac138 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+processes at priority 10
+Process      0x1000caeadd8 priority 10
+       0x300013f60 M ProcessorScheduler class>idleProcess 0x10000016f58: a(n) ProcessorScheduler class
+       0x300013fa0 I [] in ProcessorScheduler class>startUp 0x10000016f58: a(n) ProcessorScheduler class
+       0x300013fe0 I [] in FullBlockClosure>newProcess 0x1000cbc1698: a(n) FullBlockClosure
+
+suspended processes
+Process      0x100096d2c48 priority 50
+       0x300007fe0 I FinalizationProcess class>finalizationProcess 0x1000001eff8: a(n) FinalizationProcess class
+     0x100099d4b78 s [] in FinalizationProcess class>restartFinalizationProcess
+     0x100096d4148 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10002a0a070 priority 80
+       0x30001bf98 M DelayMicrosecondTicker>waitForUserSignalled:orExpired: 0x10000490cc0: a(n) DelayMicrosecondTicker
+       0x30001bfe0 M [] in DelaySemaphoreScheduler>runBackendLoopAtTimingPriority 0x100004853a0: a(n) DelaySemaphoreScheduler
+     0x10002f52510 s FullBlockClosure(BlockClosure)>ensure:
+     0x10002ab8ec0 s DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+     0x10002f342d0 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>startTimerEventLoopPriority:
+     0x10002ab8f78 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000212db08 priority 40
+     0x1000213abe8 s AtomicSharedQueue>waitForNewItems
+     0x10002162b30 s AtomicSharedQueue>next
+     0x10002123c18 s TKTWorkerProcess>privateNextTask
+     0x10002118ce8 s TKTWorkerProcess>workerLoop
+     0x10002115de8 s MessageSend>value
+     0x10002115f38 s [] in TKTPharoProcessProvider>createProcessDoing:named:
+     0x10002116150 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100034bf010 priority 31
+     0x100098db3f0 s AtomicSharedQueue>waitForNewItems
+     0x100099d4c30 s AtomicSharedQueue>next
+     0x1000327b948 s ClyDataSourceUpdateScheduler>processQueue
+     0x1000327d688 s [] in ClyDataSourceUpdateScheduler>ensureRunning
+     0x1000327e948 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fabf98 priority 70
+     0x10003fac0c0 s [] in TFCallbackQueue>forkCallbackProcess
+     0x10003fac310 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fbe698 priority 79
+       0x300025ed8 M [] in DelayWaitTimeout>(nil) 0x360f6ff28: a(n) DelayWaitTimeout
+       0x300025f20 M FullBlockClosure(BlockClosure)>ensure: 0x360f70020: a(n) FullBlockClosure
+       0x300025f58 M DelayWaitTimeout>(nil) 0x360f6ff28: a(n) DelayWaitTimeout
+       0x300025f90 M Semaphore>(nil) 0x10003fbe678: a(n) Semaphore
+       0x300025fe0 I TestExecutionEnvironment>watchDogLoop 0x10003fc0468: a(n) TestExecutionEnvironment
+     0x10003fc3928 s [] in TestExecutionEnvironment>startWatchDog
+     0x10003fc3a70 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10004daf2a0 priority 79
+       0x300015eb8 M [] in DelayWaitTimeout>(nil) 0x360f6fb88: a(n) DelayWaitTimeout
+       0x300015f00 M FullBlockClosure(BlockClosure)>ensure: 0x360f6fc80: a(n) FullBlockClosure
+       0x300015f48 I DelayWaitTimeout>wait 0x360f6fb88: a(n) DelayWaitTimeout
+       0x300015f90 I Semaphore>waitTimeoutMilliseconds: 0x10004daf280: a(n) Semaphore
+       0x300015fe0 I TestExecutionEnvironment>watchDogLoop 0x10004dbb6a8: a(n) TestExecutionEnvironment
+     0x100050b9d10 s [] in TestExecutionEnvironment>startWatchDog
+     0x100050c3bc8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000caead30 priority 60
+     0x1000cbb67a8 s SmalltalkImage>lowSpaceWatcher
+       0x3604dddd0 s [] in SmalltalkImage>installLowSpaceWatcher
+     0x1000cbc3dd8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100098934a0 priority 40
+       0x300001ee0 M [] in Delay>wait 0x3604ddc50: a(n) Delay
+       0x300001f28 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x3604de610: a(n) FullBlockClosure
+       0x300001f60 M Delay>wait 0x3604ddc50: a(n) Delay
+       0x300001fa0 I Duration>wait 0x3604de718: a(n) Duration
+       0x300001fe0 I [] in StPlaygroundPage>spawnFlushProcess 0x1000861e008: a(n) StPlaygroundPage
+     0x10009cad8c0 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000caeaea8 priority 60
+       0x30000bea0 M [] in Delay>wait 0x361058df8: a(n) Delay
+       0x30000bee8 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x361059070: a(n) FullBlockClosure
+       0x30000bf20 M Delay>wait 0x361058df8: a(n) Delay
+       0x30000bf60 M OSSDL2Driver>eventLoopProcessWithoutPlugin 0x100096d3738: a(n) OSSDL2Driver
+       0x30000bfa0 I [] in OSSDL2Driver>setupEventLoop 0x100096d3738: a(n) OSSDL2Driver
+       0x30000bfe0 I [] in FullBlockClosure>newProcess 0x1000cbc2cb0: a(n) FullBlockClosure
+
+Most recent primitives
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+object:instVarAt:
+new
+initialize
+**StackOverflow**
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+signal
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+value:
+value:
+value:
+stringHash:initialHash:
+value:
+**StackOverflow**
+
+
+@
+@
+
+
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+object:instVarAt:
+yourself
+**CompactCode**
+
+stack page bytes 8192 available headroom 5576 minimum unused headroom 5896
+
+	(VM Error)
+
+Segmentation fault: 11 Thu Mar  5 15:56:17 2026
+
+
+/Users/faouziray/Documents/XP/Pharo/images/againWithVM/pharo-local/iceberg/fouziray/JIT2/build/dist/Pharo.app/Contents/MacOS/Pharo
+PharoVM version:5.0-Pharo 10.3.0-bb546bfdb built on Feb  6 2026 14:39:36 Compiler: Apple LLVM 14.0.3 (clang-1403.0.22.14.1) Apple LLVM 14.0.3 (clang-1403.0.22.14.1) [Production Spur 64-bit VM]
+Built from: CoInterpreter VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ With:StackToRegisterMappingCogit VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ Revision: bb546bfdb - Commit: bb546bfdb - Date: 2026-02-06 14:35:39 +0100
+
+C stack backtrace & registers:
+	 x00 0x000000020360bb6c x01 0x0000000000000000 x02 0x00000000000120a8 x03 0x000000016b565fa5
+	 x04 0x0000000104ec4be7 x05 0x000000016b5664f0 x06 0x000000000000000a x07 0x0000000000000000
+	 x08 0x000000020360bb6c x09 0x0000000203616190 x10 0x0000000000000002 x11 0x00000000fffffffd
+	 x12 0x0000010000000000 x13 0x0000000000000000 x14 0x0000000000000000 x15 0x0000000000000000
+	 x16 0x000000019b8bebd4 x17 0x000000020d976b28 x18 0x0000000000000000 x19 0x0000000104ebf89d
+	 x20 0x0000000104ebf8a9 x21 0x0000000000000003 x22 0x000001000351eac8 x23 0x000001000352ac38
+	 x24 0x00000003200cb1fc x25 0x0000000104ed6000 x26 0x0000000104f70508 x27 0xfffffffffffb52b4
+	 x28 0x00000003200cb1f8  FP 0x000000016b566c60  LR 0x0000000000000000  SP 0x000000016b566c40
+	  PC 0x0000000000000000  STATE 0x0000000020001000
+*0   ???                                 0x0000000000000000 0x0 + 0
+1   libPharoVMCore.dylib                0x0000000104ebdca8 reportStackState + 212
+2   libPharoVMCore.dylib                0x0000000104ebdb6c doReport + 144
+3   libPharoVMCore.dylib                0x0000000104ebde6c sigsegv + 28
+4   libsystem_platform.dylib            0x000000019b92f584 _sigtramp + 56
+5   ???                                 0x0000000000000000 0x0 + 0
+6   libPharoVMCore.dylib                0x0000000104e3949c indexForSelectorinat + 180
+7   libPharoVMCore.dylib                0x0000000104e1962c compactCogCompiledCode + 2368
+8   libPharoVMCore.dylib                0x0000000104eb2794 commenceCogCompiledCodeCompaction + 204
+9   libPharoVMCore.dylib                0x0000000104e68498 checkForEventsMayContextSwitch + 108
+10  ???                                 0x0000000000000000 0x0 + 0
+
+
+All Smalltalk process stacks (active first):
+Process      0x100091131a0 priority 40
+       0x300033b98 I [] in SpCommand>configureAsButtonOfClass: 0x3611979f0: a(n) SpCommand
+       0x300033bd0 M SpCommand>(nil) 0x3611979f0: a(n) SpCommand
+       0x300033c08 M SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033c40 M SpCommand>(nil) 0x3611979f0: a(n) SpCommand
+       0x300033c78 M [] in SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033cd8 M OrderedCollection>(nil) 0x361194038: a(n) OrderedCollection
+       0x300033d10 M SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033d48 M SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033d80 M SpCommandGroup>(nil) 0x3611940b0: a(n) SpCommandGroup
+       0x300033db8 M [] in SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033e18 M OrderedCollection>(nil) 0x361191230: a(n) OrderedCollection
+       0x300033e50 M SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033e88 M SpToolbarPresenterBuilder>(nil) 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033ec0 M SpCommandGroup>(nil) 0x3611912a8: a(n) SpCommandGroup
+       0x300033f08 I SpToolbarPresenterBuilder(CmVisitor)>visit: 0x3611990c0: a(n) SpToolbarPresenterBuilder
+       0x300033f50 I SpToolbarPresenter>fillWith: 0x36118b310: a(n) SpToolbarPresenter
+       0x300033f98 I StHeaderBar>toolbarActions: 0x3611837a8: a(n) StHeaderBar
+       0x300033fe0 I StObjectInspectorPresenter>updateHeaderBar 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017b38 I StObjectInspectorPresenter>refresh 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017b78 I StObjectInspectorPresenter>updatePresenter 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017bb8 I StObjectInspectorPresenter(SpPresenter)>initializePrivateHooks 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017c00 I StObjectInspectorPresenter(SpPresenter)>initialize 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017c40 I StObjectInspectorPresenter>initialize 0x36117eec0: a(n) StObjectInspectorPresenter
+       0x300017c88 I ()>newApplication:owner:model: 0x10001dcc660: a(n) 
+       0x300017ce0 I ()>owner:on: 0x10001dcc660: a(n) 
+       0x300017d30 I StInspectorPresenter(SpPresenter)>instantiate:on: 0x361179970: a(n) StInspectorPresenter
+       0x300017d88 I StInspectorPresenter>newInspectorFor: 0x361179970: a(n) StInspectorPresenter
+       0x300017dd0 I [] in StInspectorPresenter>initializePresenters 0x361179970: a(n) StInspectorPresenter
+       0x300017e18 I SpMillerColumnPresenter>newPresenterFor: 0x36117b7f8: a(n) SpMillerColumnPresenter
+       0x300017e68 I SpMillerColumnPresenter>pushModel: 0x36117b7f8: a(n) SpMillerColumnPresenter
+       0x300017eb0 I SpMillerColumnPresenter>setRootModel: 0x36117b7f8: a(n) SpMillerColumnPresenter
+       0x300017f00 I StInspectorPresenter>initializePresenters 0x361179970: a(n) StInspectorPresenter
+       0x300017f40 I StInspectorPresenter(SpPresenter)>initializePrivateHooks 0x361179970: a(n) StInspectorPresenter
+       0x300017f88 I StInspectorPresenter(SpPresenter)>initialize 0x361179970: a(n) StInspectorPresenter
+       0x300017fd0 I ()>newApplication:model: 0x10001dcc410: a(n) 
+       0x300027918 I ()>on: 0x10001dcc410: a(n) 
+       0x300027960 I >onObject: 0x10001dcc410: a(n) 
+       0x3000279a8 I >openOn: 0x10001dcc410: a(n) 
+       0x3000279f0 I >inspect: 0x10001dcc410: a(n) 
+       0x300027a38 I SystemNavigation>inspect: 0x361179648: a(n) SystemNavigation
+       0x300027a80 I SpCodeInspectItCommand>inspectObject: 0x10008501e78: a(n) SpCodeInspectItCommand
+       0x300027ac8 I [] in SpCodeInspectItCommand>execute 0x10008501e78: a(n) SpCodeInspectItCommand
+       0x300027b10 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluate:andDo: 0x10008501e78: a(n) SpCodeInspectItCommand
+       0x300027b68 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluateSelectionAndDo: 0x10008501e78: a(n) SpCodeInspectItCommand
+       0x300027bb0 I SpCodeInspectItCommand>execute 0x10008501e78: a(n) SpCodeInspectItCommand
+       0x300027be0 M SpCommand>(nil) 0x100084ffa68: a(n) SpCommand
+       0x300027c10 M [] in SpToolCurrentApplicationCommand>(nil) 0x100084fe098: a(n) SpToolCurrentApplicationCommand
+       0x300027c58 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300027ca0 M FullBlockClosure(BlockClosure)>ensure: 0x360e24f28: a(n) FullBlockClosure
+       0x300027ce8 M SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300027d28 M SpToolCurrentApplication class>(nil) 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300027d68 M SpToolCurrentApplicationCommand>(nil) 0x100084fe098: a(n) SpToolCurrentApplicationCommand
+       0x300027d98 M [] in SpToolCurrentApplicationCommand>(nil) 0x100084fbee0: a(n) SpToolCurrentApplicationCommand
+       0x300027de0 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300027e28 M FullBlockClosure(BlockClosure)>ensure: 0x360e24d18: a(n) FullBlockClosure
+       0x300027e80 I SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300027ed0 I SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300027f20 I SpToolCurrentApplicationCommand>execute 0x100084fbee0: a(n) SpToolCurrentApplicationCommand
+       0x300027f58 M [] in SpKMCategoryBuilder>(nil) 0x100084fb308: a(n) SpKMCategoryBuilder
+       0x300027f88 M FullBlockClosure>(nil) 0x100084f9028: a(n) FullBlockClosure
+       0x300027fd0 I FullBlockClosure(BlockClosure)>cull:cull: 0x100084f9028: a(n) FullBlockClosure
+       0x30000dad0 I FullBlockClosure(BlockClosure)>cull:cull:cull: 0x100084f9028: a(n) FullBlockClosure
+       0x30000db28 I KMCategoryBinding>completeMatch:buffer: 0x360e21210: a(n) KMCategoryBinding
+       0x30000db70 M [] in KMKeymap>(nil) 0x100084f78f0: a(n) KMKeymap
+       0x30000dbc0 M Array(SequenceableCollection)>do: 0x360e21550: a(n) Array
+       0x30000dc10 I KMKeymap>notifyCompleteMatchTo:buffer: 0x100084f78f0: a(n) KMKeymap
+       0x30000dc50 M KMKeymap>(nil) 0x100084f78f0: a(n) KMKeymap
+       0x30000dcb0 M [] in KMCategory>(nil) 0x10008441ee8: a(n) KMCategory
+       0x30000dd08 M Set>(nil) 0x360e22fd0: a(n) Set
+       0x30000dd40 M KMCategory>(nil) 0x10008441ee8: a(n) KMCategory
+       0x30000dd88 M KMCategoryBinding>(nil) 0x360e21210: a(n) KMCategoryBinding
+       0x30000ddd8 M [] in KMDispatcher>(nil) 0x1000843ded8: a(n) KMDispatcher
+       0x30000de28 M OrderedCollection>do: 0x360e21230: a(n) OrderedCollection
+       0x30000de60 M KMDispatcher>(nil) 0x1000843ded8: a(n) KMDispatcher
+       0x30000de98 M KMTarget>(nil) 0x10008441eb8: a(n) KMTarget
+       0x30000ded8 M [] in KMDispatchChain>(nil) 0x360e1e5c0: a(n) KMDispatchChain
+       0x30000df28 I KMDispatchChain>do: 0x360e1e5c0: a(n) KMDispatchChain
+       0x30000df60 M KMDispatchChain>(nil) 0x360e1e5c0: a(n) KMDispatchChain
+       0x30000dfa0 M KMDispatcher>(nil) 0x1000843ded8: a(n) KMDispatcher
+       0x30000dfd8 M RubEditingArea>(nil) 0x1000850f520: a(n) RubEditingArea
+       0x30001d9d0 I RubEditingArea(Morph)>handleKeystrokeWithKeymappings: 0x1000850f520: a(n) RubEditingArea
+       0x30001da08 M KMShortcutHandler>handleKeystroke:inMorph: 0x10002027a18: a(n) KMShortcutHandler
+       0x30001da50 M RubEditingArea(Morph)>handleKeyDown: 0x1000850f520: a(n) RubEditingArea
+       0x30001da88 M RubEditingArea(RubAbstractTextArea)>handleKeyDown: 0x1000850f520: a(n) RubEditingArea
+       0x30001dac0 M KeyboardEvent>sentTo: 0x360e1e040: a(n) KeyboardEvent
+       0x30001daf8 M RubEditingArea(Morph)>handleEvent: 0x1000850f520: a(n) RubEditingArea
+       0x30001db30 M RubEditingArea(Morph)>handleFocusEvent: 0x1000850f520: a(n) RubEditingArea
+       0x30001db80 M [] in HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x30001dbb0 M FullBlockClosure(BlockClosure)>on:do: 0x360e1e180: a(n) FullBlockClosure
+       0x30001dbf8 M WorldMorph>becomeActiveDuring: 0x10000f6db28: a(n) WorldMorph
+       0x30001dc48 M HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x30001dc98 M HandMorph>sendEvent:focus:clear: 0x1000101b550: a(n) HandMorph
+       0x30001dce0 M HandMorph>sendKeyboardEvent: 0x1000101b550: a(n) HandMorph
+       0x30001dd38 M HandMorph>handleEvent: 0x1000101b550: a(n) HandMorph
+       0x30001dd78 M [] in OSWindowMorphicEventHandler>dispatchMorphicEvent: 0x100096d5590: a(n) OSWindowMorphicEventHandler
+       0x30001ddb8 M WorldState>runStepMethodsIn: 0x10000fd85e8: a(n) WorldState
+       0x30001ddf0 M WorldMorph>runStepMethods 0x10000f6db28: a(n) WorldMorph
+       0x30001de20 M WorldState>doOneCycleFor: 0x10000fd85e8: a(n) WorldState
+       0x30001de58 M WorldMorph>doOneCycleNow 0x10000f6db28: a(n) WorldMorph
+       0x30001de88 M WorldMorph>doOneCycle 0x10000f6db28: a(n) WorldMorph
+       0x30001dec0 M [] in WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x30001df08 M FullBlockClosure(BlockClosure)>ensure: 0x360e1ce10: a(n) FullBlockClosure
+       0x30001df40 M WorldState class>doDrawCycleWith: 0x100009c3750: a(n) WorldState class
+       0x30001df78 M WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x30001dfa8 M MorphicRenderLoop>doOneCycle 0x100091ac048: a(n) MorphicRenderLoop
+       0x30001dfd8 M MorphicRenderLoop>doOneCycleWhile: 0x100091ac048: a(n) MorphicRenderLoop
+     0x10009135d18 s [] in MorphicUIManager>spawnNewProcess
+     0x100091ac138 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+processes at priority 10
+Process      0x1000caeadd8 priority 10
+       0x300013f60 M ProcessorScheduler class>idleProcess 0x10000016f58: a(n) ProcessorScheduler class
+       0x300013fa0 I [] in ProcessorScheduler class>startUp 0x10000016f58: a(n) ProcessorScheduler class
+       0x300013fe0 I [] in FullBlockClosure>newProcess 0x1000cbc1698: a(n) FullBlockClosure
+
+suspended processes
+Process      0x100096d2c48 priority 50
+       0x300007fe0 I FinalizationProcess class>finalizationProcess 0x1000001eff8: a(n) FinalizationProcess class
+     0x100099d4b78 s [] in FinalizationProcess class>restartFinalizationProcess
+     0x100096d4148 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10002a0a070 priority 80
+       0x30001bf98 M DelayMicrosecondTicker>waitForUserSignalled:orExpired: 0x10000490cc0: a(n) DelayMicrosecondTicker
+       0x30001bfe0 M [] in DelaySemaphoreScheduler>runBackendLoopAtTimingPriority 0x100004853a0: a(n) DelaySemaphoreScheduler
+     0x10002f52510 s FullBlockClosure(BlockClosure)>ensure:
+     0x10002ab8ec0 s DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+     0x10002f342d0 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>startTimerEventLoopPriority:
+     0x10002ab8f78 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000212db08 priority 40
+     0x1000213abe8 s AtomicSharedQueue>waitForNewItems
+     0x10002162b30 s AtomicSharedQueue>next
+     0x10002123c18 s TKTWorkerProcess>privateNextTask
+     0x10002118ce8 s TKTWorkerProcess>workerLoop
+     0x10002115de8 s MessageSend>value
+     0x10002115f38 s [] in TKTPharoProcessProvider>createProcessDoing:named:
+     0x10002116150 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100034bf010 priority 31
+     0x100098db3f0 s AtomicSharedQueue>waitForNewItems
+     0x100099d4c30 s AtomicSharedQueue>next
+     0x1000327b948 s ClyDataSourceUpdateScheduler>processQueue
+     0x1000327d688 s [] in ClyDataSourceUpdateScheduler>ensureRunning
+     0x1000327e948 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fabf98 priority 70
+     0x10003fac0c0 s [] in TFCallbackQueue>forkCallbackProcess
+     0x10003fac310 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fbe698 priority 79
+       0x300025ed8 M [] in DelayWaitTimeout>(nil) 0x360f6ff28: a(n) DelayWaitTimeout
+       0x300025f20 M FullBlockClosure(BlockClosure)>ensure: 0x360f70020: a(n) FullBlockClosure
+       0x300025f58 M DelayWaitTimeout>(nil) 0x360f6ff28: a(n) DelayWaitTimeout
+       0x300025f90 M Semaphore>(nil) 0x10003fbe678: a(n) Semaphore
+       0x300025fe0 I TestExecutionEnvironment>watchDogLoop 0x10003fc0468: a(n) TestExecutionEnvironment
+     0x10003fc3928 s [] in TestExecutionEnvironment>startWatchDog
+     0x10003fc3a70 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10004daf2a0 priority 79
+       0x300015eb8 M [] in DelayWaitTimeout>(nil) 0x360f6fb88: a(n) DelayWaitTimeout
+       0x300015f00 M FullBlockClosure(BlockClosure)>ensure: 0x360f6fc80: a(n) FullBlockClosure
+       0x300015f48 I DelayWaitTimeout>wait 0x360f6fb88: a(n) DelayWaitTimeout
+       0x300015f90 I Semaphore>waitTimeoutMilliseconds: 0x10004daf280: a(n) Semaphore
+       0x300015fe0 I TestExecutionEnvironment>watchDogLoop 0x10004dbb6a8: a(n) TestExecutionEnvironment
+     0x100050b9d10 s [] in TestExecutionEnvironment>startWatchDog
+     0x100050c3bc8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000caead30 priority 60
+     0x1000cbb67a8 s SmalltalkImage>lowSpaceWatcher
+       0x3604dddd0 s [] in SmalltalkImage>installLowSpaceWatcher
+     0x1000cbc3dd8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100098934a0 priority 40
+       0x300001ee0 M [] in Delay>wait 0x3604ddc50: a(n) Delay
+       0x300001f28 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x3604de610: a(n) FullBlockClosure
+       0x300001f60 M Delay>wait 0x3604ddc50: a(n) Delay
+       0x300001fa0 I Duration>wait 0x3604de718: a(n) Duration
+       0x300001fe0 I [] in StPlaygroundPage>spawnFlushProcess 0x1000861e008: a(n) StPlaygroundPage
+     0x10009cad8c0 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000caeaea8 priority 60
+       0x30000bea0 M [] in Delay>wait 0x361058df8: a(n) Delay
+       0x30000bee8 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x361059070: a(n) FullBlockClosure
+       0x30000bf20 M Delay>wait 0x361058df8: a(n) Delay
+       0x30000bf60 M OSSDL2Driver>eventLoopProcessWithoutPlugin 0x100096d3738: a(n) OSSDL2Driver
+       0x30000bfa0 I [] in OSSDL2Driver>setupEventLoop 0x100096d3738: a(n) OSSDL2Driver
+       0x30000bfe0 I [] in FullBlockClosure>newProcess 0x1000cbc2cb0: a(n) FullBlockClosure
+
+Most recent primitives
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+flag:
+object:instVarAt:
+new
+initialize
+**StackOverflow**
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+object:instVarAt:put:
+
+
+signal
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+object:instVarAt:
+value:
+value:
+value:
+stringHash:initialHash:
+value:
+**StackOverflow**
+
+
+@
+@
+
+
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+yourself
+object:instVarAt:
+yourself
+**CompactCode**
+
+stack page bytes 8192 available headroom 5576 minimum unused headroom 5896
+
+	(Segmentation fault: 11)
+
+Segmentation fault: 11 Thu Mar  5 15:57:39 2026
+
+
+/Users/faouziray/Documents/XP/Pharo/images/againWithVM/pharo-local/iceberg/fouziray/JIT2/build/dist/Pharo.app/Contents/MacOS/Pharo
+PharoVM version:5.0-Pharo 10.3.0-bb546bfdb built on Feb  6 2026 14:39:36 Compiler: Apple LLVM 14.0.3 (clang-1403.0.22.14.1) Apple LLVM 14.0.3 (clang-1403.0.22.14.1) [Production Spur 64-bit VM]
+Built from: CoInterpreter VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ With:StackToRegisterMappingCogit VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ Revision: bb546bfdb - Commit: bb546bfdb - Date: 2026-02-06 14:35:39 +0100
+
+C stack backtrace & registers:
+	 x00 0x0000000000000000 x01 0x0000010000475938 x02 0x0000000000000024 x03 0x0000010000017ab0
+	 x04 0x0070454f2854cc11 x05 0x00000000d503201f x06 0x0000000000000000 x07 0x0000000000000000
+	 x08 0x0000000320001a10 x09 0x0000000300027d70 x10 0x00000003200007d0 x11 0x00000000012fff30
+	 x12 0x0000000360000000 x13 0x00000003614bc3b9 x14 0x0000000360b68448 x15 0x0000000000000003
+	 x16 0x00000003200e5050 x17 0x000000030003bfa8 x18 0x0000000000000000 x19 0x0000010000017ab0
+	 x20 0x0000000000000001 x21 0x0000000101473000 x22 0x00000000000036cf x23 0x0000010000017ab0
+	 x24 0x0000000101473c28 x25 0x0000010000000000 x26 0x000000030003be68 x27 0x0000000101473000
+	 x28 0x0000000300027d48  FP 0x0000000300027d60  LR 0x00000003200e50ec  SP 0x000000016efcaeb0
+	  PC 0x000000031c0eb72c  STATE 0x0000000020001000
+*0   ???                                 0x000000031c0eb72c 0x0 + 13355628332
+1   libPharoVMCore.dylib                0x0000000101459ca8 reportStackState + 212
+2   libPharoVMCore.dylib                0x0000000101459b6c doReport + 144
+3   libPharoVMCore.dylib                0x0000000101459e6c sigsegv + 28
+4   libsystem_platform.dylib            0x000000019b92f584 _sigtramp + 56
+5   ???                                 0x00000003200e50ec 0x0 + 13422711020
+6   ???                                 0x0000000000000000 0x0 + 0
+
+
+All Smalltalk process stacks (active first):
+Process      0x10009112060 priority 40
+       0x300027d60 M Caller>sendSStatic: 0x360b66de8: a(n) Caller
+       0x300027db0 M MsgSendBenchmarkMono(MicroBenchStats)>benchSendsTo64YourselvesStatic2 0x360b66d48: a(n) MsgSendBenchmarkMono
+       0x300027de0 M [] in UndefinedObject>DoIt 0x10000000000: a(n) UndefinedObject
+       0x300027e18 M FullBlockClosure(BlockClosure)>microsecondsToRun 0x360b66f30: a(n) FullBlockClosure
+       0x300027e48 M [] in UndefinedObject>DoIt 0x10000000000: a(n) UndefinedObject
+       0x300027ec8 I Interval>collect: 0x360b5fac0: a(n) Interval
+       0x300027f00 M UndefinedObject>DoIt 0x10000000000: a(n) UndefinedObject
+       0x300027f40 I OCReceiverDoItSemanticScope(OCDoItSemanticScope)>evaluateDoIt: 0x360b1bca0: a(n) OCReceiverDoItSemanticScope
+       0x300027f98 I OpalCompiler>evaluate 0x360b1b790: a(n) OpalCompiler
+       0x300027fe0 M [] in SpCodePresenter>evaluate:onCompileError:onError: 0x1000850d990: a(n) SpCodePresenter
+       0x3000139c0 M FullBlockClosure(BlockClosure)>on:do: 0x360b1a320: a(n) FullBlockClosure
+       0x300013a18 I SpCodePresenter>evaluate:onCompileError:onError: 0x1000850d990: a(n) SpCodePresenter
+       0x300013a78 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluate:andDo: 0x10008501338: a(n) SpCodeInspectItCommand
+       0x300013ad0 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluateSelectionAndDo: 0x10008501338: a(n) SpCodeInspectItCommand
+       0x300013b18 I SpCodeInspectItCommand>execute 0x10008501338: a(n) SpCodeInspectItCommand
+       0x300013b48 M SpCommand(CmCommandDecorator)>execute 0x100084fef28: a(n) SpCommand
+       0x300013b78 M [] in SpToolCurrentApplicationCommand>execute 0x100084fd558: a(n) SpToolCurrentApplicationCommand
+       0x300013bc0 M [] in SpToolCurrentApplication>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300013c08 M FullBlockClosure(BlockClosure)>ensure: 0x360b19770: a(n) FullBlockClosure
+       0x300013c50 M SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300013c90 M SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300013cd0 M SpToolCurrentApplicationCommand>execute 0x100084fd558: a(n) SpToolCurrentApplicationCommand
+       0x300013d00 M [] in SpToolCurrentApplicationCommand>execute 0x100084fb3a0: a(n) SpToolCurrentApplicationCommand
+       0x300013d48 M [] in SpToolCurrentApplication>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300013d90 M FullBlockClosure(BlockClosure)>ensure: 0x360b193f0: a(n) FullBlockClosure
+       0x300013de8 I SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300013e38 I SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300013e88 I SpToolCurrentApplicationCommand>execute 0x100084fb3a0: a(n) SpToolCurrentApplicationCommand
+       0x300013ec0 M [] in SpKMCategoryBuilder>visitCommand: 0x100084fa7c8: a(n) SpKMCategoryBuilder
+       0x300013ef0 M FullBlockClosure(BlockClosure)>cull: 0x100084f84e8: a(n) FullBlockClosure
+       0x300013f28 M FullBlockClosure(BlockClosure)>cull:cull: 0x100084f84e8: a(n) FullBlockClosure
+       0x300013f78 I FullBlockClosure(BlockClosure)>cull:cull:cull: 0x100084f84e8: a(n) FullBlockClosure
+       0x300013fd0 I KMCategoryBinding>completeMatch:buffer: 0x360b15b10: a(n) KMCategoryBinding
+       0x300005b40 M [] in KMKeymap>notifyCompleteMatchTo:buffer: 0x100084f6db0: a(n) KMKeymap
+       0x300005b90 M Array(SequenceableCollection)>do: 0x360b15e50: a(n) Array
+       0x300005be0 I KMKeymap>notifyCompleteMatchTo:buffer: 0x100084f6db0: a(n) KMKeymap
+       0x300005c20 M KMKeymap>onMatchWith:notify:andDo: 0x100084f6db0: a(n) KMKeymap
+       0x300005c80 M [] in KMCategory>onMatchWith:notify:andDo: 0x100084413a8: a(n) KMCategory
+       0x300005cd8 M Set>do: 0x360b17a40: a(n) Set
+       0x300005d10 M KMCategory>onMatchWith:notify:andDo: 0x100084413a8: a(n) KMCategory
+       0x300005d58 M KMCategoryBinding>verifyMatchWith:notifying:thenDoing: 0x360b15b10: a(n) KMCategoryBinding
+       0x300005da8 M [] in KMDispatcher>dispatch: 0x1000843d398: a(n) KMDispatcher
+       0x300005df8 M OrderedCollection>do: 0x360b15b30: a(n) OrderedCollection
+       0x300005e30 M KMDispatcher>dispatch: 0x1000843d398: a(n) KMDispatcher
+       0x300005e68 M KMTarget>dispatch: 0x10008441378: a(n) KMTarget
+       0x300005ea8 M [] in KMDispatchChain>dispatch: 0x360b12e08: a(n) KMDispatchChain
+       0x300005ef8 I KMDispatchChain>do: 0x360b12e08: a(n) KMDispatchChain
+       0x300005f40 I KMDispatchChain>dispatch: 0x360b12e08: a(n) KMDispatchChain
+       0x300005f90 I KMDispatcher>dispatchKeystroke: 0x1000843d398: a(n) KMDispatcher
+       0x300005fd8 I RubEditingArea(Morph)>dispatchKeystrokeForEvent: 0x1000850e9e0: a(n) RubEditingArea
+       0x30003f990 I RubEditingArea(Morph)>handleKeystrokeWithKeymappings: 0x1000850e9e0: a(n) RubEditingArea
+       0x30003f9d8 I KMShortcutHandler>handleKeystroke:inMorph: 0x10002027a18: a(n) KMShortcutHandler
+       0x30003fa30 I RubEditingArea(Morph)>handleKeyDown: 0x1000850e9e0: a(n) RubEditingArea
+       0x30003fa78 I RubEditingArea(RubAbstractTextArea)>handleKeyDown: 0x1000850e9e0: a(n) RubEditingArea
+       0x30003fab0 M KeyboardEvent>sentTo: 0x360b127d0: a(n) KeyboardEvent
+       0x30003fae8 M RubEditingArea(Morph)>handleEvent: 0x1000850e9e0: a(n) RubEditingArea
+       0x30003fb20 M RubEditingArea(Morph)>handleFocusEvent: 0x1000850e9e0: a(n) RubEditingArea
+       0x30003fb70 M [] in HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x30003fba0 M FullBlockClosure(BlockClosure)>on:do: 0x360b12910: a(n) FullBlockClosure
+       0x30003fbe8 M WorldMorph>becomeActiveDuring: 0x10000f6db28: a(n) WorldMorph
+       0x30003fc38 M HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x30003fc88 M HandMorph>sendEvent:focus:clear: 0x1000101b550: a(n) HandMorph
+       0x30003fce0 I HandMorph>sendKeyboardEvent: 0x1000101b550: a(n) HandMorph
+       0x30003fd38 M HandMorph>handleEvent: 0x1000101b550: a(n) HandMorph
+       0x30003fd78 M [] in OSWindowMorphicEventHandler>dispatchMorphicEvent: 0x10009559780: a(n) OSWindowMorphicEventHandler
+       0x30003fdb8 M WorldState>runStepMethodsIn: 0x10000fd85e8: a(n) WorldState
+       0x30003fdf0 M WorldMorph>runStepMethods 0x10000f6db28: a(n) WorldMorph
+       0x30003fe20 M WorldState>doOneCycleFor: 0x10000fd85e8: a(n) WorldState
+       0x30003fe58 M WorldMorph>doOneCycleNow 0x10000f6db28: a(n) WorldMorph
+       0x30003fe88 M WorldMorph>doOneCycle 0x10000f6db28: a(n) WorldMorph
+       0x30003fec0 M [] in WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x30003ff08 M FullBlockClosure(BlockClosure)>ensure: 0x360b11718: a(n) FullBlockClosure
+       0x30003ff40 M WorldState class>doDrawCycleWith: 0x100009c3750: a(n) WorldState class
+       0x30003ff78 M WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x30003ffa8 M MorphicRenderLoop>doOneCycle 0x100091aaf08: a(n) MorphicRenderLoop
+       0x30003ffd8 M MorphicRenderLoop>doOneCycleWhile: 0x100091aaf08: a(n) MorphicRenderLoop
+     0x10009134bd8 s [] in MorphicUIManager>spawnNewProcess
+     0x100091aaff8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+processes at priority 10
+Process      0x1000c9cf068 priority 10
+       0x30000ff60 M ProcessorScheduler class>idleProcess 0x10000016f58: a(n) ProcessorScheduler class
+       0x30000ffa0 I [] in ProcessorScheduler class>startUp 0x10000016f58: a(n) ProcessorScheduler class
+       0x30000ffe0 I [] in FullBlockClosure>newProcess 0x1000c9f4618: a(n) FullBlockClosure
+
+suspended processes
+Process      0x10009556e38 priority 50
+       0x300031fe0 M FinalizationProcess class>finalizationProcess 0x1000001eff8: a(n) FinalizationProcess class
+     0x100095dadb8 s [] in FinalizationProcess class>restartFinalizationProcess
+     0x10009558338 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10002a0a070 priority 80
+       0x30003bf98 M DelayMicrosecondTicker>waitForUserSignalled:orExpired: 0x10000490cc0: a(n) DelayMicrosecondTicker
+       0x30003bfe0 M [] in DelaySemaphoreScheduler>runBackendLoopAtTimingPriority 0x100004853a0: a(n) DelaySemaphoreScheduler
+     0x10002f52510 s FullBlockClosure(BlockClosure)>ensure:
+     0x10002ab8ec0 s DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+     0x10002f342d0 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>startTimerEventLoopPriority:
+     0x10002ab8f78 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000212db08 priority 40
+     0x1000213abe8 s AtomicSharedQueue>waitForNewItems
+     0x10002162b30 s AtomicSharedQueue>next
+     0x10002123c18 s TKTWorkerProcess>privateNextTask
+     0x10002118ce8 s TKTWorkerProcess>workerLoop
+     0x10002115de8 s MessageSend>value
+     0x10002115f38 s [] in TKTPharoProcessProvider>createProcessDoing:named:
+     0x10002116150 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100034bf010 priority 31
+     0x100092f2858 s AtomicSharedQueue>waitForNewItems
+     0x100092f6178 s AtomicSharedQueue>next
+     0x1000327b948 s ClyDataSourceUpdateScheduler>processQueue
+     0x1000327d688 s [] in ClyDataSourceUpdateScheduler>ensureRunning
+     0x1000327e948 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fabf98 priority 70
+     0x10003fac0c0 s [] in TFCallbackQueue>forkCallbackProcess
+     0x10003fac310 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fbe698 priority 79
+     0x10009cf7510 s [] in DelayWaitTimeout>wait
+     0x10009effe48 s FullBlockClosure(BlockClosure)>ensure:
+     0x10009ef42c0 s DelayWaitTimeout>wait
+     0x1000a00f600 s Semaphore>waitTimeoutMilliseconds:
+     0x10003fc3748 s TestExecutionEnvironment>watchDogLoop
+     0x10003fc3928 s [] in TestExecutionEnvironment>startWatchDog
+     0x10003fc3a70 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10004daf2a0 priority 79
+     0x10009cf75c8 s [] in DelayWaitTimeout>wait
+     0x10009e4ca40 s FullBlockClosure(BlockClosure)>ensure:
+     0x10009ef4378 s DelayWaitTimeout>wait
+     0x1000a00f6b8 s Semaphore>waitTimeoutMilliseconds:
+     0x100050a0ea8 s TestExecutionEnvironment>watchDogLoop
+     0x100050b9d10 s [] in TestExecutionEnvironment>startWatchDog
+     0x100050c3bc8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000c9cf010 priority 60
+     0x1000c9e3460 s SmalltalkImage>lowSpaceWatcher
+     0x10009804f78 s [] in SmalltalkImage>installLowSpaceWatcher
+     0x1000c9e3658 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000c9cf138 priority 60
+       0x30002bea0 M [] in Delay>wait 0x360b682f8: a(n) Delay
+       0x30002bee8 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x360b68570: a(n) FullBlockClosure
+       0x30002bf20 M Delay>wait 0x360b682f8: a(n) Delay
+       0x30002bf60 M OSSDL2Driver>eventLoopProcessWithoutPlugin 0x10009557928: a(n) OSSDL2Driver
+       0x30002bfa0 I [] in OSSDL2Driver>setupEventLoop 0x10009557928: a(n) OSSDL2Driver
+       0x30002bfe0 I [] in FullBlockClosure>newProcess 0x1000c9e3528: a(n) FullBlockClosure
+
+Most recent primitives
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+microsecondsToRun
+wait
+signal
+signal
+nowTick
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+microsecondsToRun
+wait
+signal
+signal
+nowTick
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+primUTCMicrosecondsClock
+microsecondsToRun
+at:put:
+at:put:
+at:put:
+at:put:
+at:put:
+at:put:
+primUTCMicrosecondsClock
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+at:put:
+wait
+signal
+signal
+nowTick
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+
+wait
+signal
+signal
+nowTick
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+
+wait
+signal
+signal
+nowTick
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+
+wait
+signal
+signal
+nowTick
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+
+wait
+signal
+signal
+nowTick
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+
+wait
+signal
+signal
+nowTick
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+primUTCMicrosecondsClock
+at:put:
+at:put:
+at:put:
+at:put:
+at:put:
+primUTCMicrosecondsClock
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+at:put:
+wait
+signal
+signal
+nowTick
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+at:put:
+byteSize
+byteSize
+byteSize
+wait
+postCopy
+postCopy
+postCopy
+signal
+postCopy
+new
+**CompactCode**
+new
+new
+yourself
+yourself
+allocate:
+allocate:
+primitivePerformWorkerCall:withArguments:
+@
+free:
+free:
+bitShift:
+bitShift:
+primitivePerformWorkerCall:withArguments:
+modifiers
+initialize
+&
+findIndexForKey:
+findIndexForKey:
+value
+value
+value
+/
+@
+fractionPart
+truncated
+fractionPart
+truncated
+@
+findElementOrNil:
+\\
+\\
+\\
+\\
+\\
+\\
+activeHand
+activeHand
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+initialize
+wait
+signal
+signal
+nowTick
+initialize
+initialize
+initialize
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+
+stack page bytes 8192 available headroom 5576 minimum unused headroom 5896
+
+	(Segmentation fault: 11)
+
+Illegal instruction: 4 Thu Mar  5 15:57:53 2026
+
+
+/Users/faouziray/Documents/XP/Pharo/images/againWithVM/pharo-local/iceberg/fouziray/JIT2/build/dist/Pharo.app/Contents/MacOS/Pharo
+PharoVM version:5.0-Pharo 10.3.0-bb546bfdb built on Feb  6 2026 14:39:36 Compiler: Apple LLVM 14.0.3 (clang-1403.0.22.14.1) Apple LLVM 14.0.3 (clang-1403.0.22.14.1) [Production Spur 64-bit VM]
+Built from: CoInterpreter VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ With:StackToRegisterMappingCogit VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ Revision: bb546bfdb - Commit: bb546bfdb - Date: 2026-02-06 14:35:39 +0100
+
+C stack backtrace & registers:
+	 x00 0x00000003200e76d8 x01 0x0000010000475938 x02 0x0000000000000013 x03 0x0000010000017ab0
+	 x04 0x00000000007a1201 x05 0x00000000d503201f x06 0x000000009f000000 x07 0x0000000010000000
+	 x08 0x0000000320001a10 x09 0x00000003200e76a0 x10 0x00000000007a11e1 x11 0x00000000000f423c
+	 x12 0x0000000000000001 x13 0x0000000000000000 x14 0x0000000000000005 x15 0x0000000000000039
+	 x16 0x00000003200e2db0 x17 0x000000020d9777b0 x18 0x0000000000000000 x19 0x0000010000017ab0
+	 x20 0x00000000007a11e1 x21 0x0000000103187000 x22 0x00000000000036cf x23 0x0000010000017ab0
+	 x24 0x0000000103187c28 x25 0x0000010000000000 x26 0x000000030003de70 x27 0x0000000103187000
+	 x28 0x000000030003de48  FP 0x000000030003de60  LR 0x00000003200e2e4c  SP 0x000000016d2b6e50
+	  PC 0x000000032004b454  STATE 0x0000000020001000
+*0   ???                                 0x000000032004b454 0x0 + 13422081108
+1   libPharoVMCore.dylib                0x000000010316dca8 reportStackState + 212
+2   libPharoVMCore.dylib                0x000000010316db6c doReport + 144
+3   libPharoVMCore.dylib                0x000000010316de6c sigsegv + 28
+4   libsystem_platform.dylib            0x000000019b92f584 _sigtramp + 56
+5   ???                                 0x00000003200e2e4c 0x0 + 13422702156
+6   ???                                 0x0000000000000000 0x0 + 0
+
+
+All Smalltalk process stacks (active first):
+Process      0x10009111ff0 priority 40
+       0x30003de60 M Caller>sendSStatic: 0x3608392a8: a(n) Caller
+       0x30003deb0 M MsgSendBenchmarkMono(MicroBenchStats)>benchSendsTo64YourselvesStatic2 0x360839208: a(n) MsgSendBenchmarkMono
+       0x30003dee0 M [] in UndefinedObject>DoIt 0x10000000000: a(n) UndefinedObject
+       0x30003df18 M FullBlockClosure(BlockClosure)>microsecondsToRun 0x3608393f0: a(n) FullBlockClosure
+       0x30003df58 I [] in UndefinedObject>DoIt 0x10000000000: a(n) UndefinedObject
+       0x30003dfd8 I Interval>collect: 0x360836918: a(n) Interval
+       0x30000d958 M UndefinedObject>DoIt 0x10000000000: a(n) UndefinedObject
+       0x30000d998 I OCReceiverDoItSemanticScope(OCDoItSemanticScope)>evaluateDoIt: 0x3607f23c8: a(n) OCReceiverDoItSemanticScope
+       0x30000d9f0 I OpalCompiler>evaluate 0x3607f1d48: a(n) OpalCompiler
+       0x30000da38 M [] in SpCodePresenter>evaluate:onCompileError:onError: 0x1000850da50: a(n) SpCodePresenter
+       0x30000da68 M FullBlockClosure(BlockClosure)>on:do: 0x3607f08d8: a(n) FullBlockClosure
+       0x30000dac0 I SpCodePresenter>evaluate:onCompileError:onError: 0x1000850da50: a(n) SpCodePresenter
+       0x30000db20 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluate:andDo: 0x100085013f8: a(n) SpCodeInspectItCommand
+       0x30000db78 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluateSelectionAndDo: 0x100085013f8: a(n) SpCodeInspectItCommand
+       0x30000dbc0 I SpCodeInspectItCommand>execute 0x100085013f8: a(n) SpCodeInspectItCommand
+       0x30000dbf0 M SpCommand(CmCommandDecorator)>execute 0x100084fefe8: a(n) SpCommand
+       0x30000dc20 M [] in SpToolCurrentApplicationCommand>execute 0x100084fd618: a(n) SpToolCurrentApplicationCommand
+       0x30000dc68 M [] in SpToolCurrentApplication>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30000dcb0 M FullBlockClosure(BlockClosure)>ensure: 0x3607efc70: a(n) FullBlockClosure
+       0x30000dcf8 M SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30000dd38 M SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x30000dd78 M SpToolCurrentApplicationCommand>execute 0x100084fd618: a(n) SpToolCurrentApplicationCommand
+       0x30000dda8 M [] in SpToolCurrentApplicationCommand>execute 0x100084fb460: a(n) SpToolCurrentApplicationCommand
+       0x30000ddf0 M [] in SpToolCurrentApplication>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30000de38 M FullBlockClosure(BlockClosure)>ensure: 0x3607efa60: a(n) FullBlockClosure
+       0x30000de90 I SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30000dee0 I SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x30000df30 I SpToolCurrentApplicationCommand>execute 0x100084fb460: a(n) SpToolCurrentApplicationCommand
+       0x30000df68 M [] in SpKMCategoryBuilder>visitCommand: 0x100084fa888: a(n) SpKMCategoryBuilder
+       0x30000df98 M FullBlockClosure(BlockClosure)>cull: 0x100084f85a8: a(n) FullBlockClosure
+       0x30000dfd0 M FullBlockClosure(BlockClosure)>cull:cull: 0x100084f85a8: a(n) FullBlockClosure
+       0x300033ad0 I FullBlockClosure(BlockClosure)>cull:cull:cull: 0x100084f85a8: a(n) FullBlockClosure
+       0x300033b28 I KMCategoryBinding>completeMatch:buffer: 0x3607ebf58: a(n) KMCategoryBinding
+       0x300033b70 M [] in KMKeymap>notifyCompleteMatchTo:buffer: 0x100084f6e70: a(n) KMKeymap
+       0x300033bc0 M Array(SequenceableCollection)>do: 0x3607ec298: a(n) Array
+       0x300033c10 I KMKeymap>notifyCompleteMatchTo:buffer: 0x100084f6e70: a(n) KMKeymap
+       0x300033c50 M KMKeymap>onMatchWith:notify:andDo: 0x100084f6e70: a(n) KMKeymap
+       0x300033cb0 M [] in KMCategory>onMatchWith:notify:andDo: 0x10008441468: a(n) KMCategory
+       0x300033d08 M Set>do: 0x3607edd18: a(n) Set
+       0x300033d40 M KMCategory>onMatchWith:notify:andDo: 0x10008441468: a(n) KMCategory
+       0x300033d88 M KMCategoryBinding>verifyMatchWith:notifying:thenDoing: 0x3607ebf58: a(n) KMCategoryBinding
+       0x300033dd8 M [] in KMDispatcher>dispatch: 0x1000843d458: a(n) KMDispatcher
+       0x300033e28 M OrderedCollection>do: 0x3607ebf78: a(n) OrderedCollection
+       0x300033e60 M KMDispatcher>dispatch: 0x1000843d458: a(n) KMDispatcher
+       0x300033e98 M KMTarget>dispatch: 0x10008441438: a(n) KMTarget
+       0x300033ed8 M [] in KMDispatchChain>dispatch: 0x3607e9250: a(n) KMDispatchChain
+       0x300033f18 M KMDispatchChain>do: 0x3607e9250: a(n) KMDispatchChain
+       0x300033f60 I KMDispatchChain>dispatch: 0x3607e9250: a(n) KMDispatchChain
+       0x300033fa0 M KMDispatcher>dispatchKeystroke: 0x1000843d458: a(n) KMDispatcher
+       0x300033fd8 M RubEditingArea(Morph)>dispatchKeystrokeForEvent: 0x1000850eaa0: a(n) RubEditingArea
+       0x3000159c0 I RubEditingArea(Morph)>handleKeystrokeWithKeymappings: 0x1000850eaa0: a(n) RubEditingArea
+       0x3000159f8 M KMShortcutHandler>handleKeystroke:inMorph: 0x10002027a18: a(n) KMShortcutHandler
+       0x300015a40 M RubEditingArea(Morph)>handleKeyDown: 0x1000850eaa0: a(n) RubEditingArea
+       0x300015a88 I RubEditingArea(RubAbstractTextArea)>handleKeyDown: 0x1000850eaa0: a(n) RubEditingArea
+       0x300015ac0 M KeyboardEvent>sentTo: 0x3607e8cd0: a(n) KeyboardEvent
+       0x300015af8 M RubEditingArea(Morph)>handleEvent: 0x1000850eaa0: a(n) RubEditingArea
+       0x300015b30 M RubEditingArea(Morph)>handleFocusEvent: 0x1000850eaa0: a(n) RubEditingArea
+       0x300015b80 M [] in HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x300015bb0 M FullBlockClosure(BlockClosure)>on:do: 0x3607e8e10: a(n) FullBlockClosure
+       0x300015bf8 M WorldMorph>becomeActiveDuring: 0x10000f6db28: a(n) WorldMorph
+       0x300015c48 M HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x300015c98 M HandMorph>sendEvent:focus:clear: 0x1000101b550: a(n) HandMorph
+       0x300015ce0 M HandMorph>sendKeyboardEvent: 0x1000101b550: a(n) HandMorph
+       0x300015d38 M HandMorph>handleEvent: 0x1000101b550: a(n) HandMorph
+       0x300015d78 M [] in OSWindowMorphicEventHandler>dispatchMorphicEvent: 0x1000ca8d1b0: a(n) OSWindowMorphicEventHandler
+       0x300015db8 M WorldState>runStepMethodsIn: 0x10000fd85e8: a(n) WorldState
+       0x300015df0 M WorldMorph>runStepMethods 0x10000f6db28: a(n) WorldMorph
+       0x300015e20 M WorldState>doOneCycleFor: 0x10000fd85e8: a(n) WorldState
+       0x300015e58 M WorldMorph>doOneCycleNow 0x10000f6db28: a(n) WorldMorph
+       0x300015e88 M WorldMorph>doOneCycle 0x10000f6db28: a(n) WorldMorph
+       0x300015ec0 M [] in WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x300015f08 M FullBlockClosure(BlockClosure)>ensure: 0x3607e7aa0: a(n) FullBlockClosure
+       0x300015f40 M WorldState class>doDrawCycleWith: 0x100009c3750: a(n) WorldState class
+       0x300015f78 M WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x300015fa8 M MorphicRenderLoop>doOneCycle 0x100091aae98: a(n) MorphicRenderLoop
+       0x300015fd8 M MorphicRenderLoop>doOneCycleWhile: 0x100091aae98: a(n) MorphicRenderLoop
+     0x10009134b68 s [] in MorphicUIManager>spawnNewProcess
+     0x100091aaf88 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+processes at priority 10
+Process      0x1000ca801a8 priority 10
+       0x30000ff60 M ProcessorScheduler class>idleProcess 0x10000016f58: a(n) ProcessorScheduler class
+       0x30000ffa0 I [] in ProcessorScheduler class>startUp 0x10000016f58: a(n) ProcessorScheduler class
+       0x30000ffe0 I [] in FullBlockClosure>newProcess 0x1000ca8d3b8: a(n) FullBlockClosure
+
+suspended processes
+Process      0x1000ca80330 priority 50
+       0x300011f60 M FinalizationProcess class>finalizationProcess 0x1000001eff8: a(n) FinalizationProcess class
+       0x300011fa0 I [] in FinalizationProcess class>restartFinalizationProcess 0x1000001eff8: a(n) FinalizationProcess class
+       0x300011fe0 I [] in FullBlockClosure>newProcess 0x1000ca8d590: a(n) FullBlockClosure
+
+Process      0x10002a0a070 priority 80
+       0x300005f98 M DelayMicrosecondTicker>waitForUserSignalled:orExpired: 0x10000490cc0: a(n) DelayMicrosecondTicker
+       0x300005fe0 M [] in DelaySemaphoreScheduler>runBackendLoopAtTimingPriority 0x100004853a0: a(n) DelaySemaphoreScheduler
+     0x10002f52510 s FullBlockClosure(BlockClosure)>ensure:
+     0x10002ab8ec0 s DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+     0x10002f342d0 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>startTimerEventLoopPriority:
+     0x10002ab8f78 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000212db08 priority 40
+     0x1000213abe8 s AtomicSharedQueue>waitForNewItems
+     0x10002162b30 s AtomicSharedQueue>next
+     0x10002123c18 s TKTWorkerProcess>privateNextTask
+     0x10002118ce8 s TKTWorkerProcess>workerLoop
+     0x10002115de8 s MessageSend>value
+     0x10002115f38 s [] in TKTPharoProcessProvider>createProcessDoing:named:
+     0x10002116150 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100034bf010 priority 31
+     0x100092f33b8 s AtomicSharedQueue>waitForNewItems
+     0x100092f6cd8 s AtomicSharedQueue>next
+     0x1000327b948 s ClyDataSourceUpdateScheduler>processQueue
+     0x1000327d688 s [] in ClyDataSourceUpdateScheduler>ensureRunning
+     0x1000327e948 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fabf98 priority 70
+     0x10003fac0c0 s [] in TFCallbackQueue>forkCallbackProcess
+     0x10003fac310 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fbe698 priority 79
+       0x300001ed8 M [] in DelayWaitTimeout>wait 0x1000ac38ca8: a(n) DelayWaitTimeout
+       0x300001f20 M FullBlockClosure(BlockClosure)>ensure: 0x1000cdd8228: a(n) FullBlockClosure
+       0x300001f58 M DelayWaitTimeout>wait 0x1000ac38ca8: a(n) DelayWaitTimeout
+       0x300001f90 M Semaphore>waitTimeoutMilliseconds: 0x10003fbe678: a(n) Semaphore
+       0x300001fe0 I TestExecutionEnvironment>watchDogLoop 0x10003fc0468: a(n) TestExecutionEnvironment
+     0x10003fc3928 s [] in TestExecutionEnvironment>startWatchDog
+     0x10003fc3a70 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10004daf2a0 priority 79
+       0x300013eb8 M [] in DelayWaitTimeout>wait 0x1000ac38c68: a(n) DelayWaitTimeout
+       0x300013f00 M FullBlockClosure(BlockClosure)>ensure: 0x1000cdd8200: a(n) FullBlockClosure
+       0x300013f48 I DelayWaitTimeout>wait 0x1000ac38c68: a(n) DelayWaitTimeout
+       0x300013f90 I Semaphore>waitTimeoutMilliseconds: 0x10004daf280: a(n) Semaphore
+       0x300013fe0 I TestExecutionEnvironment>watchDogLoop 0x10004dbb6a8: a(n) TestExecutionEnvironment
+     0x100050b9d10 s [] in TestExecutionEnvironment>startWatchDog
+     0x100050c3bc8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000ca800d8 priority 60
+     0x1000980e8a0 s SmalltalkImage>lowSpaceWatcher
+     0x10009c549c8 s [] in SmalltalkImage>installLowSpaceWatcher
+     0x1000ca8b5c0 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000ca80130 priority 60
+       0x300019ea0 M [] in Delay>wait 0x360838e88: a(n) Delay
+       0x300019ee8 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x360839100: a(n) FullBlockClosure
+       0x300019f20 M Delay>wait 0x360838e88: a(n) Delay
+       0x300019f60 M OSSDL2Driver>eventLoopProcessWithoutPlugin 0x1000ca80ec0: a(n) OSSDL2Driver
+       0x300019fa0 I [] in OSSDL2Driver>setupEventLoop 0x1000ca80ec0: a(n) OSSDL2Driver
+       0x300019fe0 I [] in FullBlockClosure>newProcess 0x1000ca8d368: a(n) FullBlockClosure
+
+Most recent primitives
+objectAt:put:
+objectAt:put:
+propertyAt:put:
+at:ifAbsent:
+at:ifAbsent:
+value
+class
+basicNew:
+basicAt:put:
+basicSize
+basicAt:
+objectAt:put:
+basicSize
+basicAt:
+class
+class
+basicSize
+basicNew:
+basicAt:
+basicAt:put:
+basicAt:put:
+class
+instVarAt:
+instVarAt:put:
+instVarAt:
+instVarAt:put:
+objectAt:put:
+withArgs:executeMethod:
+new:
+basicNew
+**StackOverflow**
+basicNew
+**StackOverflow**
+basicNew
+clone
+basicNew
+basicNew
+**StackOverflow**
+**StackOverflow**
+primUTCMicrosecondsClock
+last
+signal
+nowTick
+signal
+at:
+at:
+at:put:
+at:put:
+at:
+at:put:
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+new:
+primOopForObject:
+size
+basicAt:put:
+basicAt:put:
+basicAt:put:
+basicAt:put:
+basicAt:put:
+basicAt:put:
+basicAt:put:
+size
+basicAt:put:
+size
+at:
+at:
+at:
+primitivePerformWorkerCall:withArguments:
+basicNew
+basicNew
+class
+wait
+signal
+signal
+nowTick
+at:put:
+upHeap:
+value:value:
+signal
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+signal
+nowTick
+signal
+=
+=
+=
+=
+=
+at:
+at:put:
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+setPinnedInMemory:
+primOopForObject:
+setPinnedInMemory:
+setPinnedInMemory:
+setPinnedInMemory:
+setPinnedInMemory:
+setPinnedInMemory:
+primitivePerformWorkerCall:withArguments:
+setPinnedInMemory:
+setPinnedInMemory:
+setPinnedInMemory:
+setPinnedInMemory:
+signal
+setPinnedInMemory:
+*
+*
+*
+*
+*
+*
+*
+signal
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+signal
+nowTick
+signal
+*
+*
+*
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+*
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+*
+wait
+signal
+signal
+nowTick
+signal
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+signal
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+*
+wait
+signal
+signal
+nowTick
+signal
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+signal
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+
+wait
+signal
+signal
+nowTick
+signal
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+signal
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+
+wait
+signal
+signal
+nowTick
+signal
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+signal
+nowTick
+signal
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+primitivePerformWorkerCall:withArguments:
+
+wait
+signal
+signal
+nowTick
+signal
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+microsecondClockValue
+at:put:
+basicNew
+initIcType
+basicNew
+asNewArray
+**CompactCode**
+setContents:
+setContents:
+setUp
+new
+new
+new
+primUTCMicrosecondsClock
+microsecondsToRun
+-
+\\
+\\
+
+stack page bytes 8192 available headroom 5576 minimum unused headroom 5896
+
+	(Illegal instruction: 4)
+
+VM Error Thu Mar  5 16:13:16 2026
+
+
+/Users/faouziray/Documents/XP/Pharo/images/againWithVM/pharo-local/iceberg/fouziray/JIT2/build/dist/Pharo.app/Contents/MacOS/Pharo
+PharoVM version:5.0-Pharo 10.3.0-bb546bfdb built on Feb  6 2026 14:39:36 Compiler: Apple LLVM 14.0.3 (clang-1403.0.22.14.1) Apple LLVM 14.0.3 (clang-1403.0.22.14.1) [Production Spur 64-bit VM]
+Built from: CoInterpreter VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ With:StackToRegisterMappingCogit VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ Revision: bb546bfdb - Commit: bb546bfdb - Date: 2026-02-06 14:35:39 +0100
+
+C stack backtrace & registers:
+	 x00 0x0000000000000000 x01 0x0000000102be78af x02 0x0000000000000000 x03 0x0000000000000003
+	 x04 0xf94002e1540000c1 x05 0x000000016d83ed20 x06 0x0000000102b6149c x07 0x00000003200ac62c
+	 x08 0x00000003200ac985 x09 0x000000032004ab88 x10 0xfffffffffffb5518 x11 0xffffffffffffffeb
+	 x12 0x00000003200ac590 x13 0x000000016d83ee30 x14 0x0000000102b4162c x15 0x000000016d83ed80
+	 x16 0x000000016d83ed68 x17 0x000000016d83edb0 x18 0x000000016d83ed90 x19 0x000000016d83ec68
+	 x20 0x0000000102be78a9 x21 0x0000000000000003 x22 0x000001000351eac8 x23 0x000001000352ac38
+	 x24 0x00000003200ac62c x25 0x0000000102bfe000 x26 0x0000000102c98508 x27 0xfffffffffffb5514
+	 x28 0x00000003200ac628  FP 0x000000016d83ecb0  LR 0xf01f800102be613c  SP 0x000000016d83ec60
+	  PC 0x0000000000000000  STATE 0x0000000000000000
+*0   ???                                 0x0000000000000000 0x0 + 0
+1   libPharoVMCore.dylib                0x0000000102be5ca8 reportStackState + 212
+2   libPharoVMCore.dylib                0x0000000102be5b6c doReport + 144
+3   libPharoVMCore.dylib                0x0000000102be6154 printStatusAfterError + 52
+4   ???                                 0x0000000000000000 0x0 + 0
+5   libPharoVMCore.dylib                0x0000000102b6149c indexForSelectorinat + 180
+6   libPharoVMCore.dylib                0x0000000102b4162c compactCogCompiledCode + 2368
+7   libPharoVMCore.dylib                0x0000000102bda794 commenceCogCompiledCodeCompaction + 204
+8   libPharoVMCore.dylib                0x0000000102b90498 checkForEventsMayContextSwitch + 108
+9   ???                                 0x0000000000000000 0x0 + 0
+
+
+All Smalltalk process stacks (active first):
+Process      0x1000954aa90 priority 40
+       0x30003bbb0 M SmallInteger>+ 0x1=0
+       0x30003bc10 M Morph>(nil) 0x3607b8810: a(n) Morph
+       0x30003bc50 M [] in RowLayout>(nil) 0x3607c2be0: a(n) RowLayout
+       0x30003bcb8 M Array>(nil) 0x3607c2b88: a(n) Array
+       0x30003bd10 I RowLayout>minExtentOf:in: 0x3607c2be0: a(n) RowLayout
+       0x30003bda0 I RowLayout>layout:in: 0x3607c2be0: a(n) RowLayout
+       0x30003bdf8 M AlignmentMorph>(nil) 0x36079f758: a(n) AlignmentMorph
+       0x30003be30 M AlignmentMorph>(nil) 0x36079f758: a(n) AlignmentMorph
+       0x30003be60 M AlignmentMorph>(nil) 0x36079f758: a(n) AlignmentMorph
+       0x30003bea0 M [] in SpWindow>(nil) 0x3607750f0: a(n) SpWindow
+       0x30003bef0 M Array(SequenceableCollection)>do: 0x3607c92e8: a(n) Array
+       0x30003bf30 M SpWindow>(nil) 0x3607750f0: a(n) SpWindow
+       0x30003bf70 M SpWindow>(nil) 0x3607750f0: a(n) SpWindow
+       0x30003bfa8 M SpWindow>(nil) 0x3607750f0: a(n) SpWindow
+       0x30003bfd8 M SpWindow>(nil) 0x3607750f0: a(n) SpWindow
+       0x300013b38 I SpWindow(SystemWindow)>setStripeColorsFrom: 0x3607750f0: a(n) SpWindow
+       0x300013b88 I SpWindow(SystemWindow)>setWindowColor: 0x3607750f0: a(n) SpWindow
+       0x300013bd0 I SpWindow(StandardWindow)>initialize 0x3607750f0: a(n) SpWindow
+       0x300013c00 M (Behavior)>new 0x100012142e8: a(n) 
+       0x300013c40 I SpMorphicWindowAdapter>buildWidget 0x360775090: a(n) SpMorphicWindowAdapter
+       0x300013c88 I SpMorphicWindowAdapter(SpAbstractAdapter)>adapt: 0x360775090: a(n) SpMorphicWindowAdapter
+       0x300013cd0 I SpMorphicWindowAdapter(SpAbstractMorphicAdapter)>adapt: 0x360775090: a(n) SpMorphicWindowAdapter
+       0x300013d30 I SpAbstractWidgetLayout>adapt:bindings: 0x360774da0: a(n) SpAbstractWidgetLayout
+       0x300013d88 I SpAbstractWidgetLayout>buildAdapterFor:bindings: 0x360774da0: a(n) SpAbstractWidgetLayout
+       0x300013de0 I SpWindowPresenter>buildWindowWithLayout:presenterLayout: 0x36076a4d8: a(n) SpWindowPresenter
+       0x300013e30 I SpWindowPresenter>basicBuildWithSpecLayout: 0x36076a4d8: a(n) SpWindowPresenter
+       0x300013e70 M [] in SpWindowPresenter>(nil) 0x36076a4d8: a(n) SpWindowPresenter
+       0x300013eb8 M [] in SpBindings>(nil) 0x1000240f480: a(n) SpBindings
+       0x300013f00 M FullBlockClosure(BlockClosure)>ensure: 0x360774d28: a(n) FullBlockClosure
+       0x300013f48 M SpBindings>(nil) 0x1000240f480: a(n) SpBindings
+       0x300013f88 M SpBindings class>(nil) 0x1000111f530: a(n) SpBindings class
+       0x300013fd8 I SpWindowPresenter>buildWithSpecLayout: 0x36076a4d8: a(n) SpWindowPresenter
+       0x30002b850 I SpWindowPresenter>openWithLayout: 0x36076a4d8: a(n) SpWindowPresenter
+       0x30002b898 I SpWindowPresenter>openWith: 0x36076a4d8: a(n) SpWindowPresenter
+       0x30002b8e0 I SpWindowPresenter>open 0x36076a4d8: a(n) SpWindowPresenter
+       0x30002b920 I StInspectorPresenter(SpAbstractPresenter)>open 0x360728b20: a(n) StInspectorPresenter
+       0x30002b960 I >openOn: 0x10001dcc410: a(n) 
+       0x30002b9a8 I >inspect: 0x10001dcc410: a(n) 
+       0x30002b9f0 I SystemNavigation>inspect: 0x3607287f8: a(n) SystemNavigation
+       0x30002ba38 I SpCodeInspectItCommand>inspectObject: 0x100084fec08: a(n) SpCodeInspectItCommand
+       0x30002ba80 I [] in SpCodeInspectItCommand>execute 0x100084fec08: a(n) SpCodeInspectItCommand
+       0x30002bac8 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluate:andDo: 0x100084fec08: a(n) SpCodeInspectItCommand
+       0x30002bb20 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluateSelectionAndDo: 0x100084fec08: a(n) SpCodeInspectItCommand
+       0x30002bb68 I SpCodeInspectItCommand>execute 0x100084fec08: a(n) SpCodeInspectItCommand
+       0x30002bb98 M SpCommand>(nil) 0x100084fc7f8: a(n) SpCommand
+       0x30002bbc8 M [] in SpToolCurrentApplicationCommand>(nil) 0x100084fae28: a(n) SpToolCurrentApplicationCommand
+       0x30002bc10 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30002bc58 M FullBlockClosure(BlockClosure)>ensure: 0x36005aa30: a(n) FullBlockClosure
+       0x30002bca0 M SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30002bce0 M SpToolCurrentApplication class>(nil) 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x30002bd20 M SpToolCurrentApplicationCommand>(nil) 0x100084fae28: a(n) SpToolCurrentApplicationCommand
+       0x30002bd50 M [] in SpToolCurrentApplicationCommand>(nil) 0x100084f8c70: a(n) SpToolCurrentApplicationCommand
+       0x30002bd98 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30002bde0 M FullBlockClosure(BlockClosure)>ensure: 0x36005ac40: a(n) FullBlockClosure
+       0x30002be38 I SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30002be88 I SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x30002bed8 I SpToolCurrentApplicationCommand>execute 0x100084f8c70: a(n) SpToolCurrentApplicationCommand
+       0x30002bf10 M [] in SpKMCategoryBuilder>(nil) 0x100084f8098: a(n) SpKMCategoryBuilder
+       0x30002bf40 M FullBlockClosure>(nil) 0x100084f5db8: a(n) FullBlockClosure
+       0x30002bf78 M FullBlockClosure>(nil) 0x100084f5db8: a(n) FullBlockClosure
+       0x30002bfc8 I FullBlockClosure(BlockClosure)>cull:cull:cull: 0x100084f5db8: a(n) FullBlockClosure
+       0x300003b18 I KMCategoryBinding>completeMatch:buffer: 0x360058bc0: a(n) KMCategoryBinding
+       0x300003b60 M [] in KMKeymap>(nil) 0x100084f4680: a(n) KMKeymap
+       0x300003bb0 M Array(SequenceableCollection)>do: 0x360058ce8: a(n) Array
+       0x300003c00 I KMKeymap>notifyCompleteMatchTo:buffer: 0x100084f4680: a(n) KMKeymap
+       0x300003c40 M KMKeymap>(nil) 0x100084f4680: a(n) KMKeymap
+       0x300003ca0 M [] in KMCategory>(nil) 0x1000843fe60: a(n) KMCategory
+       0x300003cf8 M Set>(nil) 0x360058e20: a(n) Set
+       0x300003d30 M KMCategory>(nil) 0x1000843fe60: a(n) KMCategory
+       0x300003d78 M KMCategoryBinding>(nil) 0x360058bc0: a(n) KMCategoryBinding
+       0x300003dc8 M [] in KMDispatcher>(nil) 0x1000843c078: a(n) KMDispatcher
+       0x300003e18 M OrderedCollection>(nil) 0x360058fd8: a(n) OrderedCollection
+       0x300003e50 M KMDispatcher>(nil) 0x1000843c078: a(n) KMDispatcher
+       0x300003e88 M KMTarget>(nil) 0x1000843fe30: a(n) KMTarget
+       0x300003ec8 M [] in KMDispatchChain>(nil) 0x360059120: a(n) KMDispatchChain
+       0x300003f18 I KMDispatchChain>do: 0x360059120: a(n) KMDispatchChain
+       0x300003f60 I KMDispatchChain>dispatch: 0x360059120: a(n) KMDispatchChain
+       0x300003fa0 M KMDispatcher>(nil) 0x1000843c078: a(n) KMDispatcher
+       0x300003fd8 M RubEditingArea>(nil) 0x1000850c2b0: a(n) RubEditingArea
+       0x30000d9c0 M RubEditingArea>(nil) 0x1000850c2b0: a(n) RubEditingArea
+       0x30000d9f8 M KMShortcutHandler>(nil) 0x10002027a18: a(n) KMShortcutHandler
+       0x30000da40 M RubEditingArea>(nil) 0x1000850c2b0: a(n) RubEditingArea
+       0x30000da88 I RubEditingArea(RubAbstractTextArea)>handleKeyDown: 0x1000850c2b0: a(n) RubEditingArea
+       0x30000dac0 M KeyboardEvent>(nil) 0x3600590b0: a(n) KeyboardEvent
+       0x30000daf8 M RubEditingArea>(nil) 0x1000850c2b0: a(n) RubEditingArea
+       0x30000db30 M RubEditingArea>(nil) 0x1000850c2b0: a(n) RubEditingArea
+       0x30000db80 M [] in HandMorph>(nil) 0x1000101b550: a(n) HandMorph
+       0x30000dbb0 M FullBlockClosure>(nil) 0x3600593a8: a(n) FullBlockClosure
+       0x30000dbf8 M WorldMorph>(nil) 0x10000f6db28: a(n) WorldMorph
+       0x30000dc48 M HandMorph>(nil) 0x1000101b550: a(n) HandMorph
+       0x30000dc98 M HandMorph>(nil) 0x1000101b550: a(n) HandMorph
+       0x30000dce0 M HandMorph>(nil) 0x1000101b550: a(n) HandMorph
+       0x30000dd38 M HandMorph>(nil) 0x1000101b550: a(n) HandMorph
+       0x30000dd78 M [] in OSWindowMorphicEventHandler(KeyboardEvent)>sentTo: 0x100093c6a98: a(n) OSWindowMorphicEventHandler
+       0x30000ddb8 M WorldState>(nil) 0x10000fd85e8: a(n) WorldState
+       0x30000ddf0 M WorldMorph>runStepMethods 0x10000f6db28: a(n) WorldMorph
+       0x30000de20 M WorldState>doOneCycleFor: 0x10000fd85e8: a(n) WorldState
+       0x30000de58 M WorldMorph>doOneCycleNow 0x10000f6db28: a(n) WorldMorph
+       0x30000de88 M WorldMorph>doOneCycle 0x10000f6db28: a(n) WorldMorph
+       0x30000dec0 M [] in WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x30000df08 M FullBlockClosure(BlockClosure)>ensure: 0x360059878: a(n) FullBlockClosure
+       0x30000df40 M WorldState class>doDrawCycleWith: 0x100009c3750: a(n) WorldState class
+       0x30000df78 M WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x30000dfa8 M MorphicRenderLoop>doOneCycle 0x1000955c218: a(n) MorphicRenderLoop
+       0x30000dfd8 M MorphicRenderLoop>doOneCycleWhile: 0x1000955c218: a(n) MorphicRenderLoop
+     0x1000969cf38 s [] in MorphicUIManager>spawnNewProcess
+     0x1000955c250 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+processes at priority 10
+Process      0x1000c9c7068 priority 10
+       0x30003ff60 M ProcessorScheduler class>idleProcess 0x10000016f58: a(n) ProcessorScheduler class
+       0x30003ffa0 I [] in ProcessorScheduler class>startUp 0x10000016f58: a(n) ProcessorScheduler class
+       0x30003ffe0 I [] in FullBlockClosure>newProcess 0x1000c9f6d60: a(n) FullBlockClosure
+
+suspended processes
+Process      0x100093c4150 priority 50
+       0x300015fe0 M FinalizationProcess class>(nil) 0x1000001eff8: a(n) FinalizationProcess class
+     0x100094d0930 s [] in FinalizationProcess class>restartFinalizationProcess
+     0x100093c5650 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10002a0a070 priority 80
+       0x300017f98 M DelayMicrosecondTicker>waitForUserSignalled:orExpired: 0x10000490cc0: a(n) DelayMicrosecondTicker
+       0x300017fe0 M [] in DelaySemaphoreScheduler>runBackendLoopAtTimingPriority 0x100004853a0: a(n) DelaySemaphoreScheduler
+     0x10002f52510 s FullBlockClosure(BlockClosure)>ensure:
+     0x10002ab8ec0 s DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+     0x10002f342d0 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>startTimerEventLoopPriority:
+     0x10002ab8f78 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000212db08 priority 40
+     0x1000213abe8 s AtomicSharedQueue>waitForNewItems
+     0x10002162b30 s AtomicSharedQueue>next
+     0x10002123c18 s TKTWorkerProcess>privateNextTask
+     0x10002118ce8 s TKTWorkerProcess>workerLoop
+     0x10002115de8 s MessageSend>value
+     0x10002115f38 s [] in TKTPharoProcessProvider>createProcessDoing:named:
+     0x10002116150 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100034bf010 priority 31
+       0x30001ff50 I AtomicSharedQueue>waitForNewItems 0x100034beff0: a(n) AtomicSharedQueue
+       0x30001ff90 M AtomicSharedQueue>next 0x100034beff0: a(n) AtomicSharedQueue
+       0x30001ffe0 I ClyDataSourceUpdateScheduler>processQueue 0x100034ae388: a(n) ClyDataSourceUpdateScheduler
+     0x1000327d688 s [] in ClyDataSourceUpdateScheduler>ensureRunning
+     0x1000327e948 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fabf98 priority 70
+     0x10003fac0c0 s [] in TFCallbackQueue>forkCallbackProcess
+     0x10003fac310 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fbe698 priority 79
+       0x300011ed8 M [] in DelayWaitTimeout>wait 0x36000de40: a(n) DelayWaitTimeout
+       0x300011f20 M FullBlockClosure(BlockClosure)>ensure: 0x360059a38: a(n) FullBlockClosure
+       0x300011f58 M DelayWaitTimeout>wait 0x36000de40: a(n) DelayWaitTimeout
+       0x300011f90 M Semaphore>waitTimeoutMilliseconds: 0x10003fbe678: a(n) Semaphore
+       0x300011fe0 I TestExecutionEnvironment>watchDogLoop 0x10003fc0468: a(n) TestExecutionEnvironment
+     0x10003fc3928 s [] in TestExecutionEnvironment>startWatchDog
+     0x10003fc3a70 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10004daf2a0 priority 79
+       0x300035ed8 M [] in DelayWaitTimeout>wait 0x36000de00: a(n) DelayWaitTimeout
+       0x300035f20 M FullBlockClosure(BlockClosure)>ensure: 0x36005aee0: a(n) FullBlockClosure
+       0x300035f58 M DelayWaitTimeout>wait 0x36000de00: a(n) DelayWaitTimeout
+       0x300035f90 M Semaphore>waitTimeoutMilliseconds: 0x10004daf280: a(n) Semaphore
+       0x300035fe0 I TestExecutionEnvironment>watchDogLoop 0x10004dbb6a8: a(n) TestExecutionEnvironment
+     0x100050b9d10 s [] in TestExecutionEnvironment>startWatchDog
+     0x100050c3bc8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000c9c7010 priority 60
+     0x1000c9d8488 s SmalltalkImage>lowSpaceWatcher
+     0x1000cc23848 s [] in SmalltalkImage>installLowSpaceWatcher
+     0x1000c9dbc18 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000c9c7138 priority 60
+       0x300023ea0 M [] in Delay>wait 0x3607c3008: a(n) Delay
+       0x300023ee8 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x3607c3280: a(n) FullBlockClosure
+       0x300023f20 M Delay>wait 0x3607c3008: a(n) Delay
+       0x300023f60 M OSSDL2Driver>eventLoopProcessWithoutPlugin 0x100093c4c40: a(n) OSSDL2Driver
+       0x300023fa0 I [] in OSSDL2Driver>setupEventLoop 0x100093c4c40: a(n) OSSDL2Driver
+       0x300023fe0 I [] in FullBlockClosure>newProcess 0x1000c9dbae8: a(n) FullBlockClosure
+
+Most recent primitives
+commonEntries
+commonEntries
+commonEntries
+**StackOverflow**
+
+stringHash:initialHash:
+basicIdentityHash
+basicIdentityHash
+basicIdentityHash
+basicNew
+=
+=
+measureContents
+measureContents
+measureContents
+measureContents
+perform:with:
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+truncated
+fractionPart
+truncated
+truncated
+**StackOverflow**
+wait
+=
+=
+=
+=
+tempAt:
+tempAt:put:
+tempAt:
+terminateTo:
+signal
+findNextUnwindContextUpTo:
+terminateTo:
+truncated
+@
+@
+perform:with:
+@
+@
+=
+@
+extent:
+<=
+invalidRect:
+@
+@
+@
+@
+@
+@
+@
+@
+@
+privateFullBounds
+hasDropShadow
+@
+@
+@
+@
+@
+@
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+truncated
+fractionPart
+truncated
+truncated
+**StackOverflow**
+wait
+
+
+
+
+tempAt:
+tempAt:put:
+tempAt:
+terminateTo:
+signal
+findNextUnwindContextUpTo:
+terminateTo:
+truncated
+@
+@
+@
+@
+
+
+@
+
+
+@
+@
+@
+@
+@
+@
+truncated
+@
+@
+@
+@
+perform:with:
+truncated
+truncated
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+layoutInset
+@
+@
+layoutInset
+layoutInset
+**StackOverflow**
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+basicNew
+truncated
+//
+negated
+truncated
+at:ifAbsentPut:
+stringHash:initialHash:
+class
+class
+windowActiveFillStyleFor:
+stringHash:initialHash:
+basicNew
+bitAnd:
+fractionPart
+truncated
+privateFullBounds
+@
+@
+@
+@
+**StackOverflow**
+
+@
+@
+@
+@
+outerBounds
+isEmpty
+@
+@
+layoutBounds
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+ifEmpty:
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+collect:
+@
+borderStyle
+@
+@
+borderStyle
+**CompactCode**
+
+stack page bytes 8192 available headroom 5576 minimum unused headroom 5896
+
+	(VM Error)
+
+Segmentation fault: 11 Thu Mar  5 16:13:16 2026
+
+
+/Users/faouziray/Documents/XP/Pharo/images/againWithVM/pharo-local/iceberg/fouziray/JIT2/build/dist/Pharo.app/Contents/MacOS/Pharo
+PharoVM version:5.0-Pharo 10.3.0-bb546bfdb built on Feb  6 2026 14:39:36 Compiler: Apple LLVM 14.0.3 (clang-1403.0.22.14.1) Apple LLVM 14.0.3 (clang-1403.0.22.14.1) [Production Spur 64-bit VM]
+Built from: CoInterpreter VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ With:StackToRegisterMappingCogit VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ Revision: bb546bfdb - Commit: bb546bfdb - Date: 2026-02-06 14:35:39 +0100
+
+C stack backtrace & registers:
+	 x00 0x000000020360bb6c x01 0x0000000000000000 x02 0x00000000000120a8 x03 0x000000016d83e025
+	 x04 0x0000000102becbe7 x05 0x000000016d83e570 x06 0x000000000000000a x07 0x0000000000000000
+	 x08 0x000000020360bb6c x09 0x0000000203616190 x10 0x0000000000000002 x11 0x00000000fffffffd
+	 x12 0x0000010000000000 x13 0x0000000000000000 x14 0x0000000000000000 x15 0x0000000000000000
+	 x16 0x000000019b8bebd4 x17 0x000000020d976b28 x18 0x0000000000000000 x19 0x0000000102be789d
+	 x20 0x0000000102be78a9 x21 0x0000000000000003 x22 0x000001000351eac8 x23 0x000001000352ac38
+	 x24 0x00000003200ac62c x25 0x0000000102bfe000 x26 0x0000000102c98508 x27 0xfffffffffffb5514
+	 x28 0x00000003200ac628  FP 0x000000016d83ece0  LR 0x0000000000000000  SP 0x000000016d83ecc0
+	  PC 0x0000000000000000  STATE 0x0000000020001000
+*0   ???                                 0x0000000000000000 0x0 + 0
+1   libPharoVMCore.dylib                0x0000000102be5ca8 reportStackState + 212
+2   libPharoVMCore.dylib                0x0000000102be5b6c doReport + 144
+3   libPharoVMCore.dylib                0x0000000102be5e6c sigsegv + 28
+4   libsystem_platform.dylib            0x000000019b92f584 _sigtramp + 56
+5   ???                                 0x0000000000000000 0x0 + 0
+6   libPharoVMCore.dylib                0x0000000102b6149c indexForSelectorinat + 180
+7   libPharoVMCore.dylib                0x0000000102b4162c compactCogCompiledCode + 2368
+8   libPharoVMCore.dylib                0x0000000102bda794 commenceCogCompiledCodeCompaction + 204
+9   libPharoVMCore.dylib                0x0000000102b90498 checkForEventsMayContextSwitch + 108
+10  ???                                 0x0000000000000000 0x0 + 0
+
+
+All Smalltalk process stacks (active first):
+Process      0x1000954aa90 priority 40
+       0x30003bbb0 M SmallInteger>+ 0x1=0
+       0x30003bc10 M Morph>(nil) 0x3607b8810: a(n) Morph
+       0x30003bc50 M [] in RowLayout>(nil) 0x3607c2be0: a(n) RowLayout
+       0x30003bcb8 M Array>(nil) 0x3607c2b88: a(n) Array
+       0x30003bd10 I RowLayout>minExtentOf:in: 0x3607c2be0: a(n) RowLayout
+       0x30003bda0 I RowLayout>layout:in: 0x3607c2be0: a(n) RowLayout
+       0x30003bdf8 M AlignmentMorph>(nil) 0x36079f758: a(n) AlignmentMorph
+       0x30003be30 M AlignmentMorph>(nil) 0x36079f758: a(n) AlignmentMorph
+       0x30003be60 M AlignmentMorph>(nil) 0x36079f758: a(n) AlignmentMorph
+       0x30003bea0 M [] in SpWindow>(nil) 0x3607750f0: a(n) SpWindow
+       0x30003bef0 M Array(SequenceableCollection)>do: 0x3607c92e8: a(n) Array
+       0x30003bf30 M SpWindow>(nil) 0x3607750f0: a(n) SpWindow
+       0x30003bf70 M SpWindow>(nil) 0x3607750f0: a(n) SpWindow
+       0x30003bfa8 M SpWindow>(nil) 0x3607750f0: a(n) SpWindow
+       0x30003bfd8 M SpWindow>(nil) 0x3607750f0: a(n) SpWindow
+       0x300013b38 I SpWindow(SystemWindow)>setStripeColorsFrom: 0x3607750f0: a(n) SpWindow
+       0x300013b88 I SpWindow(SystemWindow)>setWindowColor: 0x3607750f0: a(n) SpWindow
+       0x300013bd0 I SpWindow(StandardWindow)>initialize 0x3607750f0: a(n) SpWindow
+       0x300013c00 M (Behavior)>new 0x100012142e8: a(n) 
+       0x300013c40 I SpMorphicWindowAdapter>buildWidget 0x360775090: a(n) SpMorphicWindowAdapter
+       0x300013c88 I SpMorphicWindowAdapter(SpAbstractAdapter)>adapt: 0x360775090: a(n) SpMorphicWindowAdapter
+       0x300013cd0 I SpMorphicWindowAdapter(SpAbstractMorphicAdapter)>adapt: 0x360775090: a(n) SpMorphicWindowAdapter
+       0x300013d30 I SpAbstractWidgetLayout>adapt:bindings: 0x360774da0: a(n) SpAbstractWidgetLayout
+       0x300013d88 I SpAbstractWidgetLayout>buildAdapterFor:bindings: 0x360774da0: a(n) SpAbstractWidgetLayout
+       0x300013de0 I SpWindowPresenter>buildWindowWithLayout:presenterLayout: 0x36076a4d8: a(n) SpWindowPresenter
+       0x300013e30 I SpWindowPresenter>basicBuildWithSpecLayout: 0x36076a4d8: a(n) SpWindowPresenter
+       0x300013e70 M [] in SpWindowPresenter>(nil) 0x36076a4d8: a(n) SpWindowPresenter
+       0x300013eb8 M [] in SpBindings>(nil) 0x1000240f480: a(n) SpBindings
+       0x300013f00 M FullBlockClosure(BlockClosure)>ensure: 0x360774d28: a(n) FullBlockClosure
+       0x300013f48 M SpBindings>(nil) 0x1000240f480: a(n) SpBindings
+       0x300013f88 M SpBindings class>(nil) 0x1000111f530: a(n) SpBindings class
+       0x300013fd8 I SpWindowPresenter>buildWithSpecLayout: 0x36076a4d8: a(n) SpWindowPresenter
+       0x30002b850 I SpWindowPresenter>openWithLayout: 0x36076a4d8: a(n) SpWindowPresenter
+       0x30002b898 I SpWindowPresenter>openWith: 0x36076a4d8: a(n) SpWindowPresenter
+       0x30002b8e0 I SpWindowPresenter>open 0x36076a4d8: a(n) SpWindowPresenter
+       0x30002b920 I StInspectorPresenter(SpAbstractPresenter)>open 0x360728b20: a(n) StInspectorPresenter
+       0x30002b960 I >openOn: 0x10001dcc410: a(n) 
+       0x30002b9a8 I >inspect: 0x10001dcc410: a(n) 
+       0x30002b9f0 I SystemNavigation>inspect: 0x3607287f8: a(n) SystemNavigation
+       0x30002ba38 I SpCodeInspectItCommand>inspectObject: 0x100084fec08: a(n) SpCodeInspectItCommand
+       0x30002ba80 I [] in SpCodeInspectItCommand>execute 0x100084fec08: a(n) SpCodeInspectItCommand
+       0x30002bac8 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluate:andDo: 0x100084fec08: a(n) SpCodeInspectItCommand
+       0x30002bb20 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluateSelectionAndDo: 0x100084fec08: a(n) SpCodeInspectItCommand
+       0x30002bb68 I SpCodeInspectItCommand>execute 0x100084fec08: a(n) SpCodeInspectItCommand
+       0x30002bb98 M SpCommand>(nil) 0x100084fc7f8: a(n) SpCommand
+       0x30002bbc8 M [] in SpToolCurrentApplicationCommand>(nil) 0x100084fae28: a(n) SpToolCurrentApplicationCommand
+       0x30002bc10 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30002bc58 M FullBlockClosure(BlockClosure)>ensure: 0x36005aa30: a(n) FullBlockClosure
+       0x30002bca0 M SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30002bce0 M SpToolCurrentApplication class>(nil) 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x30002bd20 M SpToolCurrentApplicationCommand>(nil) 0x100084fae28: a(n) SpToolCurrentApplicationCommand
+       0x30002bd50 M [] in SpToolCurrentApplicationCommand>(nil) 0x100084f8c70: a(n) SpToolCurrentApplicationCommand
+       0x30002bd98 M [] in SpToolCurrentApplication>(nil) 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30002bde0 M FullBlockClosure(BlockClosure)>ensure: 0x36005ac40: a(n) FullBlockClosure
+       0x30002be38 I SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x30002be88 I SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x30002bed8 I SpToolCurrentApplicationCommand>execute 0x100084f8c70: a(n) SpToolCurrentApplicationCommand
+       0x30002bf10 M [] in SpKMCategoryBuilder>(nil) 0x100084f8098: a(n) SpKMCategoryBuilder
+       0x30002bf40 M FullBlockClosure>(nil) 0x100084f5db8: a(n) FullBlockClosure
+       0x30002bf78 M FullBlockClosure>(nil) 0x100084f5db8: a(n) FullBlockClosure
+       0x30002bfc8 I FullBlockClosure(BlockClosure)>cull:cull:cull: 0x100084f5db8: a(n) FullBlockClosure
+       0x300003b18 I KMCategoryBinding>completeMatch:buffer: 0x360058bc0: a(n) KMCategoryBinding
+       0x300003b60 M [] in KMKeymap>(nil) 0x100084f4680: a(n) KMKeymap
+       0x300003bb0 M Array(SequenceableCollection)>do: 0x360058ce8: a(n) Array
+       0x300003c00 I KMKeymap>notifyCompleteMatchTo:buffer: 0x100084f4680: a(n) KMKeymap
+       0x300003c40 M KMKeymap>(nil) 0x100084f4680: a(n) KMKeymap
+       0x300003ca0 M [] in KMCategory>(nil) 0x1000843fe60: a(n) KMCategory
+       0x300003cf8 M Set>(nil) 0x360058e20: a(n) Set
+       0x300003d30 M KMCategory>(nil) 0x1000843fe60: a(n) KMCategory
+       0x300003d78 M KMCategoryBinding>(nil) 0x360058bc0: a(n) KMCategoryBinding
+       0x300003dc8 M [] in KMDispatcher>(nil) 0x1000843c078: a(n) KMDispatcher
+       0x300003e18 M OrderedCollection>(nil) 0x360058fd8: a(n) OrderedCollection
+       0x300003e50 M KMDispatcher>(nil) 0x1000843c078: a(n) KMDispatcher
+       0x300003e88 M KMTarget>(nil) 0x1000843fe30: a(n) KMTarget
+       0x300003ec8 M [] in KMDispatchChain>(nil) 0x360059120: a(n) KMDispatchChain
+       0x300003f18 I KMDispatchChain>do: 0x360059120: a(n) KMDispatchChain
+       0x300003f60 I KMDispatchChain>dispatch: 0x360059120: a(n) KMDispatchChain
+       0x300003fa0 M KMDispatcher>(nil) 0x1000843c078: a(n) KMDispatcher
+       0x300003fd8 M RubEditingArea>(nil) 0x1000850c2b0: a(n) RubEditingArea
+       0x30000d9c0 M RubEditingArea>(nil) 0x1000850c2b0: a(n) RubEditingArea
+       0x30000d9f8 M KMShortcutHandler>(nil) 0x10002027a18: a(n) KMShortcutHandler
+       0x30000da40 M RubEditingArea>(nil) 0x1000850c2b0: a(n) RubEditingArea
+       0x30000da88 I RubEditingArea(RubAbstractTextArea)>handleKeyDown: 0x1000850c2b0: a(n) RubEditingArea
+       0x30000dac0 M KeyboardEvent>(nil) 0x3600590b0: a(n) KeyboardEvent
+       0x30000daf8 M RubEditingArea>(nil) 0x1000850c2b0: a(n) RubEditingArea
+       0x30000db30 M RubEditingArea>(nil) 0x1000850c2b0: a(n) RubEditingArea
+       0x30000db80 M [] in HandMorph>(nil) 0x1000101b550: a(n) HandMorph
+       0x30000dbb0 M FullBlockClosure>(nil) 0x3600593a8: a(n) FullBlockClosure
+       0x30000dbf8 M WorldMorph>(nil) 0x10000f6db28: a(n) WorldMorph
+       0x30000dc48 M HandMorph>(nil) 0x1000101b550: a(n) HandMorph
+       0x30000dc98 M HandMorph>(nil) 0x1000101b550: a(n) HandMorph
+       0x30000dce0 M HandMorph>(nil) 0x1000101b550: a(n) HandMorph
+       0x30000dd38 M HandMorph>(nil) 0x1000101b550: a(n) HandMorph
+       0x30000dd78 M [] in OSWindowMorphicEventHandler(KeyboardEvent)>sentTo: 0x100093c6a98: a(n) OSWindowMorphicEventHandler
+       0x30000ddb8 M WorldState>(nil) 0x10000fd85e8: a(n) WorldState
+       0x30000ddf0 M WorldMorph>runStepMethods 0x10000f6db28: a(n) WorldMorph
+       0x30000de20 M WorldState>doOneCycleFor: 0x10000fd85e8: a(n) WorldState
+       0x30000de58 M WorldMorph>doOneCycleNow 0x10000f6db28: a(n) WorldMorph
+       0x30000de88 M WorldMorph>doOneCycle 0x10000f6db28: a(n) WorldMorph
+       0x30000dec0 M [] in WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x30000df08 M FullBlockClosure(BlockClosure)>ensure: 0x360059878: a(n) FullBlockClosure
+       0x30000df40 M WorldState class>doDrawCycleWith: 0x100009c3750: a(n) WorldState class
+       0x30000df78 M WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x30000dfa8 M MorphicRenderLoop>doOneCycle 0x1000955c218: a(n) MorphicRenderLoop
+       0x30000dfd8 M MorphicRenderLoop>doOneCycleWhile: 0x1000955c218: a(n) MorphicRenderLoop
+     0x1000969cf38 s [] in MorphicUIManager>spawnNewProcess
+     0x1000955c250 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+processes at priority 10
+Process      0x1000c9c7068 priority 10
+       0x30003ff60 M ProcessorScheduler class>idleProcess 0x10000016f58: a(n) ProcessorScheduler class
+       0x30003ffa0 I [] in ProcessorScheduler class>startUp 0x10000016f58: a(n) ProcessorScheduler class
+       0x30003ffe0 I [] in FullBlockClosure>newProcess 0x1000c9f6d60: a(n) FullBlockClosure
+
+suspended processes
+Process      0x100093c4150 priority 50
+       0x300015fe0 M FinalizationProcess class>(nil) 0x1000001eff8: a(n) FinalizationProcess class
+     0x100094d0930 s [] in FinalizationProcess class>restartFinalizationProcess
+     0x100093c5650 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10002a0a070 priority 80
+       0x300017f98 M DelayMicrosecondTicker>waitForUserSignalled:orExpired: 0x10000490cc0: a(n) DelayMicrosecondTicker
+       0x300017fe0 M [] in DelaySemaphoreScheduler>runBackendLoopAtTimingPriority 0x100004853a0: a(n) DelaySemaphoreScheduler
+     0x10002f52510 s FullBlockClosure(BlockClosure)>ensure:
+     0x10002ab8ec0 s DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+     0x10002f342d0 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>startTimerEventLoopPriority:
+     0x10002ab8f78 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000212db08 priority 40
+     0x1000213abe8 s AtomicSharedQueue>waitForNewItems
+     0x10002162b30 s AtomicSharedQueue>next
+     0x10002123c18 s TKTWorkerProcess>privateNextTask
+     0x10002118ce8 s TKTWorkerProcess>workerLoop
+     0x10002115de8 s MessageSend>value
+     0x10002115f38 s [] in TKTPharoProcessProvider>createProcessDoing:named:
+     0x10002116150 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100034bf010 priority 31
+       0x30001ff50 I AtomicSharedQueue>waitForNewItems 0x100034beff0: a(n) AtomicSharedQueue
+       0x30001ff90 M AtomicSharedQueue>next 0x100034beff0: a(n) AtomicSharedQueue
+       0x30001ffe0 I ClyDataSourceUpdateScheduler>processQueue 0x100034ae388: a(n) ClyDataSourceUpdateScheduler
+     0x1000327d688 s [] in ClyDataSourceUpdateScheduler>ensureRunning
+     0x1000327e948 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fabf98 priority 70
+     0x10003fac0c0 s [] in TFCallbackQueue>forkCallbackProcess
+     0x10003fac310 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fbe698 priority 79
+       0x300011ed8 M [] in DelayWaitTimeout>wait 0x36000de40: a(n) DelayWaitTimeout
+       0x300011f20 M FullBlockClosure(BlockClosure)>ensure: 0x360059a38: a(n) FullBlockClosure
+       0x300011f58 M DelayWaitTimeout>wait 0x36000de40: a(n) DelayWaitTimeout
+       0x300011f90 M Semaphore>waitTimeoutMilliseconds: 0x10003fbe678: a(n) Semaphore
+       0x300011fe0 I TestExecutionEnvironment>watchDogLoop 0x10003fc0468: a(n) TestExecutionEnvironment
+     0x10003fc3928 s [] in TestExecutionEnvironment>startWatchDog
+     0x10003fc3a70 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10004daf2a0 priority 79
+       0x300035ed8 M [] in DelayWaitTimeout>wait 0x36000de00: a(n) DelayWaitTimeout
+       0x300035f20 M FullBlockClosure(BlockClosure)>ensure: 0x36005aee0: a(n) FullBlockClosure
+       0x300035f58 M DelayWaitTimeout>wait 0x36000de00: a(n) DelayWaitTimeout
+       0x300035f90 M Semaphore>waitTimeoutMilliseconds: 0x10004daf280: a(n) Semaphore
+       0x300035fe0 I TestExecutionEnvironment>watchDogLoop 0x10004dbb6a8: a(n) TestExecutionEnvironment
+     0x100050b9d10 s [] in TestExecutionEnvironment>startWatchDog
+     0x100050c3bc8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000c9c7010 priority 60
+     0x1000c9d8488 s SmalltalkImage>lowSpaceWatcher
+     0x1000cc23848 s [] in SmalltalkImage>installLowSpaceWatcher
+     0x1000c9dbc18 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000c9c7138 priority 60
+       0x300023ea0 M [] in Delay>wait 0x3607c3008: a(n) Delay
+       0x300023ee8 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x3607c3280: a(n) FullBlockClosure
+       0x300023f20 M Delay>wait 0x3607c3008: a(n) Delay
+       0x300023f60 M OSSDL2Driver>eventLoopProcessWithoutPlugin 0x100093c4c40: a(n) OSSDL2Driver
+       0x300023fa0 I [] in OSSDL2Driver>setupEventLoop 0x100093c4c40: a(n) OSSDL2Driver
+       0x300023fe0 I [] in FullBlockClosure>newProcess 0x1000c9dbae8: a(n) FullBlockClosure
+
+Most recent primitives
+commonEntries
+commonEntries
+commonEntries
+**StackOverflow**
+
+stringHash:initialHash:
+basicIdentityHash
+basicIdentityHash
+basicIdentityHash
+basicNew
+=
+=
+measureContents
+measureContents
+measureContents
+measureContents
+perform:with:
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+truncated
+fractionPart
+truncated
+truncated
+**StackOverflow**
+wait
+=
+=
+=
+=
+tempAt:
+tempAt:put:
+tempAt:
+terminateTo:
+signal
+findNextUnwindContextUpTo:
+terminateTo:
+truncated
+@
+@
+perform:with:
+@
+@
+=
+@
+extent:
+<=
+invalidRect:
+@
+@
+@
+@
+@
+@
+@
+@
+@
+privateFullBounds
+hasDropShadow
+@
+@
+@
+@
+@
+@
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+fitContents
+truncated
+fractionPart
+truncated
+truncated
+**StackOverflow**
+wait
+
+
+
+
+tempAt:
+tempAt:put:
+tempAt:
+terminateTo:
+signal
+findNextUnwindContextUpTo:
+terminateTo:
+truncated
+@
+@
+@
+@
+
+
+@
+
+
+@
+@
+@
+@
+@
+@
+truncated
+@
+@
+@
+@
+perform:with:
+truncated
+truncated
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+layoutInset
+@
+@
+layoutInset
+layoutInset
+**StackOverflow**
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+basicNew
+truncated
+//
+negated
+truncated
+at:ifAbsentPut:
+stringHash:initialHash:
+class
+class
+windowActiveFillStyleFor:
+stringHash:initialHash:
+basicNew
+bitAnd:
+fractionPart
+truncated
+privateFullBounds
+@
+@
+@
+@
+**StackOverflow**
+
+@
+@
+@
+@
+outerBounds
+isEmpty
+@
+@
+layoutBounds
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+ifEmpty:
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+@
+collect:
+@
+borderStyle
+@
+@
+borderStyle
+**CompactCode**
+
+stack page bytes 8192 available headroom 5576 minimum unused headroom 5896
+
+	(Segmentation fault: 11)
+
+Segmentation fault: 11 Thu Mar  5 16:16:05 2026
+
+
+/Users/faouziray/Documents/XP/Pharo/images/againWithVM/pharo-local/iceberg/fouziray/JIT2/build/dist/Pharo.app/Contents/MacOS/Pharo
+PharoVM version:5.0-Pharo 10.3.0-bb546bfdb built on Feb  6 2026 14:39:36 Compiler: Apple LLVM 14.0.3 (clang-1403.0.22.14.1) Apple LLVM 14.0.3 (clang-1403.0.22.14.1) [Production Spur 64-bit VM]
+Built from: CoInterpreter VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ With:StackToRegisterMappingCogit VMMaker-tonel.1 uuid: 9550f1a2-8906-0e00-8155-23a702ed674b Feb  6 2026
+ Revision: bb546bfdb - Commit: bb546bfdb - Date: 2026-02-06 14:35:39 +0100
+
+C stack backtrace & registers:
+	 x00 0x0000000360b188b0 x01 0x0000000300025800 x02 0x0000000000000011 x03 0x0000000000000009
+	 x04 0x0000000000000002 x05 0x0000000000000018 x06 0x0000000000000002 x07 0x0000000000000000
+	 x08 0x0000000360b188b8 x09 0x0000020000000000 x10 0x0000000000040000 x11 0xffffffffffffffff
+	 x12 0x0000000004000000 x13 0x0000000004000000 x14 0x0000000004000000 x15 0x00000003200f2b84
+	 x16 0x000000032000be40 x17 0x000000020d9777b0 x18 0x0000000000000000 x19 0x0000000360022f20
+	 x20 0x0000000000000034 x21 0x00000003200f7d68 x22 0x0000000000000009 x23 0x0000000000000009
+	 x24 0x00000001049e7c28 x25 0x0000010000000000 x26 0x00000003200f22a0 x27 0x00000001049e6000
+	 x28 0x0000000300025e10  FP 0x0000000300025e28  LR 0x00000003200dd9fc  SP 0x000000016ba56ef0
+	  PC 0x000000032000bf04  STATE 0x0000000020001000
+*0   ???                                 0x000000032000bf04 0x0 + 13421821700
+1   libPharoVMCore.dylib                0x00000001049cdca8 reportStackState + 212
+2   libPharoVMCore.dylib                0x00000001049cdb6c doReport + 144
+3   libPharoVMCore.dylib                0x00000001049cde6c sigsegv + 28
+4   libsystem_platform.dylib            0x000000019b92f584 _sigtramp + 56
+5   ???                                 0x00000003200dd9fc 0x0 + 13422680572
+6   ???                                 0x0000000000000000 0x0 + 0
+
+
+All Smalltalk process stacks (active first):
+Process      0x100093aefe0 priority 40
+       0x300025e28 M SmallInteger(UserInputEvent)>wasHandled: 0x9=1
+       0x300025e60 M Caller>sendSStatic: 0x36002aa50: a(n) Caller
+       0x300025eb0 M MsgSendBenchmarkPoly(MicroBenchStats)>benchWithAlternatingTypesStatic 0x360017c80: a(n) MsgSendBenchmarkPoly
+       0x300025ee0 M [] in UndefinedObject>DoIt 0x10000000000: a(n) UndefinedObject
+       0x300025f18 M FullBlockClosure(BlockClosure)>microsecondsToRun 0x360b18988: a(n) FullBlockClosure
+       0x300025f58 I [] in UndefinedObject>DoIt 0x10000000000: a(n) UndefinedObject
+       0x300025fd8 I Interval>collect: 0x3600233a8: a(n) Interval
+       0x300039a48 M UndefinedObject>DoIt 0x10000000000: a(n) UndefinedObject
+       0x300039a88 I OCReceiverDoItSemanticScope(OCDoItSemanticScope)>evaluateDoIt: 0x360023ce8: a(n) OCReceiverDoItSemanticScope
+       0x300039ae0 I OpalCompiler>evaluate 0x360023d80: a(n) OpalCompiler
+       0x300039b28 M [] in SpCodePresenter>evaluate:onCompileError:onError: 0x1000850abf8: a(n) SpCodePresenter
+       0x300039b58 M FullBlockClosure(BlockClosure)>on:do: 0x360024050: a(n) FullBlockClosure
+       0x300039bb0 I SpCodePresenter>evaluate:onCompileError:onError: 0x1000850abf8: a(n) SpCodePresenter
+       0x300039c10 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluate:andDo: 0x100084fe5a0: a(n) SpCodeInspectItCommand
+       0x300039c68 I SpCodeInspectItCommand(SpCodeSelectionCommand)>evaluateSelectionAndDo: 0x100084fe5a0: a(n) SpCodeInspectItCommand
+       0x300039cb0 I SpCodeInspectItCommand>execute 0x100084fe5a0: a(n) SpCodeInspectItCommand
+       0x300039ce0 M SpCommand(CmCommandDecorator)>execute 0x100084fc190: a(n) SpCommand
+       0x300039d10 M [] in SpToolCurrentApplicationCommand>execute 0x100084fa7c0: a(n) SpToolCurrentApplicationCommand
+       0x300039d58 M [] in SpToolCurrentApplication>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300039da0 M FullBlockClosure(BlockClosure)>ensure: 0x360024420: a(n) FullBlockClosure
+       0x300039de8 M SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300039e28 M SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300039e68 M SpToolCurrentApplicationCommand>execute 0x100084fa7c0: a(n) SpToolCurrentApplicationCommand
+       0x300039e98 M [] in SpToolCurrentApplicationCommand>execute 0x100084f8608: a(n) SpToolCurrentApplicationCommand
+       0x300039ee0 M [] in SpToolCurrentApplication>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300039f28 M FullBlockClosure(BlockClosure)>ensure: 0x360024630: a(n) FullBlockClosure
+       0x300039f80 I SpToolCurrentApplication(DynamicVariable)>value:during: 0x1000240f330: a(n) SpToolCurrentApplication
+       0x300039fd0 I SpToolCurrentApplication class(DynamicVariable class)>value:during: 0x10001184b88: a(n) SpToolCurrentApplication class
+       0x300021a18 I SpToolCurrentApplicationCommand>execute 0x100084f8608: a(n) SpToolCurrentApplicationCommand
+       0x300021a50 M [] in SpKMCategoryBuilder>visitCommand: 0x100084f7a30: a(n) SpKMCategoryBuilder
+       0x300021a80 M FullBlockClosure(BlockClosure)>cull: 0x100084f5750: a(n) FullBlockClosure
+       0x300021ab8 M FullBlockClosure(BlockClosure)>cull:cull: 0x100084f5750: a(n) FullBlockClosure
+       0x300021b08 I FullBlockClosure(BlockClosure)>cull:cull:cull: 0x100084f5750: a(n) FullBlockClosure
+       0x300021b60 I KMCategoryBinding>completeMatch:buffer: 0x360022828: a(n) KMCategoryBinding
+       0x300021ba8 M [] in KMKeymap>notifyCompleteMatchTo:buffer: 0x100084f4018: a(n) KMKeymap
+       0x300021bf8 M Array(SequenceableCollection)>do: 0x360022898: a(n) Array
+       0x300021c48 I KMKeymap>notifyCompleteMatchTo:buffer: 0x100084f4018: a(n) KMKeymap
+       0x300021c88 M KMKeymap>onMatchWith:notify:andDo: 0x100084f4018: a(n) KMKeymap
+       0x300021ce8 M [] in KMCategory>onMatchWith:notify:andDo: 0x1000843f7f8: a(n) KMCategory
+       0x300021d40 M Set>do: 0x3600229d0: a(n) Set
+       0x300021d78 M KMCategory>onMatchWith:notify:andDo: 0x1000843f7f8: a(n) KMCategory
+       0x300021dc0 M KMCategoryBinding>verifyMatchWith:notifying:thenDoing: 0x360022828: a(n) KMCategoryBinding
+       0x300021e10 M [] in KMDispatcher>dispatch: 0x1000843ba10: a(n) KMDispatcher
+       0x300021e60 M OrderedCollection>do: 0x360022b88: a(n) OrderedCollection
+       0x300021e98 M KMDispatcher>dispatch: 0x1000843ba10: a(n) KMDispatcher
+       0x300021ed0 M KMTarget>dispatch: 0x1000843f7c8: a(n) KMTarget
+       0x300021f10 M [] in KMDispatchChain>dispatch: 0x360022c60: a(n) KMDispatchChain
+       0x300021f50 M KMDispatchChain>do: 0x360022c60: a(n) KMDispatchChain
+       0x300021f98 I KMDispatchChain>dispatch: 0x360022c60: a(n) KMDispatchChain
+       0x300021fd8 M KMDispatcher>dispatchKeystroke: 0x1000843ba10: a(n) KMDispatcher
+       0x300037988 M RubEditingArea(Morph)>dispatchKeystrokeForEvent: 0x1000850bc48: a(n) RubEditingArea
+       0x3000379c0 M RubEditingArea(Morph)>handleKeystrokeWithKeymappings: 0x1000850bc48: a(n) RubEditingArea
+       0x3000379f8 M KMShortcutHandler>handleKeystroke:inMorph: 0x10002027a18: a(n) KMShortcutHandler
+       0x300037a40 M RubEditingArea(Morph)>handleKeyDown: 0x1000850bc48: a(n) RubEditingArea
+       0x300037a88 I RubEditingArea(RubAbstractTextArea)>handleKeyDown: 0x1000850bc48: a(n) RubEditingArea
+       0x300037ac0 M KeyboardEvent>sentTo: 0x3600227b8: a(n) KeyboardEvent
+       0x300037af8 M RubEditingArea(Morph)>handleEvent: 0x1000850bc48: a(n) RubEditingArea
+       0x300037b30 M RubEditingArea(Morph)>handleFocusEvent: 0x1000850bc48: a(n) RubEditingArea
+       0x300037b80 M [] in HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x300037bb0 M FullBlockClosure(BlockClosure)>on:do: 0x360023658: a(n) FullBlockClosure
+       0x300037bf8 M WorldMorph>becomeActiveDuring: 0x10000f6db28: a(n) WorldMorph
+       0x300037c48 M HandMorph>sendFocusEvent:to:clear: 0x1000101b550: a(n) HandMorph
+       0x300037c98 M HandMorph>sendEvent:focus:clear: 0x1000101b550: a(n) HandMorph
+       0x300037ce0 M HandMorph>sendKeyboardEvent: 0x1000101b550: a(n) HandMorph
+       0x300037d38 M HandMorph>handleEvent: 0x1000101b550: a(n) HandMorph
+       0x300037d78 M [] in OSWindowMorphicEventHandler>dispatchMorphicEvent: 0x1000978cc70: a(n) OSWindowMorphicEventHandler
+       0x300037db8 M WorldState>runStepMethodsIn: 0x10000fd85e8: a(n) WorldState
+       0x300037df0 M WorldMorph>runStepMethods 0x10000f6db28: a(n) WorldMorph
+       0x300037e20 M WorldState>doOneCycleFor: 0x10000fd85e8: a(n) WorldState
+       0x300037e58 M WorldMorph>doOneCycleNow 0x10000f6db28: a(n) WorldMorph
+       0x300037e88 M WorldMorph>doOneCycle 0x10000f6db28: a(n) WorldMorph
+       0x300037ec0 M [] in WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x300037f08 M FullBlockClosure(BlockClosure)>ensure: 0x360023b28: a(n) FullBlockClosure
+       0x300037f40 M WorldState class>doDrawCycleWith: 0x100009c3750: a(n) WorldState class
+       0x300037f78 M WorldMorph class>doOneCycle 0x100009af700: a(n) WorldMorph class
+       0x300037fa8 M MorphicRenderLoop>doOneCycle 0x100093af738: a(n) MorphicRenderLoop
+       0x300037fd8 M MorphicRenderLoop>doOneCycleWhile: 0x100093af738: a(n) MorphicRenderLoop
+     0x100093d9668 s [] in MorphicUIManager>spawnNewProcess
+     0x100093af770 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+processes at priority 10
+Process        0x360000268 priority 10
+       0x300011f60 M ProcessorScheduler class>idleProcess 0x10000016f58: a(n) ProcessorScheduler class
+       0x300011fa0 I [] in ProcessorScheduler class>startUp 0x10000016f58: a(n) ProcessorScheduler class
+       0x300011fe0 I [] in FullBlockClosure>newProcess 0x360022300: a(n) FullBlockClosure
+
+suspended processes
+Process      0x1000978a278 priority 50
+       0x300031fe0 M FinalizationProcess class>finalizationProcess 0x1000001eff8: a(n) FinalizationProcess class
+     0x1000988dcd0 s [] in FinalizationProcess class>restartFinalizationProcess
+     0x1000978b7b8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10002a0a070 priority 80
+       0x300035f98 M DelayMicrosecondTicker>waitForUserSignalled:orExpired: 0x10000490cc0: a(n) DelayMicrosecondTicker
+       0x300035fe0 M [] in DelaySemaphoreScheduler>runBackendLoopAtTimingPriority 0x100004853a0: a(n) DelaySemaphoreScheduler
+     0x10002f52510 s FullBlockClosure(BlockClosure)>ensure:
+     0x10002ab8ec0 s DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+     0x10002f342d0 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>startTimerEventLoopPriority:
+     0x10002ab8f78 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x1000212db08 priority 40
+     0x1000213abe8 s AtomicSharedQueue>waitForNewItems
+     0x10002162b30 s AtomicSharedQueue>next
+     0x10002123c18 s TKTWorkerProcess>privateNextTask
+     0x10002118ce8 s TKTWorkerProcess>workerLoop
+     0x10002115de8 s MessageSend>value
+     0x10002115f38 s [] in TKTPharoProcessProvider>createProcessDoing:named:
+     0x10002116150 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x100034bf010 priority 31
+     0x100093b7968 s AtomicSharedQueue>waitForNewItems
+     0x100093bdfd8 s AtomicSharedQueue>next
+     0x1000327b948 s ClyDataSourceUpdateScheduler>processQueue
+     0x1000327d688 s [] in ClyDataSourceUpdateScheduler>ensureRunning
+     0x1000327e948 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fabf98 priority 70
+     0x10003fac0c0 s [] in TFCallbackQueue>forkCallbackProcess
+     0x10003fac310 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10003fbe698 priority 79
+       0x360017370 s [] in DelayWaitTimeout>wait
+       0x360029418 s FullBlockClosure(BlockClosure)>ensure:
+       0x3600392b8 s DelayWaitTimeout>wait
+       0x3600686c8 s Semaphore>waitTimeoutMilliseconds:
+     0x10003fc3748 s TestExecutionEnvironment>watchDogLoop
+     0x10003fc3928 s [] in TestExecutionEnvironment>startWatchDog
+     0x10003fc3a70 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process      0x10004daf2a0 priority 79
+       0x3600172b8 s [] in DelayWaitTimeout>wait
+       0x360029338 s FullBlockClosure(BlockClosure)>ensure:
+       0x3600391d8 s DelayWaitTimeout>wait
+       0x360068610 s Semaphore>waitTimeoutMilliseconds:
+     0x100050a0ea8 s TestExecutionEnvironment>watchDogLoop
+     0x100050b9d10 s [] in TestExecutionEnvironment>startWatchDog
+     0x100050c3bc8 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process        0x3600001d8 priority 60
+       0x360024b18 s SmalltalkImage>lowSpaceWatcher
+       0x3600336f0 s [] in SmalltalkImage>installLowSpaceWatcher
+       0x360062578 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process        0x360017cc0 priority 40
+       0x36002aa80 s [] in Delay>wait
+       0x360039bc0 s FullBlockClosure(BlockClosure)>ifCurtailed:
+       0x3600694a0 s Delay>wait
+       0x36008f8d0 s Duration>wait
+       0x3600ae530 s [] in StPlaygroundPage>spawnFlushProcess
+       0x3600c7d08 s [] in FullBlockClosure(BlockClosure)>newProcess
+
+Process        0x360000338 priority 60
+       0x300013ea0 M [] in Delay>wait 0x3605fefd0: a(n) Delay
+       0x300013ee8 M FullBlockClosure(BlockClosure)>ifCurtailed: 0x3605ff248: a(n) FullBlockClosure
+       0x300013f20 M Delay>wait 0x3605fefd0: a(n) Delay
+       0x300013f60 M OSSDL2Driver>eventLoopProcessWithoutPlugin 0x1000978ada8: a(n) OSSDL2Driver
+       0x300013fa0 I [] in OSSDL2Driver>setupEventLoop 0x1000978ada8: a(n) OSSDL2Driver
+       0x300013fe0 I [] in FullBlockClosure>newProcess 0x3600225f8: a(n) FullBlockClosure
+
+Most recent primitives
+basicSize
+basicAt:
+at:
+isZero
+basicNew
+at:
+=
+next
+asInteger
+asInteger
+at:
+digitValue
+digitValue
+digitValue
+fullName
+fullName
+class
+new
+setFrom:to:by:
+setFrom:to:by:
+**StackOverflow**
+
+named:
+class
+class
+**StackOverflow**
+
+
+**StackOverflow**
+
+findFirstInString:inSet:startingAt:
+
+
+
+
+open:writable:
+wait
+**StackOverflow**
+basicNew
+basicNew
+signal
+basicNew
+new:
+basicNew
+initialize
+postCopy
+postCopy
+postCopy
+at:
+at:
+class
+class
+class
+subclasses
+subclasses
+species
+**StackOverflow**
+
+
+value:
+
+
+
+characterSet
+charCode
+at:
+//
+//
+//
+//
+//
+//
+//
+between:and:
+between:and:
+between:and:
+between:and:
+translate:from:to:table:
+scanFor:
+**StackOverflow**
+
+stringHash:initialHash:
+at:
+at:
+at:
+**StackOverflow**
+
+
+
+
+translate:from:to:table:
+
+
+
+**StackOverflow**
+
+
+
+
+translate:from:to:table:
+
+stringHash:initialHash:
+
+**StackOverflow**
+
+
+
+
+translate:from:to:table:
+
+
+
+value:
+getPosition:
+position:
+read:into:startingAt:count:
+at:
+basicNew
+basicNew
+basicNew
+new:
+new
+new
+value
+**StackOverflow**
+
+
+value:
+readStream
+>=
+peek
+next
+=
+getPosition:
+position
+position
+byteAt:put:
+**PrimitiveFailure**
+byteAt:put:
+**PrimitiveFailure**
+at:put:
+stringHash:initialHash:
+nextEntryPositionIfFound:ifNone:
+nextEntryPositionIfFound:ifNone:
+nextEntryPositionIfFound:ifNone:
+class
+class
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+atEnd:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+replaceFrom:to:with:startingAt:
+atEnd:
+atEnd:
+=
+bitShift:
+tempAt:
+tempAt:put:
+tempAt:
+terminateTo:
+sizeOrNil:
+close:
+**StackOverflow**
+wait
+signal
+findNextUnwindContextUpTo:
+terminateTo:
+signal
+value
+basicNew:
+stackp:
+numCopiedValues
+at:
+tempAt:put:
+numCopiedValues
+stackp:
+at:put:
+at:
+stackp:
+valueNoContextSwitch
+value
+findNextUnwindContextUpTo:
+bitAnd:
+**PrimitiveFailure**
+bitOr:
+**PrimitiveFailure**
+~=
+~=
+findNextUnwindContextUpTo:
+terminateTo:
+suspend
+**IncrementalGC**
+nowTick
+signal
+
+at:
+at:
+at:put:
+at:put:
+at:
+at:
+value:value:
+at:put:
+at:put:
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+instVarAt:
+setPinnedInMemory:
+primOopForObject:
+basicAt:put:
+basicAt:put:
+basicAt:put:
+size
+at:
+at:
+at:
+primitivePerformWorkerCall:withArguments:
+at:
+class
+wait
+signal
+signal
+nowTick
+beingWaitedOn
+beingWaitedOn
+beingWaitedOn
+beingWaitedOn
+beingWaitedOn
+<=
+<=
+<=
+nowTick
+nowTick
+primSignal:atUTCMicroseconds:
+wait
+wait
+primitiveFetchMourner
+wait
+primUTCMicrosecondsClock
+
+stack page bytes 8192 available headroom 5576 minimum unused headroom 5904
+
+	(Segmentation fault: 11)
