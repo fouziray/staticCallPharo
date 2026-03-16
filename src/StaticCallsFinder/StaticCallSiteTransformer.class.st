@@ -7,7 +7,8 @@ Class {
 		'receiver',
 		'message',
 		'nestedCallsVisitor',
-		'filteredRecordedTypes'
+		'filteredRecordedTypes',
+		'messageToRecord'
 	],
 	#category : 'StaticCallsFinder-Benchmarks',
 	#package : 'StaticCallsFinder',
@@ -30,6 +31,7 @@ StaticCallSiteTransformer >> backupMethod: method [
 StaticCallSiteTransformer >> compileAstWithStaticNodes: newAst [
 
 	| newMethod |
+1 halt.
 	ASTCache default at: newAst compiledMethod put: newAst.
 newAst doSemanticAnalysis .
 	newMethod := newAst generateMethod.
@@ -120,6 +122,55 @@ StaticCallSiteTransformer >> getNewMethodOfDevirtualizingAll [
 ]
 
 { #category : 'as yet unclassified' }
+StaticCallSiteTransformer >> getNewMethodOfDevirtualizingAll2 [
+
+	           | newAst newMethod candidate astCachePerModifiedMethod |
+	     
+	  astCachePerModifiedMethod := Dictionary new.
+	           filteredRecordedTypes := PolymorphicCallSitesVisitor
+		                                    filterFakePoly: recordedTypes.
+	           filteredRecordedTypes do: [ :each |
+		           | currentAssociation |
+		           currentAssociation := each.
+1 halt.    
+		           "	(each key parent isMessage or:[ each key isStaticCall ]) ifTrue:[ 1 halt. ]"
+		           self receiver:
+			           each value values first asOrderedCollection first.
+		           candidate := StaticCallCandidate
+			                        method: each value keys first
+			                        callSite: each key
+			                        selector: each key methodNode selector
+			                        receiver:
+			                        each value values first asOrderedCollection
+				                        first
+			                        receiverType:
+			                        (each key receiver acceptVisitor: self).
+	candidate receiverType ifNotNil: [ " transformMethod:
+		          candidate callSite methodNode compiledMethod
+		          forCandidate: candidate."
+			self backupMethod:
+			candidate callSite methodNode compiledMethod.
+			newAst := astCachePerModifiedMethod
+				                     at:
+				                     candidate callSite methodNode compiledMethod
+				                     ifAbsentPut: [ candidate callSite methodNode ].
+			newAst := self
+				                     transformUpMethodNode: newAst forCandidate: candidate.
+			astCachePerModifiedMethod
+				           at: candidate callSite methodNode compiledMethod
+				           put: newAst ] 
+	].
+
+	           astCachePerModifiedMethod associationsDo: [ :a |
+		           self compileAstWithStaticNodes: a value.
+			[ self runBenchProgram ] on: Error do:[
+			RollbackImageStaticBytecodes replaceMsgs:( newAst sendNodes select: #isStaticCall).
+			self compileAstWithStaticNodes: a value
+			] .
+		 ]
+]
+
+{ #category : 'as yet unclassified' }
 StaticCallSiteTransformer >> graduallyDevirtualize [
 
 	           | newAst newMethod candidate astCachePerModifiedMethod |
@@ -194,6 +245,11 @@ StaticCallSiteTransformer >> receiver: aClass [
 	receiver:= aClass
 ]
 
+{ #category : 'as yet unclassified' }
+StaticCallSiteTransformer >> recordTrace: aCollection [ 
+	messageToRecord:= aCollection.
+]
+
 { #category : 'visiting' }
 StaticCallSiteTransformer >> recordedTypes [
 
@@ -204,6 +260,21 @@ StaticCallSiteTransformer >> recordedTypes [
 StaticCallSiteTransformer >> recordedTypes: aTable [
 
 	recordedTypes := aTable
+]
+
+{ #category : 'as yet unclassified' }
+StaticCallSiteTransformer >> replaceNodeRenameCallers: aRBStaticMessageNode as: aRBStaticMessageNode2 [ 
+| record parallelMethodNode |
+record:=messageToRecord at: aRBStaticMessageNode .
+aRBStaticMessageNode replaceWith: aRBStaticMessageNode2. 
+parallelMethodNode:= aRBStaticMessageNode methodNode copy.
+parallelMethodNode selector: 'devirt_',parallelMethodNode selector.
+
+self compileAstWithStaticNodes: parallelMethodNode .
+1 halt .
+record parent isMessage ifTrue: [ self replaceNodeRenameCallers: record parent node as: (record parent node copy selector: parallelMethodNode selector )  . ] ifFalse: [ record parent isMethod ifTrue: [   self replaceNodeRenameCallers: record parent parent node as: (record parent node copy selector: parallelMethodNode selector ) ] ]
+.
+1 halt.
 ]
 
 { #category : 'running' }
@@ -307,6 +378,33 @@ aMethod ast acceptVisitor: visitor. "" ^ aStaticCallCandidate callSite replaceWi
 		  ifFalse: [ aMethodNode ]
 ]
 
+{ #category : 'refactoring' }
+StaticCallSiteTransformer >> transformUpMethodNode: aMethodNode forCandidate: aStaticCallCandidate [
+
+	| visitor newNode result |
+	"visitor:= ASTNodeReplacer new .
+visitor replace: aStaticCallCandidate callSite  with: ((RBStaticMessageNode fromMessageNode:
+			    aStaticCallCandidate callSite) staticClass:
+			   aStaticCallCandidate receiverType).
+aMethod ast acceptVisitor: visitor. "" ^ aStaticCallCandidate callSite replaceWith:
+		  ((RBStaticMessageNode fromMessageNode:
+			    aStaticCallCandidate callSite) staticClass:
+			   aStaticCallCandidate receiverType)"
+
+	^ (aStaticCallCandidate callSite isBinary not and: [
+		   aStaticCallCandidate receiverType ~= 'temp' ])
+		  ifTrue: [
+		self haltIf: aStaticCallCandidate receiverType isNil.
+		1 halt.
+			  newNode := (RBStaticMessageNode fromMessageNode:
+				              aStaticCallCandidate callSite) staticClass:
+				             aStaticCallCandidate receiverType.
+				
+			  self replaceNodeRenameCallers: aStaticCallCandidate callSite as:  newNode.
+			   ]
+		  ifFalse: [ aMethodNode ]
+]
+
 { #category : 'visiting' }
 StaticCallSiteTransformer >> visitClassVariableNode: aNode [
 1 halt.
@@ -336,7 +434,7 @@ StaticCallSiteTransformer >> visitMessageNode: aMessageNode [
 
 { #category : 'visiting' }
 StaticCallSiteTransformer >> visitSelfNode: aSelfNode [
- ^ receiver 
+ ^ receiver class 
 	
 ]
 
