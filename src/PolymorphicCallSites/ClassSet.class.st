@@ -13,7 +13,7 @@ ClassSet >> scanFor: anObject [
 	index := start := anObject class hash \\ array size + 1.
 	[
 		| element |
-		((element := array at: index) == nil or: [ element enclosedElement class = anObject class ])
+		((element := array at: index) == nil or: [ element enclosedElement "class" = anObject "class" ])
 			ifTrue: [ ^index ].
 		(index := index \\ array size + 1) = start ] whileFalse.
 	self errorNoFreeSpace

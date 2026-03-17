@@ -78,16 +78,23 @@ InlineCacheCharacteristicsTests >> tearDown [
 
 { #category : 'tests' }
 InlineCacheCharacteristicsTests >> testInlineCacheContent [
-	| document traceRecordTree devirtualizableNodes candidate method newMethod transformer fullMessageList unopt opt vis |
+	| traceRecordTree fullMessageList programModel resultModel disparitiesAssociation |
 
 	traceRecordTree := ScpExecutionRecorder
-		                   recordBlock: [ FixtureEscapeAnalysis new plus  ]
+		                   recordBlock: [ self threeTypes  ]
 		                   as: ScpExecutionRecordTree.
 
+	fullMessageList := self visitRecord: traceRecordTree.
+programModel:= 	ProgramModel new fromTraceMessages: fullMessageList.
+resultModel := ProgramResult for: programModel.
+disparitiesAssociation:= (resultModel disparities ).
+self assert: disparitiesAssociation first value equals: 1/4.
+self assert:( disparitiesAssociation select:[:e | resultModel isSpurious: e key] ) size equals: disparitiesAssociation size.	
+]
 
-	fullMessageList := self visitRecord:
-				                                            traceRecordTree.
-	1 halt.
+{ #category : 'as yet unclassified' }
+InlineCacheCharacteristicsTests >> threeTypes [
+	{ Object new. 3. 4.0. 'ss' } do: [:each | each class ]
 ]
 
 { #category : 'as yet unclassified' }

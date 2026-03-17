@@ -28,7 +28,7 @@ MethodActivatedModel >> compiledMethodName [
 MethodActivatedModel >> fromRaw: anAssociation [ 
 	
 	compiledMethodName := anAssociation key printString.
-	receiverTypes := anAssociation value collect: [ :e | e name ]
+	receiverTypes := anAssociation value collect: [ :e | e className ]
 ]
 
 { #category : 'accessing' }
@@ -40,5 +40,16 @@ MethodActivatedModel >> numberOfCalls [
 { #category : 'as yet unclassified' }
 MethodActivatedModel >> numberOfReceiverClasses [
 	
-	^ receiverTypes valuesAndCounts size
+	^ receiverTypes asBag valuesAndCounts size
+]
+
+{ #category : 'as yet unclassified' }
+MethodActivatedModel >> receiverClassesFrequency [
+	
+	^ receiverTypes asBag valuesAndCounts
+]
+
+{ #category : 'as yet unclassified' }
+MethodActivatedModel >> receiverTypes [	
+	^ receiverTypes asBag
 ]

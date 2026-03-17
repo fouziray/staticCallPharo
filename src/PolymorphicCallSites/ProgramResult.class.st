@@ -19,7 +19,8 @@ Class {
 		'spuriousPolyCalls',
 		'spuriousMegaCalls',
 		'numberOfSingleImplementationPoly',
-		'numberOfSingleImplementationMega'
+		'numberOfSingleImplementationMega',
+		'disparities'
 	],
 	#category : 'PolymorphicCallSites-Objects',
 	#package : 'PolymorphicCallSites',
@@ -78,6 +79,15 @@ ProgramResult >> calculateData [
 	self calculateSpurious
 ]
 
+{ #category : 'properties' }
+ProgramResult >> calculateInlineCacheIndividualCalls [
+	| spurious |
+	spurious:= self callSites select: [:e| self isSpurious: e].
+	spurious collect:#receiverClassesFrequency.
+	disparities:= spurious  collect: #findDisparities
+
+]
+
 { #category : 'as yet unclassified' }
 ProgramResult >> calculateSpurious [
 	
@@ -94,6 +104,12 @@ ProgramResult >> calculateSpurious [
 ProgramResult >> callSites [
 
 	^ originalData callSites
+]
+
+{ #category : 'accessing' }
+ProgramResult >> disparities [
+	^ ((self callSites collect:[:e |
+		e -> e disparity ] )select:[:e | e value isNotNil]) sortDescending: #value
 ]
 
 { #category : 'printing' }
@@ -159,8 +175,9 @@ ProgramResult >> initializeFor: aProgramModel [
 	
 	originalData := aProgramModel.
 	programName := aProgramModel programName.
-	
+
 	self calculateData.
+	self calculateInlineCacheIndividualCalls.
 	self assertData
 ]
 
@@ -301,4 +318,10 @@ ProgramResult >> putPercentage: aValue total: total On: aWriteStream [
 		nextPutAll: ((aValue / total * 100.0) round: 2) asString;
 		nextPutAll: ' \%'
 		
+]
+
+{ #category : 'as yet unclassified' }
+ProgramResult >> spuriousCallSites [ 
+
+	^ spuriousCallSites
 ]

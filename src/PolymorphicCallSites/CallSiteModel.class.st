@@ -10,7 +10,8 @@ Class {
 		'bytecodeStart',
 		'bytecodeEnd',
 		'methodsActivated',
-		'selector'
+		'selector',
+		'frequencyOfFirstElement'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -23,6 +24,11 @@ CallSiteModel class >> fromRaw: aCollection [
 	^ self new
 		fromRaw: aCollection;
 		yourself
+]
+
+{ #category : 'as yet unclassified' }
+CallSiteModel >> disparity [
+  ^ frequencyOfFirstElement 
 ]
 
 { #category : 'accessing' }
@@ -46,6 +52,16 @@ CallSiteModel >> fillKey: 	aCollection [
 			bytecodeStart := (messageNode methodNode pcsForNode: messageNode) first.
 			bytecodeEnd := (messageNode methodNode pcsForNode: messageNode) last. 	 ]
 
+]
+
+{ #category : 'as yet unclassified' }
+CallSiteModel >> findDisparities [
+	| orderedByFrequ |
+	orderedByFrequ := self receiverTypesBag sorted collect: [:e | e sortedCounts ].
+	
+	  frequencyOfFirstElement:=  (orderedByFrequ collect:[:e | e first key / ((e collect:#key) sum ) ]) first.
+	^ frequencyOfFirstElement 
+	
 ]
 
 { #category : 'instance creation' }
@@ -72,6 +88,20 @@ CallSiteModel >> numberOfDifferentMethods [
 CallSiteModel >> numberOfReceiverClasses [
 	
 	^ methodsActivated sum: [ :m | m numberOfReceiverClasses ]
+]
+
+{ #category : 'as yet unclassified' }
+CallSiteModel >> receiverClassesFrequency [
+	 
+	 ^ methodsActivated collect: [ :m | m receiverClassesFrequency ].
+	 
+]
+
+{ #category : 'as yet unclassified' }
+CallSiteModel >> receiverTypesBag [
+	 
+	 ^ methodsActivated collect: [ :m | m receiverTypes ].
+	 
 ]
 
 { #category : 'accessing' }

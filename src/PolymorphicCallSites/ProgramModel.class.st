@@ -29,11 +29,23 @@ ProgramModel >> fromRaw: anAssociation [
 ]
 
 { #category : 'instance creation' }
+ProgramModel >> fromTraceMessages: traceAssociatons [
+	
+	callSites := (traceAssociatons) associations reject: [ :e | e key isNil ] thenCollect: [ :e | CallSiteModel fromRaw: e ]
+]
+
+{ #category : 'instance creation' }
 ProgramModel >> name: aString fromRaw: anAssociation [ 
 	
 	programName := aString.
 	blockCode := anAssociation key compiledBlock sourceNode sourceCode.
 	callSites := (anAssociation value) associations reject: [ :e | e key isNil ] thenCollect: [ :e | CallSiteModel fromRaw: e ]
+]
+
+{ #category : 'instance creation' }
+ProgramModel >> name: aName fromTraceMessages: traceAssociatons [
+	programName := aName.
+	callSites := (traceAssociatons) associations reject: [ :e | e key isNil ] thenCollect: [ :e | CallSiteModel fromRaw: e ]
 ]
 
 { #category : 'accessing' }
