@@ -96,7 +96,7 @@ programs associations do: [ :assoc |
 			
 	devirtualizableNodes := simulator getAllCallSites.
 	result := ProgramModel new name: 'NI_',key fromRaw: value -> devirtualizableNodes.
-	('NI_',key asFileReference withExtension: 'ston')
+	(('NI2_',key) asFileReference withExtension: 'ston')
 		writeStreamDo: [:s | STON put: result onStream: s].
 ] displayingProgress: [:assoc | assoc key].
 
@@ -126,7 +126,7 @@ programs associations do: [ :assoc |
 			
 	devirtualizableNodes := simulator getAllCallSites.
 	result := ProgramModel new name: 'NI_',key fromRaw: value -> devirtualizableNodes.
-	('NI_',key asFileReference withExtension: 'ston')
+	(('NI2_',key) asFileReference withExtension: 'ston')
 		writeStreamDo: [:s | STON put: result onStream: s].
 ] displayingProgress: [:assoc | assoc key].
 
@@ -156,7 +156,7 @@ programs associations do: [ :assoc |
 			
 	devirtualizableNodes := simulator getAllCallSites.
 	result := ProgramModel new name: 'NI_',key fromRaw: value -> devirtualizableNodes.
-	(('NI_',key) asFileReference withExtension: 'ston')
+	(('NI2_',key) asFileReference withExtension: 'ston')
 		writeStreamDo: [:s | STON put: result onStream: s].
 ] displayingProgress: [:assoc | assoc key].
 
@@ -329,7 +329,7 @@ DevirtualizableCallSites >> getDevirtualizableCallSites [
 DevirtualizableCallSites >> initialize [
 
 	methods := Dictionary new.
-	inlinedMethods := #(#isNil #ifTrue: #ifFalse: #ifTrue:ifFalse: #ifFalse:ifTrue: #ifNil:ifNotNilDo: #ifNil: #ifNil:ifNotNil: #or: #not) asOrderedCollection .
+	inlinedMethods := #(#isNil #ifTrue: #ifFalse: #ifTrue:ifFalse: #ifFalse:ifTrue: #ifNil:ifNotNilDo: #ifNotNil: #ifNil: #ifNil:ifNotNil: #or: #not) asOrderedCollection .
 	instrumentation := ScpMethodInstrumentation new.	
 	instrumentation addIndirection: (ScpMessageIndirection new
 		reifyNode; reifySender; reifyReceiver; reifyArguments;

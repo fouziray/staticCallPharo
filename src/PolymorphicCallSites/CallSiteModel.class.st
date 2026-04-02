@@ -56,7 +56,7 @@ CallSiteModel >> dominantTypeWithThreshold: anInteger [
 
 	tmp := flattenedTypes sortedCounts first key .
 	^ ((tmp /self numberOfCalls) asFloat* 100 > anInteger) 
-	ifTrue:[ tmp ]
+	ifTrue:[ self dominantType ]
 	ifFalse:[ nil ].
 ]
 
