@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'compiledMethodName',
-		'receiverTypes'
+		'receiverTypes',
+		'dominantType'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -24,11 +25,28 @@ MethodActivatedModel >> compiledMethodName [
 	^ compiledMethodName
 ]
 
+{ #category : 'printing' }
+MethodActivatedModel >> computeDominantType [  
+	dominantType := receiverTypes sortedCounts first.
+]
+
+{ #category : 'printing' }
+MethodActivatedModel >> dominantType [
+
+	^ dominantType
+]
+
 { #category : 'instance creation' }
 MethodActivatedModel >> fromRaw: anAssociation [ 
 	
 	compiledMethodName := anAssociation key printString.
 	receiverTypes := anAssociation value collect: [ :e | e className ]
+]
+
+{ #category : 'printing' }
+MethodActivatedModel >> initialize [ 
+
+	super initialize.
 ]
 
 { #category : 'accessing' }
@@ -41,6 +59,12 @@ MethodActivatedModel >> numberOfCalls [
 MethodActivatedModel >> numberOfReceiverClasses [
 	
 	^ receiverTypes asBag valuesAndCounts size
+]
+
+{ #category : 'printing' }
+MethodActivatedModel >> printOn: aStream [
+	super printOn: aStream .
+	aStream nextPutAll: '(',compiledMethodName , ' ' ,self dominantType  asString  ,')'.
 ]
 
 { #category : 'as yet unclassified' }

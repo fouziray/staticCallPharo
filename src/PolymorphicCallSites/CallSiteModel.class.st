@@ -14,7 +14,8 @@ Class {
 		'frequencyOfFirstElement',
 		'numberOfCalls',
 		'numberOfReceiverClasses',
-		'allTypesFreq'
+		'allTypesFreq',
+		'flattenedTypes'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -29,11 +30,23 @@ CallSiteModel class >> fromRaw: aCollection [
 		yourself
 ]
 
+{ #category : 'accessing' }
+CallSiteModel >> computeTypes [
+
+	flattenedTypes := (methodsActivated collect: #receiverTypes )flattened asBag
+]
+
 { #category : 'as yet unclassified' }
 CallSiteModel >> disparity [
 
 	^ frequencyOfFirstElement ifNil: [
  		frequencyOfFirstElement := self findDisparities ]
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> dominantType [
+	^	flattenedTypes sortedCounts first value
+
 ]
 
 { #category : 'accessing' }
@@ -76,6 +89,7 @@ CallSiteModel >> fromRaw: aCollection [
 	self fillKey: aCollection.
 	methodsActivated := aCollection value associations collect: [ :e | MethodActivatedModel fromRaw: e ].
  	self fetchSelector.
+	self computeTypes.
 ]
 
 { #category : 'accessing' }
@@ -100,7 +114,7 @@ CallSiteModel >> numberOfReceiverClasses [
 CallSiteModel >> printOn: aStream [
 
 	super printOn: aStream.
-	aStream nextPutAll: '(#calls: '.
+	aStream nextPutAll: '( ', selector , ', #calls: '.
 	aStream nextPutAll: self numberOfCalls asString.
 	aStream nextPutAll: ', #types: '.
 	aStream nextPutAll: self numberOfReceiverClasses asString.
