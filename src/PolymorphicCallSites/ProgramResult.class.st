@@ -223,7 +223,7 @@ ProgramResult >> initializeFor: aProgramModel [
 	self calculateInlineCacheIndividualCalls.
 	self assertData.
 "	self graphs."
-	MatrixSiteType matrixProgram: aProgramModel .
+	"MatrixSiteType matrixProgram: aProgramModel ."
 ]
 
 { #category : 'testing' }
