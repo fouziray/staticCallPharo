@@ -9,7 +9,8 @@ Class {
 		'instrumentation',
 		'methods',
 		'callsites',
-		'devirtualize'
+		'devirtualize',
+		'inlinedMethods'
 	],
 	#classInstVars : [
 		'recorders',
@@ -21,13 +22,19 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'benchs' }
 DevirtualizableCallSites class >> benchMarksToExecute [
 
 	^ self roassalBenchs , self honneyGingerBenchs 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> benchRoassalProgram [
+
+	^ self roassalBenchs  
+]
+
+{ #category : 'benchs' }
 DevirtualizableCallSites class >> blocBenchs [
 
 ^ {
@@ -35,7 +42,7 @@ DevirtualizableCallSites class >> blocBenchs [
  }	
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'benchs' }
 DevirtualizableCallSites class >> executeBenchmarks [
 
 <script>
@@ -59,7 +66,94 @@ programs associations do: [ :assoc |
 			
 	devirtualizableNodes := simulator getAllCallSites.
 	result := ProgramModel new name: key fromRaw: value -> devirtualizableNodes.
-	(key asFileReference withExtension: 'ston')
+	('NI_', key asFileReference withExtension: 'ston')
+		writeStreamDo: [:s | STON put: result onStream: s].
+] displayingProgress: [:assoc | assoc key].
+
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> executeMRoassalFiltered [
+
+<script>
+	
+| programs simulator devirtualizableNodes result |
+
+programs := self roassalBenchs asDictionary.
+
+programs associations do: [ :assoc | 
+ 	| key value blockReturn |. 
+	key := assoc key.
+	value := assoc value.
+
+	simulator := self new.
+	simulator block: value.
+	blockReturn := simulator execute.		
+	
+	(blockReturn isKindOf: Morph) ifTrue: [ 
+		blockReturn containingWindow ifNotNil: #close
+	].
+			
+	devirtualizableNodes := simulator getAllCallSites.
+	result := ProgramModel new name: 'NI_',key fromRaw: value -> devirtualizableNodes.
+	('NI_',key asFileReference withExtension: 'ston')
+		writeStreamDo: [:s | STON put: result onStream: s].
+] displayingProgress: [:assoc | assoc key].
+
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> executeMooseFiltered [
+
+<script>
+	
+| programs simulator devirtualizableNodes result |
+
+programs := self mooseBenchs asDictionary.
+
+programs associations do: [ :assoc | 
+ 	| key value blockReturn |. 
+	key := assoc key.
+	value := assoc value.
+
+	simulator := self new.
+	simulator block: value.
+	blockReturn := simulator execute.		
+	
+	(blockReturn isKindOf: Morph) ifTrue: [ 
+		blockReturn containingWindow ifNotNil: #close
+	].
+			
+	devirtualizableNodes := simulator getAllCallSites.
+	result := ProgramModel new name: 'NI_',key fromRaw: value -> devirtualizableNodes.
+	('NI_',key asFileReference withExtension: 'ston')
+		writeStreamDo: [:s | STON put: result onStream: s].
+] displayingProgress: [:assoc | assoc key].
+
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> floatBenchs [
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := {  'asfloat' -> [ true ifTrue:[2 isNil . 2 asFloat]. ]  } asDictionary.
+
+	programs associations do: [ :assoc | 
+ 		| key value blockReturn | 
+		key := assoc key.
+		value := assoc value.
+
+		simulator := DevirtualizableCallSites new.
+		simulator block: value.
+		blockReturn := simulator execute.		
+	
+		(blockReturn isKindOf: Morph) ifTrue: [ 
+			blockReturn containingWindow ifNotNil: #close
+		].
+				
+	devirtualizableNodes := simulator getAllCallSites.
+	result := ProgramModel new name: key fromRaw: value -> devirtualizableNodes.
+	('NI_',key asFileReference withExtension: 'ston')
 		writeStreamDo: [:s | STON put: result onStream: s].
 ] displayingProgress: [:assoc | assoc key].
 
@@ -76,7 +170,7 @@ DevirtualizableCallSites class >> from: aBlock [
 		calls
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'benchs' }
 DevirtualizableCallSites class >> honneyGingerBenchs [
 	
 ^ { 
@@ -100,7 +194,7 @@ DevirtualizableCallSites class >> honneyGingerBenchs [
  }
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'benchs' }
 DevirtualizableCallSites class >> mooseBenchs [
 
 ^ {
@@ -108,7 +202,7 @@ DevirtualizableCallSites class >> mooseBenchs [
  }	
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'benchs' }
 DevirtualizableCallSites class >> rewriterBenchs [
 
 ^ {
@@ -116,7 +210,7 @@ DevirtualizableCallSites class >> rewriterBenchs [
  }	
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'benchs' }
 DevirtualizableCallSites class >> roassalBenchs [
 
 ^ {
@@ -197,7 +291,7 @@ DevirtualizableCallSites >> getDevirtualizableCallSites [
 DevirtualizableCallSites >> initialize [
 
 	methods := Dictionary new.
-	
+	inlinedMethods := #(#isNil #ifTrue: #ifFalse: #ifTrue:ifFalse: #ifFalse:ifTrue: #ifNil:ifNotNilDo: #ifNil: #ifNil:ifNotNil: #or: #not) asOrderedCollection .
 	instrumentation := ScpMethodInstrumentation new.	
 	instrumentation addIndirection: (ScpMessageIndirection new
 		reifyNode; reifySender; reifyReceiver; reifyArguments;
@@ -207,6 +301,18 @@ DevirtualizableCallSites >> initialize [
 	).
 	
 	callsites := IdentityDictionary new.
+]
+
+{ #category : 'accessing' }
+DevirtualizableCallSites >> inlinedMethods [
+
+	^ inlinedMethods
+]
+
+{ #category : 'accessing' }
+DevirtualizableCallSites >> inlinedMethods: anObject [
+
+	inlinedMethods := anObject
 ]
 
 { #category : 'testing' }
@@ -235,14 +341,12 @@ DevirtualizableCallSites >> lookup: aSelector in: aClass [
 	]
 ]
 
-{ #category : 'private - recording' }
+{ #category : 'private - execution' }
 DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver arguments: aArguments [
 
 	<noInstrumentation>
    | arguments |
-
 	arguments := aArguments.
-
 	(aMethod selector = #doesNotUnderstand:) ifTrue: [ 
 			arguments := { (MessageSend
 						receiver: aReceiver
@@ -250,9 +354,12 @@ DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver a
                  arguments: aArguments) }
    	].
 
-
 	(aNode isNotNil and: [ aNode methodNode isNil ]) 
 		ifTrue: [ ^ aReceiver withArgs: arguments executeMethod: aMethod ].
+	aNode ifNotNil: [ 
+		(inlinedMethods includes: aNode selector) 
+			ifTrue: [ ^ aReceiver withArgs: arguments executeMethod: aMethod
+    ].
 
 	callsites at: aNode 
 		ifPresent: [ :m | m at: aMethod 
@@ -267,12 +374,12 @@ DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver a
 				yourself);
 			yourself
 		].
-
+	].
 	^ aReceiver withArgs: arguments executeMethod: aMethod
    
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - execution' }
 DevirtualizableCallSites >> message: aNode sender: aSender receiver: aReceiver arguments: aArguments [
 
 	<noInstrumentation>
