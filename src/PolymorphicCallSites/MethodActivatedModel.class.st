@@ -58,7 +58,7 @@ MethodActivatedModel >> numberOfCalls [
 { #category : 'as yet unclassified' }
 MethodActivatedModel >> numberOfReceiverClasses [
 	
-	^ receiverTypes asBag valuesAndCounts size
+	^ receiverTypes asBag numberOfKeys
 ]
 
 { #category : 'printing' }

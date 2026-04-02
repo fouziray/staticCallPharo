@@ -50,6 +50,17 @@ CallSiteModel >> dominantType [
 ]
 
 { #category : 'accessing' }
+CallSiteModel >> dominantTypeWithThreshold: anInteger [ 
+
+	| tmp |
+
+	tmp := flattenedTypes sortedCounts first key .
+	^ ((tmp /self numberOfCalls) asFloat* 100 > anInteger) 
+	ifTrue:[ tmp ]
+	ifFalse:[ nil ].
+]
+
+{ #category : 'accessing' }
 CallSiteModel >> fetchSelector [
 selector := methodsActivated first compiledMethodName copyAfterLast: $#
 ]
