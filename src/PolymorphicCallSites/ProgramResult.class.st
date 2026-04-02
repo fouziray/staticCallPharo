@@ -170,15 +170,60 @@ ProgramResult >> generateLatexOn: aStream [
 	
 ]
 
+{ #category : 'as yet unclassified' }
+ProgramResult >> graphs [
+
+	| full c p p2 x y size intervalCallsites threshold|
+	threshold := 0.5.
+	intervalCallsites := OrderedDictionary new.
+ full:= (self callSites collect:[:e | e -> e disparity  ]) sorted: [ :a :b | a key numberOfCalls > b key numberOfCalls ].
+	x := 0 to: full first key numberOfCalls count: 10.
+	y := full do:[:value |
+    x doWithConsecutivePairs: [:e :b | (e < value key numberOfCalls  and: [ b > value key numberOfCalls ] ) ifTrue: [  intervalCallsites at: { e. b } ifPresent: [ :col | col add: value value ] ifAbsentPut: [OrderedCollection new]]]].
+y:= intervalCallsites values collect:#size.
+	c := RSCompositeChart new.
+	p := RSBarPlot new x: x y: {0.y.0} flattened.
+	size := 6.
+	p barSize: size.
+	p barOffset: size / 2.
+	p2 := RSBarPlot new x: x y:{ 0. (intervalCallsites values collect: [:e |  (e select:[:e | e > threshold ]) size]). 0
+} flattened.
+	p2 barSize: size.
+	p2 barOffset: size / -2.
+	c add: p.
+	c add: p2.
+	c horizontalTick doNotUseNiceLabel;
+			 numberOfTicks: x size - 1;
+			 asFloat: 5;
+			 useVerticalLabel.
+
+	c build.
+	p bars @ RSPopup.
+
+	p2 bars
+		when: RSMouseEnter
+		do: [ :evt |
+			| color |
+			color := Color random.
+			p2 bars do: [ :shape | shape color: color ].
+			evt signalUpdate ]
+		for: self.
+		1 halt.
+		
+	^ c canvas
+]
+
 { #category : 'initialization' }
 ProgramResult >> initializeFor: aProgramModel [ 
-	
+
 	originalData := aProgramModel.
 	programName := aProgramModel programName.
 
 	self calculateData.
 	self calculateInlineCacheIndividualCalls.
-	self assertData
+	self assertData.
+"	self graphs."
+	MatrixSiteType matrixProgram: aProgramModel .
 ]
 
 { #category : 'testing' }

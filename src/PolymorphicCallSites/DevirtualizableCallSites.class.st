@@ -16,8 +16,9 @@ Class {
 		'methods',
 		'aScpExecutionClass'
 	],
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-Model',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Model'
 }
 
 { #category : 'as yet unclassified' }

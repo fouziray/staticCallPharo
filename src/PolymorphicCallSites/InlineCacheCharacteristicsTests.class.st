@@ -5,8 +5,9 @@ Class {
 		'transformer',
 		'visitorClass'
 	],
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-Tests',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Tests'
 }
 
 { #category : 'deserializing' }

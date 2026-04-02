@@ -21,6 +21,18 @@ ProgramModel >> callSites [
 	^ callSites
 ]
 
+{ #category : 'accessing' }
+ProgramModel >> callSites: aCol [
+	callSites := aCol 
+]
+
+{ #category : 'as yet unclassified' }
+ProgramModel >> filterOutInlinedMethodsByCompiled [
+
+ callSites := callSites reject:[:site| { #ifTrue:ifFalse: . #ifFalse:ifTrue: .#ifFalse: . #ifTrue:. #ifEmpty. } includes: site selector ].
+"haven't yet executed this portion"
+]
+
 { #category : 'instance creation' }
 ProgramModel >> fromRaw: anAssociation [ 
 	
@@ -46,6 +58,24 @@ ProgramModel >> name: aString fromRaw: anAssociation [
 ProgramModel >> name: aName fromTraceMessages: traceAssociatons [
 	programName := aName.
 	callSites := (traceAssociatons) associations reject: [ :e | e key isNil ] thenCollect: [ :e | CallSiteModel fromRaw: e ]
+]
+
+{ #category : 'accessing' }
+ProgramModel >> numberOfCalls [
+	
+	^ callSites sum: [ :cs | cs numberOfCalls ]
+]
+
+{ #category : 'printing' }
+ProgramModel >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream nextPutAll: ' ', self programName, ' sites: '.
+	aStream print: self callSites size. 
+	aStream nextPutAll: ' calls: '.
+	aStream print: self numberOfCalls.
+	
+	
 ]
 
 { #category : 'accessing' }

@@ -8,8 +8,9 @@ Class {
 	#classInstVars : [
 		'index'
 	],
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-Visitors',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Visitors'
 }
 
 { #category : 'tests' }

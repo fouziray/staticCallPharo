@@ -11,7 +11,10 @@ Class {
 		'bytecodeEnd',
 		'methodsActivated',
 		'selector',
-		'frequencyOfFirstElement'
+		'frequencyOfFirstElement',
+		'numberOfCalls',
+		'numberOfReceiverClasses',
+		'allTypesFreq'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -28,12 +31,14 @@ CallSiteModel class >> fromRaw: aCollection [
 
 { #category : 'as yet unclassified' }
 CallSiteModel >> disparity [
-  ^ frequencyOfFirstElement 
+
+	^ frequencyOfFirstElement ifNil: [
+ 		frequencyOfFirstElement := self findDisparities ]
 ]
 
 { #category : 'accessing' }
 CallSiteModel >> fetchSelector [
-	^ methodsActivated first compiledMethodName copyAfterLast: $#
+selector := methodsActivated first compiledMethodName copyAfterLast: $#
 ]
 
 { #category : 'instance creation' }
@@ -56,12 +61,13 @@ CallSiteModel >> fillKey: 	aCollection [
 
 { #category : 'as yet unclassified' }
 CallSiteModel >> findDisparities [
-	| orderedByFrequ |
-	orderedByFrequ := self receiverTypesBag sorted collect: [:e | e sortedCounts ].
-	
-	  frequencyOfFirstElement:=  (orderedByFrequ collect:[:e | e first key / ((e collect:#key) sum ) ]) first.
-	^ frequencyOfFirstElement 
-	
+	| orderedByFrequ numberOfCallsPerType totalCalls |
+	numberOfCallsPerType := methodsActivated flatCollect: [ :e | e receiverTypes ] as: Bag.
+	orderedByFrequ := numberOfCallsPerType sortedCounts.
+	totalCalls := numberOfCallsPerType size.
+
+	allTypesFreq := (orderedByFrequ collect:[:e | (e key / totalCalls) asFloat ]). 
+	^ allTypesFreq first	
 ]
 
 { #category : 'instance creation' }
@@ -69,13 +75,13 @@ CallSiteModel >> fromRaw: aCollection [
 	
 	self fillKey: aCollection.
 	methodsActivated := aCollection value associations collect: [ :e | MethodActivatedModel fromRaw: e ].
-	selector := self fetchSelector.
+ 	self fetchSelector.
 ]
 
 { #category : 'accessing' }
 CallSiteModel >> numberOfCalls [
 	
-	^ methodsActivated sum: [ :m | m numberOfCalls ]
+	^ numberOfCalls ifNil: [ numberOfCalls := methodsActivated sum: [ :m | m numberOfCalls ] ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -87,7 +93,20 @@ CallSiteModel >> numberOfDifferentMethods [
 { #category : 'as yet unclassified' }
 CallSiteModel >> numberOfReceiverClasses [
 	
-	^ methodsActivated sum: [ :m | m numberOfReceiverClasses ]
+	^ numberOfReceiverClasses ifNil: [ numberOfReceiverClasses := methodsActivated sum: [ :m | m numberOfReceiverClasses ] ]
+]
+
+{ #category : 'as yet unclassified' }
+CallSiteModel >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream nextPutAll: '(#calls: '.
+	aStream nextPutAll: self numberOfCalls asString.
+	aStream nextPutAll: ', #types: '.
+	aStream nextPutAll: self numberOfReceiverClasses asString.
+	aStream nextPutAll: ', #methods: '.
+	aStream nextPutAll: self numberOfDifferentMethods asString.
+	aStream nextPutAll: ')'.
 ]
 
 { #category : 'as yet unclassified' }

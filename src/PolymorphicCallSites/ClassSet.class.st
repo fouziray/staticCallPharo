@@ -1,8 +1,9 @@
 Class {
 	#name : 'ClassSet',
 	#superclass : 'Set',
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-Model',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Model'
 }
 
 { #category : 'comparing' }
