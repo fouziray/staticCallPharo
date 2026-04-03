@@ -74,6 +74,32 @@ FindingStatsTest >> polyCallClass [
 ]
 
 { #category : 'tests' }
+FindingStatsTest >> testCallSiteCreationWithoutMessageNOde [
+
+	
+	| dict |
+	dict := Dictionary new.
+	dict at: ProtoObject >> #class put: (Bag newFrom: {
+				 (1 / 2) class.
+				 (1 / 2) class.
+				 (1 / 2) class }).
+	dict at: Float >> #asFloat put: (Bag newFrom: {
+				 0.2 class.
+				 2.3 class }).
+	CallSiteModel fromRaw:
+		  (FindingStatsTest >> #classCallTwice) ast sendNodes second -> dict.
+	
+"	self
+		assert: (m ast pcsForNode: m ast sendNodes first) first
+		equals: 59.
+	self
+		assert: m ast sendNodes first callSiteName
+		equals: 'FindingStatsTest>>#classCallTwice !59'
+	""    nodeOffsets := m symbolic.
+"""
+]
+
+{ #category : 'tests' }
 FindingStatsTest >> testFindingDominantType [
 	
 	self 
@@ -100,15 +126,33 @@ FindingStatsTest >> testFindingDominantTypePoly [
 { #category : 'tests' }
 FindingStatsTest >> testMessageIntoItsCallerAndBCOffset [
 
-	| m |
+	| m node |
 	m := FindingStatsTest >> #classCallTwice.
-
+	node := m ast sendNodes first.
 	self
-		assert: (m ast pcsForNode: m ast sendNodes first) first
+		assert: (m ast pcsForNode: node) first
 		equals: 59.
-	self 
-		assert: m ast sendNodes first callSiteName
+	self
+		assert: node callSiteName
 		equals: 'FindingStatsTest>>#classCallTwice !59'
+	"    nodeOffsets := m symbolic.
+"
+]
+
+{ #category : 'tests' }
+FindingStatsTest >> testMessageIntoItsCallerAndBCOffsetTwo [
+
+	| m node |
+	
+	m := FindingStatsTest >> #classCallTwice.
+	node := m ast sendNodes fourth.
+	self assert: node selector equals: #class.
+	self
+		assert: (m ast pcsForNode: node) first
+		equals: 65.
+	self
+		assert: node callSiteName
+		equals: 'FindingStatsTest>>#classCallTwice !65'
 	"    nodeOffsets := m symbolic.
 "
 ]
