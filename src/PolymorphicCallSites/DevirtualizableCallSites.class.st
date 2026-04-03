@@ -327,10 +327,15 @@ DevirtualizableCallSites >> getDevirtualizableCallSites [
 DevirtualizableCallSites >> initialize [
 
 	methods := Dictionary new.
-	inlinedMethods := #( #isNil #ifTrue: #ifFalse: #ifTrue:ifFalse:
-	                     #ifFalse:ifTrue: #ifNil:ifNotNilDo:
-	                     #ifNotNil: #ifNil: #ifNil:ifNotNil:
-	                     #or: #not ) asSet.
+	inlinedMethods := #( #isNil
+								#ifTrue: #ifFalse:
+								#ifTrue:ifFalse: #ifFalse:ifTrue:
+								
+								#ifNotNil: #ifNil:
+								#ifNil:ifNotNil: #ifNotNil:ifNil:
+								
+								#or: #and:
+								#not #'==' ) asSet.
 	instrumentation := ScpMethodInstrumentation new.
 	instrumentation addIndirection: (ScpMessageIndirection new
 			 reifyNode;

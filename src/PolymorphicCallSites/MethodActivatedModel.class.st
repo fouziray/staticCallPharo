@@ -37,10 +37,10 @@ MethodActivatedModel >> dominantType [
 ]
 
 { #category : 'instance creation' }
-MethodActivatedModel >> fromRaw: anAssociation [ 
-	
+MethodActivatedModel >> fromRaw: anAssociation [
+
 	compiledMethodName := anAssociation key printString.
-	receiverTypes := anAssociation value collect: [ :e | e className ]
+	receiverTypes := anAssociation value collect: [ :e | e name ]
 ]
 
 { #category : 'printing' }

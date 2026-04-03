@@ -15,7 +15,8 @@ Class {
 		'numberOfCalls',
 		'numberOfReceiverClasses',
 		'allTypesFreq',
-		'flattenedTypes'
+		'flattenedTypes',
+		'isSelfSend'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -44,43 +45,56 @@ CallSiteModel >> disparity [
 ]
 
 { #category : 'accessing' }
+CallSiteModel >> dominance [
+
+	^ (self dominantTypeNumberOfCalls / self numberOfCalls) asFloat
+]
+
+{ #category : 'accessing' }
 CallSiteModel >> dominantType [
 	^	flattenedTypes sortedCounts first value
 
 ]
 
 { #category : 'accessing' }
-CallSiteModel >> dominantTypeWithThreshold: anInteger [ 
+CallSiteModel >> dominantTypeNumberOfCalls [
+
+	^ flattenedTypes sortedCounts first key
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> dominantTypeWithThreshold: anInteger [
 
 	| tmp |
-
-	tmp := flattenedTypes sortedCounts first key .
-	^ ((tmp /self numberOfCalls) asFloat* 100 > anInteger) 
-	ifTrue:[ self dominantType ]
-	ifFalse:[ nil ].
+	tmp := self dominantTypeNumberOfCalls.
+	^ (tmp / self numberOfCalls) asFloat * 100 > anInteger
+		  ifTrue: [ self dominantType ]
+		  ifFalse: [ nil ]
 ]
 
 { #category : 'accessing' }
 CallSiteModel >> fetchSelector [
-selector := methodsActivated first compiledMethodName copyAfterLast: $#
+
+	selector := methodsActivated first compiledMethodName copyAfterLast: $#
 ]
 
 { #category : 'instance creation' }
-CallSiteModel >> fillKey: 	aCollection [
-	
+CallSiteModel >> fillKey: aCollection [
+
 	| messageNode |
 	messageNode := aCollection key.
-	
+
 	methodClassName := messageNode methodNode methodClass name.
 	methodSelector := messageNode methodNode selector.
 	sourceStart := messageNode start.
 	sourceEnd := messageNode stop.
 	source := messageNode sourceCode.
-	
-	(messageNode methodNode pcsForNode: messageNode) ifNotEmpty: [	
-			bytecodeStart := (messageNode methodNode pcsForNode: messageNode) first.
-			bytecodeEnd := (messageNode methodNode pcsForNode: messageNode) last. 	 ]
+	isSelfSend := messageNode receiver isSelfVariable.
 
+	(messageNode methodNode pcsForNode: messageNode) ifNotEmpty: [
+		bytecodeStart := (messageNode methodNode pcsForNode: messageNode)
+			                 first.
+		bytecodeEnd := (messageNode methodNode pcsForNode: messageNode) last ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -101,6 +115,11 @@ CallSiteModel >> fromRaw: aCollection [
 	methodsActivated := aCollection value associations collect: [ :e | MethodActivatedModel fromRaw: e ].
  	self fetchSelector.
 	self computeTypes.
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> isSelfSend [
+	^ isSelfSend
 ]
 
 { #category : 'accessing' }
