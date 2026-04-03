@@ -45,31 +45,30 @@ DevirtualizableCallSites class >> blocBenchs [
 { #category : 'benchs' }
 DevirtualizableCallSites class >> executeBenchmarks [
 
-<script>
-	
-| programs simulator devirtualizableNodes result |
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := self benchMarksToExecute asDictionary.
 
-programs := self benchMarksToExecute asDictionary.
+	programs associations
+		do: [ :assoc |
+			| key value blockReturn |
+			key := assoc key.
+			value := assoc value.
 
-programs associations do: [ :assoc | 
- 	| key value blockReturn |. 
-	key := assoc key.
-	value := assoc value.
+			simulator := self new. 
+			simulator block: value.
+			blockReturn := simulator execute.
 
-	simulator := self new.
-	simulator block: value.
-	blockReturn := simulator execute.		
-	
-	(blockReturn isKindOf: Morph) ifTrue: [ 
-		blockReturn containingWindow ifNotNil: #close
-	].
-			
-	devirtualizableNodes := simulator getAllCallSites.
-	result := ProgramModel new name: key fromRaw: value -> devirtualizableNodes.
-	('NI_', key asFileReference withExtension: 'ston')
-		writeStreamDo: [:s | STON put: result onStream: s].
-] displayingProgress: [:assoc | assoc key].
+			(blockReturn isKindOf: Morph) ifTrue: [
+				blockReturn containingWindow ifNotNil: #close ].
 
+			devirtualizableNodes := simulator getAllCallSites.
+			result := ProgramModel new
+				          name: key
+				          fromRaw: value -> devirtualizableNodes.
+			('NI_' , key asFileReference withExtension: 'ston') writeStreamDo: [
+				:s | STON put: result onStream: s ] ]
+		displayingProgress: [ :assoc | assoc key ]
 ]
 
 { #category : 'benchs' }
@@ -135,31 +134,30 @@ programs associations do: [ :assoc |
 { #category : 'benchs' }
 DevirtualizableCallSites class >> executeSingHGFiltered [
 
-<script>
-	
-| programs simulator devirtualizableNodes result |
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := self honneyGingerBenchsSingle asDictionary.
 
-programs := self honneyGingerBenchsSingle asDictionary.
+	programs associations
+		do: [ :assoc |
+			| key value blockReturn |
+			key := assoc key.
+			value := assoc value.
 
-programs associations do: [ :assoc | 
- 	| key value blockReturn |. 
-	key := assoc key.
-	value := assoc value.
+			simulator := self new.
+			simulator block: value.
+			blockReturn := simulator execute.
 
-	simulator := self new.
-	simulator block: value.
-	blockReturn := simulator execute.		
-	
-	(blockReturn isKindOf: Morph) ifTrue: [ 
-		blockReturn containingWindow ifNotNil: #close
-	].
-			
-	devirtualizableNodes := simulator getAllCallSites.
-	result := ProgramModel new name: 'NI_',key fromRaw: value -> devirtualizableNodes.
-	(('NI2_',key) asFileReference withExtension: 'ston')
-		writeStreamDo: [:s | STON put: result onStream: s].
-] displayingProgress: [:assoc | assoc key].
+			(blockReturn isKindOf: Morph) ifTrue: [
+				blockReturn containingWindow ifNotNil: #close ].
 
+			devirtualizableNodes := simulator getAllCallSites.
+			result := ProgramModel new
+				          name: 'NI_' , key
+				          fromRaw: value -> devirtualizableNodes.
+			(('NI2_' , key) asFileReference withExtension: 'ston')
+				writeStreamDo: [ :s | STON put: result onStream: s ] ]
+		displayingProgress: [ :assoc | assoc key ]
 ]
 
 { #category : 'benchs' }

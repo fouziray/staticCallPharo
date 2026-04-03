@@ -58,6 +58,16 @@ FindingStatsTest >> classCall [
 ]
 
 { #category : 'as yet unclassified' }
+FindingStatsTest >> classCallTwice [
+
+	Object new class.
+	
+	self callSiteOne.
+	
+	4 class.
+]
+
+{ #category : 'as yet unclassified' }
 FindingStatsTest >> polyCallClass [
 "pay attention that types here are examples and just used to access message node for test setup"
 	{1/2 . 4/5. 2.66 } do: #asFloat
@@ -85,6 +95,22 @@ FindingStatsTest >> testFindingDominantTypePoly [
 	self
 		assert: self callSiteMulitpleTarget dominantType
 		equals: 'Fraction class'
+]
+
+{ #category : 'tests' }
+FindingStatsTest >> testMessageIntoItsCallerAndBCOffset [
+
+	| m |
+	m := FindingStatsTest >> #classCallTwice.
+
+	self
+		assert: (m ast pcsForNode: m ast sendNodes first) first
+		equals: 59.
+	self 
+		assert: m ast sendNodes first callSiteName
+		equals: 'FindingStatsTest>>#classCallTwice !59'
+	"    nodeOffsets := m symbolic.
+"
 ]
 
 { #category : 'tests' }
