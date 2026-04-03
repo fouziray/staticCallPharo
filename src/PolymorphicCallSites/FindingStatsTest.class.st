@@ -6,6 +6,15 @@ Class {
 	#tag : 'Objects'
 }
 
+{ #category : 'as yet unclassified' }
+FindingStatsTest >> callACascade [
+
+	self
+		class;
+		callSite;
+		yourself
+]
+
 { #category : 'tests' }
 FindingStatsTest >> callSiteMulitpleTarget [
 	"self new callSiteMulitpleTarget"
@@ -121,6 +130,27 @@ FindingStatsTest >> testFindingDominantTypePoly [
 	self
 		assert: self callSiteMulitpleTarget dominantType
 		equals: 'Fraction class'
+]
+
+{ #category : 'tests' }
+FindingStatsTest >> testMessageCascade [
+
+	| m node1 node2 node3|
+
+	m := FindingStatsTest >> #callACascade.
+	node1 := m ast sendNodes first.
+	node2 := m ast sendNodes second.
+	node3 := m ast sendNodes third.
+
+	self assert: node1 selector equals: #class.
+	self assert: (m ast pcsForNode: node1) first equals: 51.
+	self assert: (m ast pcsForNode:node2) first equals:54.
+	self assert: (m ast pcsForNode:node3) first  equals: 56.
+	self
+		assert: node1 callSiteName
+		equals: 'FindingStatsTest>>#callACascade !51'
+	"    nodeOffsets := m symbolic.
+"
 ]
 
 { #category : 'tests' }
