@@ -123,6 +123,12 @@ CallSiteModel >> isSelfSend [
 ]
 
 { #category : 'accessing' }
+CallSiteModel >> methodName [
+
+	^ methodClassName , '>>' , methodSelector
+]
+
+{ #category : 'accessing' }
 CallSiteModel >> numberOfCalls [
 	
 	^ numberOfCalls ifNil: [ numberOfCalls := methodsActivated sum: [ :m | m numberOfCalls ] ]
