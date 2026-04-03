@@ -269,17 +269,17 @@ DevirtualizableCallSites >> canInstrument: aMethod [
 	aMethod isInstrumented ifTrue: [ ^ false ].
 	aMethod isPrimitive ifTrue: [ ^ false ].
 	
-	(aMethod hasPragmaNamed: #noInstrumentation) ifTrue: [ ^ false ].	
+	(inlinedMethods includes: aMethod selector) ifTrue: [ ^ false ].
+	(aMethod hasPragmaNamed: #noInstrumentation) ifTrue: [ ^ false ].
 
-	aMethod methodClass = UndefinedObject ifFalse: [ 
+	aMethod methodClass = UndefinedObject ifFalse: [
 		aMethod isFFIMethod ifTrue: [ ^ false ].
-		((aMethod name endsWith: #initialize) or: [aMethod name endsWith: #new]) ifFalse: [
+		((aMethod name endsWith: #initialize) or: [
+			 aMethod name endsWith: #new ]) ifFalse: [
 			(aMethod package name beginsWith: #Kernel) ifTrue: [ ^ false ].
 			(aMethod package name beginsWith: #FreeType) ifTrue: [ ^ false ].
 			(aMethod package name beginsWith: #UnifiedFFI) ifTrue: [ ^ false ].
-			(aMethod package name beginsWith: #Collection) ifTrue: [ ^ false ].
-		].
-	].
+			(aMethod package name beginsWith: #Collection) ifTrue: [ ^ false ] ] ].
 
 	^ true
 ]
@@ -327,16 +327,23 @@ DevirtualizableCallSites >> getDevirtualizableCallSites [
 DevirtualizableCallSites >> initialize [
 
 	methods := Dictionary new.
-	inlinedMethods := #(#isNil #ifTrue: #ifFalse: #ifTrue:ifFalse: #ifFalse:ifTrue: #ifNil:ifNotNilDo: #ifNotNil: #ifNil: #ifNil:ifNotNil: #or: #not) asOrderedCollection .
-	instrumentation := ScpMethodInstrumentation new.	
+	inlinedMethods := #( #isNil #ifTrue: #ifFalse: #ifTrue:ifFalse:
+	                     #ifFalse:ifTrue: #ifNil:ifNotNilDo:
+	                     #ifNotNil: #ifNil: #ifNil:ifNotNil:
+	                     #or: #not ) asSet.
+	instrumentation := ScpMethodInstrumentation new.
 	instrumentation addIndirection: (ScpMessageIndirection new
-		reifyNode; reifySender; reifyReceiver; reifyArguments;
-		handler: self;
-		handlerSelector: (self class lookupSelector: #message:sender:receiver:arguments:) selector;
-		yourself 
-	).
-	
-	callsites := IdentityDictionary new.
+			 reifyNode;
+			 reifySender;
+			 reifyReceiver;
+			 reifyArguments;
+			 handler: self;
+			 handlerSelector:
+				 (self class lookupSelector: #message:sender:receiver:arguments:)
+					 selector;
+			 yourself).
+
+	callsites := IdentityDictionary new
 ]
 
 { #category : 'accessing' }
