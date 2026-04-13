@@ -146,11 +146,40 @@ DevirtualizableCallSites class >> executeSingHGFiltered [
 
 			simulator := self new.
 			simulator block: value.
+
+			blockReturn := simulator execute.
+			blockReturn containingWindow ifNotNil: #close.
+
+			devirtualizableNodes := simulator getAllCallSites.
+			result := ProgramModel new
+				          name: 'NI_' , key
+				          fromRaw: value -> devirtualizableNodes.
+			(('NI2_' , key) asFileReference withExtension: 'ston')
+				writeStreamDo: [ :s | STON put: result onStream: s ] ]
+		displayingProgress: [ :assoc | assoc key ]
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> executeSingHGFiltered2 [
+
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := self honneyGingerBenchsSingle asDictionary.
+
+	programs associations
+		do: [ :assoc |
+			| key value blockReturn |
+			key := assoc key.
+			value := assoc value.
+
+			simulator := ScpExecutionRecorder new.
+			simulator block: value.
 			blockReturn := simulator execute.
 
 			(blockReturn isKindOf: Morph) ifTrue: [
 				blockReturn containingWindow ifNotNil: #close ].
 
+			1 halt.
 			devirtualizableNodes := simulator getAllCallSites.
 			result := ProgramModel new
 				          name: 'NI_' , key
@@ -224,10 +253,13 @@ DevirtualizableCallSites class >> honneyGingerBenchs [
 
 { #category : 'benchs' }
 DevirtualizableCallSites class >> honneyGingerBenchsSingle [
-	
-^ { 
-'HGSimulator impossibeRiverPressureMap' -> [ HGSimulator impossibeRiverPressureMap  ].
- }
+
+	^ { ('HGSimulator impossibeRiverPressureMap' -> [
+	   [
+	   | simulator |
+	   simulator := HGSimulator impossibeRiverPressureMap.
+	   0 timesRepeat: [ World doOneCycle ].
+	   simulator ] value ]) }
 ]
 
 { #category : 'benchs' }
