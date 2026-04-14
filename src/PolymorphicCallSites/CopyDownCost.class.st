@@ -23,8 +23,19 @@ CopyDownCost class >> forProgram: aBlock [
 
 { #category : 'testing' }
 CopyDownCost >> canBeCopiedDown: aCollection [ 
-1 halt.
-	aCollection first 
+| actualClass lookedUp lookedUpClass |
+
+	actualClass := OpalCompiler evaluate:  aCollection first dominantType.
+	lookedUp := (actualClass lookupSelector: aCollection first selector asSymbol) .
+	lookedUpClass := lookedUp classBinding value.
+	  ((actualClass isKindOf: lookedUpClass)  and:[ actualClass ~= lookedUpClass]) ifTrue:[
+		self copyDown: lookedUp into: actualClass. 
+		].
+]
+
+{ #category : 'copying' }
+CopyDownCost >> copyDown: aCollection into: aMetaclass [ 
+	self shouldBeImplemented.
 ]
 
 { #category : 'as yet unclassified' }
