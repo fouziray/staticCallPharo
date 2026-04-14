@@ -152,6 +152,12 @@ Caller >> performMicroSet [
 ]
 
 { #category : 'as yet unclassified' }
+Caller >> performMicroSetStatic [
+
+	1 to: 20000 do: [ :e | self sending64TimeMessageToSt: Set ]
+]
+
+{ #category : 'as yet unclassified' }
 Caller >> send: x [ 
 
 	x yourself.

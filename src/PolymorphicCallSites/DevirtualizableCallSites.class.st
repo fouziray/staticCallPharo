@@ -263,6 +263,36 @@ DevirtualizableCallSites class >> honneyGingerBenchsSingle [
 ]
 
 { #category : 'benchs' }
+DevirtualizableCallSites class >> microSendRateCalculation [
+
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := { ('microSendSetClass'
+	             -> [ CallerStaticInterpreter new microSendSetClass ]) }
+		            asDictionary.
+
+	programs associations do: [ :assoc |
+		| key value blockReturn |
+		key := assoc key.
+		value := assoc value.
+
+		simulator := DevirtualizableCallSites new.
+		simulator block: value.
+		blockReturn := simulator execute.
+
+		(blockReturn isKindOf: Morph) ifTrue: [
+			blockReturn containingWindow ifNotNil: #close ].
+
+		devirtualizableNodes := simulator getAllCallSites.
+		result := ProgramModel new
+				          name: key
+				          fromRaw: value -> devirtualizableNodes
+				].
+
+		1 halt.
+]
+
+{ #category : 'benchs' }
 DevirtualizableCallSites class >> mooseBenchs [
 
 ^ {

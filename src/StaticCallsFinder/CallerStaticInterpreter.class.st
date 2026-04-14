@@ -24,6 +24,36 @@ CallerStaticInterpreter >> microSendSetClass [
 ]
 
 { #category : 'as yet unclassified' }
+CallerStaticInterpreter >> microSendSetClassBenchOneIteration [
+	"self new micro1 iterations"
+
+	" 3011"
+
+	self warmupSend.
+	^  self performMicroSet
+]
+
+{ #category : 'as yet unclassified' }
+CallerStaticInterpreter >> microSendSetClassStatic [
+	"self new micro1 iterations"
+
+	" 3011"
+
+	self warmupSendStatic.
+	^ [ self performMicroSetStatic ] bench
+]
+
+{ #category : 'as yet unclassified' }
+CallerStaticInterpreter >> microSendSetClassStaticBenchOneIteration [
+	"self new micro1 iterations"
+
+	" 3011"
+
+	self warmupSendStatic.
+	^ self performMicroSetStatic  
+]
+
+{ #category : 'as yet unclassified' }
 CallerStaticInterpreter >> performMicroBytestring [
 
 	1 to: 20000 do: [ :e | self sending64TimeMessageTo: 'toto' ]
@@ -33,6 +63,12 @@ CallerStaticInterpreter >> performMicroBytestring [
 CallerStaticInterpreter >> performMicroSet [
 
 	1 to: 20000 do: [ :e | self sending64TimeMessageTo: Set ]
+]
+
+{ #category : 'as yet unclassified' }
+CallerStaticInterpreter >> performMicroSetStatic [
+
+	1 to: 20000 do: [ :e | self sending64TimeMessageToSt: Set ]
 ]
 
 { #category : 'instructions' }
@@ -201,4 +237,17 @@ CallerStaticInterpreter >> warmupSend [
           	sending64TimeMessageTo: 1.0;
 		sending64TimeMessageTo: 'toto';
 		sending64TimeMessageTo: Object ]
+]
+
+{ #category : 'as yet unclassified' }
+CallerStaticInterpreter >> warmupSendStatic [
+
+	3 timesRepeat: [
+		self
+			sending64TimeMessageToSt: Set;
+			sending64TimeMessageToSt: 1;
+			sending64TimeMessageToSt: OrderedCollection new;
+			sending64TimeMessageToSt: 1.0;
+			sending64TimeMessageToSt: 'toto';
+			sending64TimeMessageToSt: Object ]
 ]
