@@ -16,6 +16,12 @@ InsertedMethod class >> withMethod: aCollection associatedTo: aCallSiteModel [
 ]
 
 { #category : 'accessing' }
+InsertedMethod >> benchmarkResult [
+
+	^ benchmarkResult
+]
+
+{ #category : 'accessing' }
 InsertedMethod >> callSite [
 
 	^ callSite
