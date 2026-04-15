@@ -5,12 +5,18 @@ Class {
 	#package : 'PolymorphicCallSites'
 }
 
+{ #category : 'running' }
+CopyDownCostTest >> tearDown [ 
+	
+]
+
 { #category : 'tests' }
 CopyDownCostTest >> testCopyDownProgram [
 
-	CopyDownCost forProgram: [[
-	   | simulator |
-	   simulator := HGSimulator impossibeRiverPressureMap.
-	   0 timesRepeat: [ World doOneCycle ].
-	   simulator ] value].
+	CopyDownCost forProgram: [
+		[
+		| simulator |
+		simulator := HGSimulator impossibeRiverPressureMap.
+		1 timesRepeat: [ World doOneCycle ].
+		simulator ] value ]
 ]
