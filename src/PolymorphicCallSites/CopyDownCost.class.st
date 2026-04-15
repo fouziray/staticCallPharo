@@ -30,25 +30,21 @@ CopyDownCost class >> forProgram: aBlock [
 CopyDownCost >> canBeCopiedDown: aCollection [
 
 	| actualClass lookedUp lookedUpClass |
-	
-	aCollection do:[ :callsite |
-	actualClass := OpalCompiler new
-		               source: callsite dominantType;
-		               evaluate.
-	lookedUp := actualClass lookupSelector:
-		            callsite selector asSymbol.
-	lookedUpClass := lookedUp classBinding value.
-	(((actualClass isKindOf: lookedUpClass) and: [
-		 actualClass ~= lookedUpClass ]) and:[ self stillUnderLimit ] ) ifTrue: [
-		self copyDown: lookedUp into: actualClass 
-			]
-			]
+	aCollection do: [ :callsite |
+		actualClass := OpalCompiler new
+			               source: callsite dominantType;
+			               evaluate.
+		lookedUp := actualClass lookupSelector: callsite selector asSymbol.
+		lookedUpClass := lookedUp classBinding value.
+		(((actualClass isKindOf: lookedUpClass) and: [
+			  actualClass ~= lookedUpClass ]) and: [ self stillUnderLimit ])
+			ifTrue: [ self copyDown: lookedUp into: actualClass having: callsite  ] ]
 ]
 
 { #category : 'copying' }
 CopyDownCost >> copyDown: aCollection into: aMetaclass [
 
-	1 halt.
+
 	(RBMoveMethodToClassTransformation
 		 method: aCollection
 		 class: aMetaclass) checkPreconditions.
@@ -61,14 +57,40 @@ CopyDownCost >> copyDown: aCollection into: aMetaclass [
 	self evaluateProgram
 ]
 
+{ #category : 'copying' }
+CopyDownCost >> copyDown: aCollection into: aMetaclass having: callSite [
+
+	(RBMoveMethodToClassTransformation
+		 method: aCollection
+		 class: aMetaclass) checkPreconditions.
+	" once it passes the preconditions usually used in Refactoring (not defined in the subclass"
+
+	aMetaclass compile: aCollection sourceCode.
+	insertedMethods add: (InsertedMethod withMethod:(OpalCompiler new
+			 source: aMetaclass asString , '>>' , ('#' , aCollection selector);
+			 evaluate) associatedTo: callSite ).
+	self evaluateProgram
+]
+
 { #category : 'benchmarking' }
 CopyDownCost >> evaluateProgram [
-	| window resultMicroSec |
-	1 halt.
+
+	| window resultMicroSec compilationTimeBefore compilationTimeAfter |
 	Smalltalk garbageCollect.
-	resultMicroSec:= [window := programBlock value] microsecondsToRun .
-Transcript show: programBlock asString ,' , MicroSeconds: ', resultMicroSec asString, ' NumberOfChanges: ', insertedMethods size asString; cr.
-	 window containingWindow ifNotNil: #close.
+	compilationTimeBefore := Smalltalk vm totalJITCompileTime.
+		
+	resultMicroSec := [ window := programBlock value ] microsecondsToRun.
+	
+	compilationTimeAfter := Smalltalk vm totalJITCompileTime.
+	
+	Transcript
+		show:
+			programBlock asString , ' , MicroSeconds: '
+			, resultMicroSec asString , ' NumberOfChanges: '
+			, insertedMethods size asString;
+		cr.
+	insertedMethods last compilationVsPerformance: (CopyDownResult runtimePerformance: resultMicroSec compilationInJitTime: (compilationTimeAfter - compilationTimeBefore) ).
+	window containingWindow ifNotNil: #close
 ]
 
 { #category : 'as yet unclassified' }
@@ -97,6 +119,18 @@ CopyDownCost >> initialize [
 	super initialize.
 	maxModifications:= 5.
 	insertedMethods := OrderedCollection new
+]
+
+{ #category : 'accessing' }
+CopyDownCost >> insertedMethods [
+
+	^ insertedMethods
+]
+
+{ #category : 'accessing' }
+CopyDownCost >> insertedMethods: anObject [
+
+	insertedMethods := anObject
 ]
 
 { #category : 'as yet unclassified' }
@@ -133,14 +167,16 @@ CopyDownCost >> nodesToCopyDown: aCollection [
 		                           e isSelfSend not ].
 
 	canBeCopiedDown := self canBeCopiedDown: frequentSelfMessage.
-	1 halt.
+
 	self rollbackCopiedMethod.
 ]
 
 { #category : 'as yet unclassified' }
 CopyDownCost >> rollbackCopiedMethod [
-"removes copied down methods from the child classes "
-insertedMethods do:[:e | e classBinding value removeSelector: e selector ]
+	"removes copied down methods from the child classes "
+
+	(insertedMethods collect:#method) do: [ :e |
+		e classBinding value removeSelector: e selector ]
 ]
 
 { #category : 'as yet unclassified' }
