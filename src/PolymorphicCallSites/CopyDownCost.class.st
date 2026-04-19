@@ -26,6 +26,11 @@ CopyDownCost class >> forProgram: aBlock [
 	^ self new forProgram: aBlock 
 ]
 
+{ #category : 'as yet unclassified' }
+CopyDownCost class >> forProgram: aBlock modifyUpTo: aNumber [
+	^ self new maxModifications: aNumber; forProgram: aBlock 
+]
+
 { #category : 'testing' }
 CopyDownCost >> canBeCopiedDown: aCollection [
 
