@@ -107,9 +107,9 @@ CopyDownCost >> forProgram: aBlock [
 	simulator block: aBlock.
 	blockReturn := simulator execute.
 
-	(blockReturn isKindOf: Morph) ifTrue: [
+	[(blockReturn isKindOf: Morph) ifTrue: [
 		blockReturn containingWindow ifNotNil: #close ].
-
+] onErrorDo: [  ].
 	devirtualizableNodes := simulator getAllCallSites.
 	result := ProgramModel new
 		          name: 'blank'
