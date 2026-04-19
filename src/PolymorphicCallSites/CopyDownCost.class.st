@@ -8,6 +8,7 @@ This serves as a model to understand:
 	We consider the above parameters to evaluate the efficiency of copy down.
 	For different levels of copy down. i.e. by sorting sites to be copied down from most frequently called.
 	
+I'm used in a pharo Image and give a details on speedup incrementally
 "
 Class {
 	#name : 'CopyDownCost',
