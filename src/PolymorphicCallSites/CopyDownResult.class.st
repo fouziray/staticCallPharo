@@ -10,8 +10,19 @@ Class {
 }
 
 { #category : 'initialize' }
-CopyDownResult class >> runtimePerformance: anInteger compilationInJitTime: anInteger2 [ 
-	self new runtimePerformance: anInteger compilationInJitTime: anInteger2 
+CopyDownResult class >> runtimePerformance: anInteger compilationInJitTime: anInteger2 [
+
+	^ self new
+		runtimePerformance: anInteger
+		compilationInJitTime: anInteger2
+]
+
+{ #category : 'converting' }
+CopyDownResult >> asPointInGraph [
+
+	^ {
+		self runtime.
+		self jitCompilationOverhead }
 ]
 
 { #category : 'accessing' }
