@@ -72,6 +72,37 @@ DevirtualizableCallSites class >> executeBenchmarks [
 ]
 
 { #category : 'benchs' }
+DevirtualizableCallSites class >> executeHGV [
+
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := self honneyGingerVeritas asDictionary.
+
+	programs associations
+		do: [ :assoc |
+			| key value blockReturn  transformer|
+			key := assoc key.
+			value := assoc value.
+
+			simulator := self new.
+			simulator block: value.
+
+			blockReturn := simulator execute.
+			[blockReturn containingWindow ifNotNil: #close.
+] onErrorDo: [  ].
+			devirtualizableNodes := simulator getAllCallSites.
+			result := ProgramModel new
+				          name: 'NI_' , key
+				          fromRaw: value -> devirtualizableNodes.
+
+			transformer := StaticCallSiteTransformer new
+		               recordedTypes: devirtualizableNodes asDictionary ;
+		               yourself.
+			transformer	getNewMethodOfDevirtualizingAll.
+			]
+]
+
+{ #category : 'benchs' }
 DevirtualizableCallSites class >> executeMRoassalFiltered [
 
 <script>
@@ -258,6 +289,17 @@ DevirtualizableCallSites class >> honneyGingerBenchsSingle [
 	   [
 	   | simulator |
 	   simulator := HGSimulator impossibeRiverPressureMap.
+	   0 timesRepeat: [ World doOneCycle ].
+	   simulator ] value ]) }
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> honneyGingerVeritas [
+
+	^ { ('VeritasHoneyGinger new run' -> [
+	   [
+	   | simulator |
+	   simulator := VeritasHoneyGinger new run.
 	   0 timesRepeat: [ World doOneCycle ].
 	   simulator ] value ]) }
 ]
