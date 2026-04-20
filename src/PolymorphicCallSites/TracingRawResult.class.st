@@ -2,7 +2,8 @@ Class {
 	#name : 'TracingRawResult',
 	#superclass : 'Object',
 	#instVars : [
-		'nodesAndTypes'
+		'nodesAndTypes',
+		'programBlock'
 	],
 	#classInstVars : [
 		'uniqueInstance'
@@ -24,6 +25,24 @@ TracingRawResult class >> from: aCollection [
 		ifNil: [ uniqueInstance := self new with: aCollection ]
 		ifNotNil: [ uniqueInstance with: aCollection ].
 	^ uniqueInstance
+]
+
+{ #category : 'instance creation' }
+TracingRawResult class >> from: aCollection ofProgram: aProgramBlock [
+
+	^ (self from: aCollection ) programBlock: aProgramBlock .
+]
+
+{ #category : 'accessing' }
+TracingRawResult >> programBlock [
+
+	^ programBlock
+]
+
+{ #category : 'accessing' }
+TracingRawResult >> programBlock: aProgramBlock [
+
+	programBlock := aProgramBlock .
 ]
 
 { #category : 'instance creation' }

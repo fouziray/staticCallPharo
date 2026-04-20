@@ -28,8 +28,9 @@ CopyDownCostRebench >> canBeCopiedDown: aCollection [
 		(((actualClass isKindOf: lookedUpClass) and: [
 			  actualClass ~= lookedUpClass ]) and: [ self stillUnderLimit ])
 			ifTrue: [ self copyDown: lookedUp into: actualClass having: callsite  ] .
-			self stillUnderLimit ifFalse:[ 	^ self evaluateProgram ].
-			]
+			  
+			].
+		self evaluateProgram
 ]
 
 { #category : 'as yet unclassified' }
@@ -59,7 +60,8 @@ CopyDownCostRebench >> copyItUpTo: aNumber [
 	"then evaluate and return the result as tupe of <runtime, jitCompilationOverhead>"
 
 	self maxModifications: aNumber.
-	^ self nodesToCopyDown: TracingRawResult defaultInstance
+	programBlock := TracingRawResult defaultInstance programBlock .
+	^ self nodesToCopyDown: TracingRawResult defaultInstance traceDict
 ]
 
 { #category : 'benchmarking' }
@@ -68,7 +70,7 @@ CopyDownCostRebench >> evaluateProgram [
 	| window resultMicroSec compilationTimeBefore compilationTimeAfter |
 	Smalltalk garbageCollect.
 	compilationTimeBefore := Smalltalk vm totalJITCompileTime.
-		
+
 	resultMicroSec := [ window := programBlock value ] microsecondsToRun.
 	
 	compilationTimeAfter := Smalltalk vm totalJITCompileTime.
@@ -91,7 +93,7 @@ CopyDownCostRebench >> forProgram: aBlock [
 		blockReturn containingWindow ifNotNil: #close ].
 ] onErrorDo: [  ].
 	devirtualizableNodes := simulator getAllCallSites.
-	TracingRawResult from: devirtualizableNodes .
+	TracingRawResult from: devirtualizableNodes ofProgram: programBlock .
 	
 	
 ]
