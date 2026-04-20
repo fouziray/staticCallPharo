@@ -54,6 +54,14 @@ CopyDownCostRebench >> copyIt [
 	^ self nodesToCopyDown: TracingRawResult defaultInstance
 ]
 
+{ #category : 'copying' }
+CopyDownCostRebench >> copyItUpTo: aNumber [
+	"then evaluate and return the result as tupe of <runtime, jitCompilationOverhead>"
+
+	self maxModifications: aNumber.
+	^ self nodesToCopyDown: TracingRawResult defaultInstance
+]
+
 { #category : 'benchmarking' }
 CopyDownCostRebench >> evaluateProgram [
 
