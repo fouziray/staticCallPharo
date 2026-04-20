@@ -9,6 +9,13 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+CopyDownCostRebench class >> traceHGveritas [
+	<script>
+	
+	self forProgram: [ VeritasHoneyGinger new run ].
+]
+
+{ #category : 'as yet unclassified' }
 CopyDownCostRebench >> canBeCopiedDown: aCollection [
 
 	| actualClass lookedUp lookedUpClass |
@@ -20,7 +27,8 @@ CopyDownCostRebench >> canBeCopiedDown: aCollection [
 		lookedUpClass := lookedUp classBinding value.
 		(((actualClass isKindOf: lookedUpClass) and: [
 			  actualClass ~= lookedUpClass ]) and: [ self stillUnderLimit ])
-			ifTrue: [ self copyDown: lookedUp into: actualClass having: callsite  ] ifFalse: [ 	self evaluateProgram ].
+			ifTrue: [ self copyDown: lookedUp into: actualClass having: callsite  ] .
+			self stillUnderLimit ifFalse:[ 	^ self evaluateProgram ].
 			]
 ]
 
@@ -39,6 +47,29 @@ CopyDownCostRebench >> copyDown: aCollection into: aMetaclass having: callSite [
 
 ]
 
+{ #category : 'copying' }
+CopyDownCostRebench >> copyIt [
+	"then evaluate and return the result as tupe of <runtime, jitCompilationOverhead>"
+
+	^ self nodesToCopyDown: TracingRawResult defaultInstance
+]
+
+{ #category : 'benchmarking' }
+CopyDownCostRebench >> evaluateProgram [
+
+	| window resultMicroSec compilationTimeBefore compilationTimeAfter |
+	Smalltalk garbageCollect.
+	compilationTimeBefore := Smalltalk vm totalJITCompileTime.
+		
+	resultMicroSec := [ window := programBlock value ] microsecondsToRun.
+	
+	compilationTimeAfter := Smalltalk vm totalJITCompileTime.
+	
+	[window containingWindow ifNotNil: #close.] onErrorDo: [  ].
+	 ^ (CopyDownResult runtimePerformance: resultMicroSec compilationInJitTime: (compilationTimeAfter - compilationTimeBefore) ).
+	
+]
+
 { #category : 'as yet unclassified' }
 CopyDownCostRebench >> forProgram: aBlock [
 
@@ -52,8 +83,8 @@ CopyDownCostRebench >> forProgram: aBlock [
 		blockReturn containingWindow ifNotNil: #close ].
 ] onErrorDo: [  ].
 	devirtualizableNodes := simulator getAllCallSites.
+	TracingRawResult from: devirtualizableNodes .
 	
-	self nodesToCopyDown: devirtualizableNodes.
 	
 ]
 
@@ -80,5 +111,5 @@ CopyDownCostRebench >> nodesToCopyDown: aCollection [
 
 	canBeCopiedDown := self canBeCopiedDown: frequentSelfMessage.
 
-
+	^ canBeCopiedDown
 ]
