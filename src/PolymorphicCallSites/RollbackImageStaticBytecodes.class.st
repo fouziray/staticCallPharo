@@ -7,8 +7,9 @@ Class {
 	#classInstVars : [
 		'defaultInstance'
 	],
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-Model',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }

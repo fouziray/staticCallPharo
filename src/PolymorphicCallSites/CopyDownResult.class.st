@@ -3,12 +3,10 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'runtime',
-		'jitCompilationOverhead',
-		'insertedMethodsSizs'
+		'jitCompilationOverhead'
 	],
-	#category : 'PolymorphicCallSites-CopyDowner',
-	#package : 'PolymorphicCallSites',
-	#tag : 'CopyDowner'
+	#category : 'PolymorphicCallSites',
+	#package : 'PolymorphicCallSites'
 }
 
 { #category : 'initialize' }

@@ -2,10 +2,15 @@ Class {
 	#name : 'PolymorphicCallSitesVisitor',
 	#superclass : 'CallSitesFrequencyVisitor',
 	#instVars : [
-		'messageExecutionsDictionary'
+		'messageExecutionsDictionary',
+		'messageToTrace'
 	],
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#classInstVars : [
+		'index'
+	],
+	#category : 'PolymorphicCallSites-Visitors',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Visitors'
 }
 
 { #category : 'tests' }
@@ -25,8 +30,8 @@ PolymorphicCallSitesVisitor class >> filter: aListOfMessageReceiversAssociations
 PolymorphicCallSitesVisitor class >> filterFakePoly: targetMethodsDict [
 
 	^ targetMethodsDict associations select: [ :messageTargetAndReceiver |
-		  messageTargetAndReceiver value keys size = 1 and: [
-			  messageTargetAndReceiver value values first asIdentitySet size > 1 ] ]
+		  messageTargetAndReceiver value keys asSet size = 1 and: [
+			  messageTargetAndReceiver value values flattened asIdentitySet size > 1 ] ]
 ]
 
 { #category : 'formatting' }
@@ -113,7 +118,8 @@ PolymorphicCallSitesVisitor class >> transformSummaryToBeSerializable: aSummaryD
 PolymorphicCallSitesVisitor >> initialize [
 
 	"message send node -> IdentityDictionary(executed compiled method -> Collection( method call receiver))"
-	messageExecutionsDictionary := IdentityDictionary new
+	messageExecutionsDictionary := IdentityDictionary new.
+	messageToTrace := Dictionary new.
 ]
 
 { #category : 'accessing' }
@@ -131,6 +137,7 @@ PolymorphicCallSitesVisitor >> recordTraceMessage [
 PolymorphicCallSitesVisitor >> visitMethodTrace: aScpMethodTrace [
 
 	aScpMethodTrace parent ifNotNil: [ :message |
+		messageToTrace at: message node put: aScpMethodTrace.
 		messageExecutionsDictionary
 			at: message node
 			ifPresent: [ :d |

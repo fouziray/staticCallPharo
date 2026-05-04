@@ -9,15 +9,17 @@ Class {
 		'instrumentation',
 		'methods',
 		'callsites',
-		'devirtualize'
+		'devirtualize',
+		'inlinedMethods'
 	],
 	#classInstVars : [
 		'recorders',
 		'methods',
 		'aScpExecutionClass'
 	],
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-Model',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Model'
 }
 
 { #category : 'benchs' }
@@ -371,17 +373,17 @@ DevirtualizableCallSites >> canInstrument: aMethod [
 	aMethod isInstrumented ifTrue: [ ^ false ].
 	aMethod isPrimitive ifTrue: [ ^ false ].
 	
-	(aMethod hasPragmaNamed: #noInstrumentation) ifTrue: [ ^ false ].	
+	(inlinedMethods includes: aMethod selector) ifTrue: [ ^ false ].
+	(aMethod hasPragmaNamed: #noInstrumentation) ifTrue: [ ^ false ].
 
-	aMethod methodClass = UndefinedObject ifFalse: [ 
+	aMethod methodClass = UndefinedObject ifFalse: [
 		aMethod isFFIMethod ifTrue: [ ^ false ].
-		((aMethod name endsWith: #initialize) or: [aMethod name endsWith: #new]) ifFalse: [
+		((aMethod name endsWith: #initialize) or: [
+			 aMethod name endsWith: #new ]) ifFalse: [
 			(aMethod package name beginsWith: #Kernel) ifTrue: [ ^ false ].
 			(aMethod package name beginsWith: #FreeType) ifTrue: [ ^ false ].
 			(aMethod package name beginsWith: #UnifiedFFI) ifTrue: [ ^ false ].
-			(aMethod package name beginsWith: #Collection) ifTrue: [ ^ false ].
-		].
-	].
+			(aMethod package name beginsWith: #Collection) ifTrue: [ ^ false ] ] ].
 
 	^ true
 ]
@@ -391,7 +393,7 @@ DevirtualizableCallSites >> execute [
 
 	| method receiver |	
 	
-	method := (block home compiler compile: block sourceNode body formattedCode).
+	method := (block home compiler compile: '^ ' , block sourceNode body formattedCode).
 	receiver := block home receiver.
 	
 	instrumentation compiler: block home compiler.
@@ -429,16 +431,28 @@ DevirtualizableCallSites >> getDevirtualizableCallSites [
 DevirtualizableCallSites >> initialize [
 
 	methods := Dictionary new.
-	
-	instrumentation := ScpMethodInstrumentation new.	
+	inlinedMethods := #( #isNil
+								#ifTrue: #ifFalse:
+								#ifTrue:ifFalse: #ifFalse:ifTrue:
+								
+								#ifNotNil: #ifNil:
+								#ifNil:ifNotNil: #ifNotNil:ifNil:
+								
+								#or: #and:
+								#not #'==' ) asSet.
+	instrumentation := ScpMethodInstrumentation new.
 	instrumentation addIndirection: (ScpMessageIndirection new
-		reifyNode; reifySender; reifyReceiver; reifyArguments;
-		handler: self;
-		handlerSelector: (self class lookupSelector: #message:sender:receiver:arguments:) selector;
-		yourself 
-	).
-	
-	callsites := IdentityDictionary new.
+			 reifyNode;
+			 reifySender;
+			 reifyReceiver;
+			 reifyArguments;
+			 handler: self;
+			 handlerSelector:
+				 (self class lookupSelector: #message:sender:receiver:arguments:)
+					 selector;
+			 yourself).
+
+	callsites := IdentityDictionary new
 ]
 
 { #category : 'accessing' }
@@ -479,14 +493,12 @@ DevirtualizableCallSites >> lookup: aSelector in: aClass [
 	]
 ]
 
-{ #category : 'private - recording' }
+{ #category : 'private - execution' }
 DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver arguments: aArguments [
 
 	<noInstrumentation>
    | arguments |
-
 	arguments := aArguments.
-
 	(aMethod selector = #doesNotUnderstand:) ifTrue: [ 
 			arguments := { (MessageSend
 						receiver: aReceiver
@@ -494,28 +506,36 @@ DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver a
                  arguments: aArguments) }
    	].
 
+	(aNode isNotNil and: [ aNode methodNode isNil ]) 
+		ifTrue: [ ^ aReceiver withArgs: arguments executeMethod: aMethod ].
+	aNode ifNotNil: [ 
+		(inlinedMethods includes: aNode selector) 
+			ifTrue: [ ^ aReceiver withArgs: arguments executeMethod: aMethod
+    ].
+
 	callsites at: aNode 
 		ifPresent: [ :m | m at: aMethod 
 			ifPresent: [ :r | r add: aReceiver class ]
-			ifAbsentPut: [ IdentitySet new
+			ifAbsentPut: [ Bag new
 				add: aReceiver class;
 				yourself ]
 		]
-		ifAbsentPut: [ IdentityDictionary new
+		ifAbsentPut: [ Dictionary new
 			at: aMethod put: (Bag new
 				add: aReceiver class;
 				yourself);
 			yourself
 		].
-
+	].
 	^ aReceiver withArgs: arguments executeMethod: aMethod
    
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - execution' }
 DevirtualizableCallSites >> message: aNode sender: aSender receiver: aReceiver arguments: aArguments [
 
 	<noInstrumentation>
+	
 	| method class |
 	
 	class := aNode isSuperSend

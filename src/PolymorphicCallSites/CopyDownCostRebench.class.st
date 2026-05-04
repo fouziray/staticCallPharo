@@ -4,9 +4,8 @@ I'm used in rebench, least possible rollbacks and evaluations are done by batch 
 Class {
 	#name : 'CopyDownCostRebench',
 	#superclass : 'CopyDownCost',
-	#category : 'PolymorphicCallSites-CopyDownerRebench',
-	#package : 'PolymorphicCallSites',
-	#tag : 'CopyDownerRebench'
+	#category : 'PolymorphicCallSites',
+	#package : 'PolymorphicCallSites'
 }
 
 { #category : 'as yet unclassified' }

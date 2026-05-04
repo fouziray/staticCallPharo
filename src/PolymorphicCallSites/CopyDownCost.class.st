@@ -18,9 +18,8 @@ Class {
 		'programBlock',
 		'maxModifications'
 	],
-	#category : 'PolymorphicCallSites-CopyDowner',
-	#package : 'PolymorphicCallSites',
-	#tag : 'CopyDowner'
+	#category : 'PolymorphicCallSites',
+	#package : 'PolymorphicCallSites'
 }
 
 { #category : 'as yet unclassified' }
@@ -47,7 +46,7 @@ CopyDownCost >> canBeCopiedDown: sites [
 			ifTrue: [ self copyDown: methodToCopyDown into: mostDominantReceiverClass having: callsite  ] ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'copying' }
 CopyDownCost >> copyDown: aCollection into: aMetaclass [
 
 
@@ -63,7 +62,7 @@ CopyDownCost >> copyDown: aCollection into: aMetaclass [
 	self evaluateProgram
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'copying' }
 CopyDownCost >> copyDown: aCollection into: aMetaclass having: callSite [
 
 	(RBMoveMethodToClassTransformation
@@ -78,7 +77,7 @@ CopyDownCost >> copyDown: aCollection into: aMetaclass having: callSite [
 	self evaluateProgram
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'benchmarking' }
 CopyDownCost >> evaluateProgram [
 
 	| window resultMicroSec compilationTimeBefore compilationTimeAfter |
@@ -127,13 +126,13 @@ CopyDownCost >> initialize [
 	insertedMethods := OrderedCollection new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 CopyDownCost >> insertedMethods [
 
 	^ insertedMethods
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 CopyDownCost >> insertedMethods: anObject [
 
 	insertedMethods := anObject
@@ -151,7 +150,7 @@ CopyDownCost >> maxModifications: aNumber [
 	maxModifications := aNumber
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'filtering' }
 CopyDownCost >> nodesToCopyDown: aCollection [
 
 	| result sortedCallsFrequent frequentSelfMessage frequentVariableMessage canBeCopiedDown |

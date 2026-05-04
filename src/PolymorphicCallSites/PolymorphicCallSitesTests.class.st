@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'transformer'
 	],
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-Tests',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Tests'
 }
 
 { #category : 'deserializing' }
@@ -79,7 +80,7 @@ PolymorphicCallSitesTests >> methodWithPolymorphicCallSites [
 	{ Object new. 3. 4.0 } do: [:each | each class ]
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> recoverVeritasCSVDataInto [
 	| object |
 	object := 'mydata.ston' asFileReference readStreamDo: [ :stream |
@@ -94,7 +95,7 @@ PolymorphicCallSitesTests >> tearDown [
 	transformer ifNotNil:[:e | e rollbackBackedUpAst]
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testCappucinoStatic [
 
 	| devirtualizableNodes |
@@ -108,7 +109,7 @@ PolymorphicCallSitesTests >> testCappucinoStatic [
 		
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testFalsePolymorphicIsMonoMorphic [
 
 | traceRecordTree targetMethodsDict targetMethodAssociationWithTypes |	
@@ -127,7 +128,7 @@ self assert: targetMethodAssociationWithTypes value size equals: 3.
 self assert:  targetMethodAssociationWithTypes key equals: ProtoObject >> #class
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testFalsePolymorphicIsMonoMorphicFiltering [
 
 	| traceRecordTree targetMethodsDict targetMethodAssociationWithTypes |
@@ -154,7 +155,7 @@ PolymorphicCallSitesTests >> testFalsePolymorphicIsMonoMorphicFiltering [
 		equals: ProtoObject >> #class
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testFilteringDevirutalisableSites [
 
 	| traceRecordTree targetMethodsDict document devirtualisable |
@@ -193,7 +194,7 @@ PolymorphicCallSitesTests >> testInlineCacheContent [
 	transformer	getNewMethodOfDevirtualizingAll2.
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testMooseDevirtualize [
 
 	|   devirtualizableNodes   |
@@ -214,7 +215,7 @@ PolymorphicCallSitesTests >> testMooseDevirtualize [
 	
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testMooseIsDevirtualized [
 
 	|   devirtualizableNodes   |
@@ -224,7 +225,7 @@ PolymorphicCallSitesTests >> testMooseIsDevirtualized [
 	
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testMooseIsRevirtualized [
 
 	|   devirtualizableNodes   |
@@ -238,7 +239,7 @@ PolymorphicCallSitesTests >> testMooseIsRevirtualized [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testRefactorFakePoly [
 
 	| document traceRecordTree devirtualizableNodes candidate method newMethod transformer fullMessageList simulator optTime baselinetime baselinetime2 optTime2 |
@@ -269,7 +270,7 @@ PolymorphicCallSitesTests >> testRefactorFakePoly [
 	{baselinetime. baselinetime2. optTime . optTime2 } inspect.
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testRefactorFakePolyInCormas [
 
 	| devirtualizableNodes |
@@ -290,7 +291,7 @@ PolymorphicCallSitesTests >> testRefactorFakePolyInCormas [
 	
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testRefactorFakePolyInTrivialCase [
 
 	| devirtualizableNodes |
@@ -311,7 +312,7 @@ PolymorphicCallSitesTests >> testRefactorFakePolyInTrivialCase [
 	
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testRefactorFakePolyInTrivialCase1 [
 
 	| devirtualizableNodes |
@@ -332,7 +333,7 @@ PolymorphicCallSitesTests >> testRefactorFakePolyInTrivialCase1 [
 	
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testRefactorFakePolyInVeritas [
 
 	| devirtualizableNodes |
@@ -353,7 +354,7 @@ PolymorphicCallSitesTests >> testRefactorFakePolyInVeritas [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testRefactorFakePolyWithBench [
 
 	| document traceRecordTree devirtualizableNodes candidate method newMethod transformer fullMessageList unopt opt |
@@ -426,7 +427,7 @@ PolymorphicCallSitesTests >> testRefactorOnParallelASTPath [
 	transformer	getNewMethodOfDevirtualizingAll2.
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testRefactorTwoNestedCallsInOneMessage [
 
 	| document traceRecordTree devirtualizableNodes candidate method newMethod transformer fullMessageList |
@@ -463,7 +464,7 @@ PolymorphicCallSitesTests >> testRefactorTwoNestedCallsInOneMessage [
 	transformer rollbackBackedUpAst
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testRefactorVeritasHoneyGinger [
 
 	| devirtualizableNodes |
@@ -484,7 +485,7 @@ PolymorphicCallSitesTests >> testRefactorVeritasHoneyGinger [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testTraceThenFilter [
 |  devirtualizableNodes simulator  |
 
@@ -496,7 +497,7 @@ PolymorphicCallSitesTests >> testTraceThenFilter [
 	self assert: (PolymorphicCallSitesVisitor rateOfDevirtualizable: devirtualizableNodes) asFloat rounded equals: 9
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> testTruePolymorphic [
 
 | traceRecordTree targetMethodsDict targetMethodAssociationWithTypes |	
@@ -521,7 +522,7 @@ self assert: targetMethodAssociationWithTypes value size equals: 1.
 self assert:  targetMethodAssociationWithTypes key equals: Object>>#defaultLabel.
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> trivialCase1 [
 
 	{Object new. String new. Class . OrderedCollection newFrom: { 2. 3 . 5.3 } . 'sasaa'}  collect:[ :e | e printString ]
@@ -529,7 +530,7 @@ PolymorphicCallSitesTests >> trivialCase1 [
 
 ]
 
-{ #category : 'veritas' }
+{ #category : 'as yet unclassified' }
 PolymorphicCallSitesTests >> trivialCase2 [
 
 	{Object new. String new. Class . 3 . 2.34 . 'sasaa'}  collect:[ :e | e class ]

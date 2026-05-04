@@ -5,9 +5,11 @@ Class {
 		'nodesAndTypes',
 		'programBlock'
 	],
-	#category : 'PolymorphicCallSites-CopyDowner',
-	#package : 'PolymorphicCallSites',
-	#tag : 'CopyDowner'
+	#classInstVars : [
+		'uniqueInstance'
+	],
+	#category : 'PolymorphicCallSites',
+	#package : 'PolymorphicCallSites'
 }
 
 { #category : 'as yet unclassified' }

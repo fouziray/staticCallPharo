@@ -6,9 +6,8 @@ Class {
 		'callSite',
 		'benchmarkResult'
 	],
-	#category : 'PolymorphicCallSites-CopyDowner',
-	#package : 'PolymorphicCallSites',
-	#tag : 'CopyDowner'
+	#category : 'PolymorphicCallSites',
+	#package : 'PolymorphicCallSites'
 }
 
 { #category : 'initialization' }
