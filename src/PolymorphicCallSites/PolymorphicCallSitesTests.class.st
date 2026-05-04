@@ -173,6 +173,26 @@ PolymorphicCallSitesTests >> testFilteringDevirutalisableSites [
 	self assert: devirtualisable first value asArray first size > 1
 ]
 
+{ #category : 'tests' }
+PolymorphicCallSitesTests >> testInlineCacheContent [
+	| document traceRecordTree devirtualizableNodes candidate method newMethod transformer fullMessageList unopt opt vis |
+
+	traceRecordTree := ScpExecutionRecorder
+		                   recordBlock: [ FixtureEscapeAnalysis new plus  ]
+		                   as: ScpExecutionRecordTree.
+
+
+	fullMessageList := (vis:=PolymorphicCallSitesVisitor new)
+			                                            visitExecutionRecord:
+				                                            traceRecordTree;
+				                                            messageExecutionsDictionary.
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes: fullMessageList asDictionary;recordTrace: vis recordTraceMessage;
+		               yourself.
+		
+	transformer	getNewMethodOfDevirtualizingAll2.
+]
+
 { #category : 'veritas' }
 PolymorphicCallSitesTests >> testMooseDevirtualize [
 
@@ -383,6 +403,27 @@ PolymorphicCallSitesTests >> testRefactorFakePolyWithBench [
 	{	unopt.
 		opt } inspect.
 	transformer rollbackBackedUpAst
+]
+
+{ #category : 'as yet unclassified' }
+PolymorphicCallSitesTests >> testRefactorOnParallelASTPath [
+
+	| document traceRecordTree devirtualizableNodes candidate method newMethod transformer fullMessageList unopt opt vis |
+
+	traceRecordTree := ScpExecutionRecorder
+		                   recordBlock: [ HGSimulator sandtrap3D  ]
+		                   as: ScpExecutionRecordTree.
+
+
+	fullMessageList := (vis:=PolymorphicCallSitesVisitor new)
+			                                            visitExecutionRecord:
+				                                            traceRecordTree;
+				                                            messageExecutionsDictionary.
+	transformer := StaticCallSiteTransformer new
+		               recordedTypes: fullMessageList asDictionary;recordTrace: vis recordTraceMessage;
+		               yourself.
+		
+	transformer	getNewMethodOfDevirtualizingAll2.
 ]
 
 { #category : 'tests' }

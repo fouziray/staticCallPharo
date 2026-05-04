@@ -20,6 +20,231 @@ Class {
 	#package : 'PolymorphicCallSites'
 }
 
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> benchMarksToExecute [
+
+	^ self roassalBenchs , self honneyGingerBenchs 
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> benchRoassalProgram [
+
+	^ self roassalBenchs  
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> blocBenchs [
+
+^ {
+'Bloc VeritasBloc' -> [  VeritasBloc new run   ].
+ }	
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> executeBenchmarks [
+
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := self benchMarksToExecute asDictionary.
+
+	programs associations
+		do: [ :assoc |
+			| key value blockReturn |
+			key := assoc key.
+			value := assoc value.
+
+			simulator := self new. 
+			simulator block: value.
+			blockReturn := simulator execute.
+
+			(blockReturn isKindOf: Morph) ifTrue: [
+				blockReturn containingWindow ifNotNil: #close ].
+
+			devirtualizableNodes := simulator getAllCallSites.
+			result := ProgramModel new
+				          name: key
+				          fromRaw: value -> devirtualizableNodes.
+			('NI_' , key asFileReference withExtension: 'ston') writeStreamDo: [
+				:s | STON put: result onStream: s ] ]
+		displayingProgress: [ :assoc | assoc key ]
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> executeHGV [
+
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := self honneyGingerVeritas asDictionary.
+
+	programs associations
+		do: [ :assoc |
+			| key value blockReturn  transformer|
+			key := assoc key.
+			value := assoc value.
+
+			simulator := self new.
+			simulator block: value.
+
+			blockReturn := simulator execute.
+			[blockReturn containingWindow ifNotNil: #close.
+] onErrorDo: [  ].
+			devirtualizableNodes := simulator getAllCallSites.
+			result := ProgramModel new
+				          name: 'NI_' , key
+				          fromRaw: value -> devirtualizableNodes.
+
+			transformer := StaticCallSiteTransformer new
+		               recordedTypes: devirtualizableNodes asDictionary ;
+		               yourself.
+			transformer	getNewMethodOfDevirtualizingAll.
+			]
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> executeMRoassalFiltered [
+
+<script>
+	
+| programs simulator devirtualizableNodes result |
+
+programs := self roassalBenchs asDictionary.
+
+programs associations do: [ :assoc | 
+ 	| key value blockReturn |. 
+	key := assoc key.
+	value := assoc value.
+
+	simulator := self new.
+	simulator block: value.
+	blockReturn := simulator execute.		
+	
+	(blockReturn isKindOf: Morph) ifTrue: [ 
+		blockReturn containingWindow ifNotNil: #close
+	].
+			
+	devirtualizableNodes := simulator getAllCallSites.
+	result := ProgramModel new name: 'NI_',key fromRaw: value -> devirtualizableNodes.
+	(('NI2_',key) asFileReference withExtension: 'ston')
+		writeStreamDo: [:s | STON put: result onStream: s].
+] displayingProgress: [:assoc | assoc key].
+
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> executeMooseFiltered [
+
+<script>
+	
+| programs simulator devirtualizableNodes result |
+
+programs := self mooseBenchs asDictionary.
+
+programs associations do: [ :assoc | 
+ 	| key value blockReturn |. 
+	key := assoc key.
+	value := assoc value.
+
+	simulator := self new.
+	simulator block: value.
+	blockReturn := simulator execute.		
+	
+	(blockReturn isKindOf: Morph) ifTrue: [ 
+		blockReturn containingWindow ifNotNil: #close
+	].
+			
+	devirtualizableNodes := simulator getAllCallSites.
+	result := ProgramModel new name: 'NI_',key fromRaw: value -> devirtualizableNodes.
+	(('NI2_',key) asFileReference withExtension: 'ston')
+		writeStreamDo: [:s | STON put: result onStream: s].
+] displayingProgress: [:assoc | assoc key].
+
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> executeSingHGFiltered [
+
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := self honneyGingerBenchsSingle asDictionary.
+
+	programs associations
+		do: [ :assoc |
+			| key value blockReturn |
+			key := assoc key.
+			value := assoc value.
+
+			simulator := self new.
+			simulator block: value.
+
+			blockReturn := simulator execute.
+			blockReturn containingWindow ifNotNil: #close.
+
+			devirtualizableNodes := simulator getAllCallSites.
+			result := ProgramModel new
+				          name: 'NI_' , key
+				          fromRaw: value -> devirtualizableNodes.
+			(('NI2_' , key) asFileReference withExtension: 'ston')
+				writeStreamDo: [ :s | STON put: result onStream: s ] ]
+		displayingProgress: [ :assoc | assoc key ]
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> executeSingHGFiltered2 [
+
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := self honneyGingerBenchsSingle asDictionary.
+
+	programs associations
+		do: [ :assoc |
+			| key value blockReturn |
+			key := assoc key.
+			value := assoc value.
+
+			simulator := ScpExecutionRecorder new.
+			simulator block: value.
+			blockReturn := simulator execute.
+
+			(blockReturn isKindOf: Morph) ifTrue: [
+				blockReturn containingWindow ifNotNil: #close ].
+
+			1 halt.
+			devirtualizableNodes := simulator getAllCallSites.
+			result := ProgramModel new
+				          name: 'NI_' , key
+				          fromRaw: value -> devirtualizableNodes.
+			(('NI2_' , key) asFileReference withExtension: 'ston')
+				writeStreamDo: [ :s | STON put: result onStream: s ] ]
+		displayingProgress: [ :assoc | assoc key ]
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> floatBenchs [
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := {  'asfloat' -> [ true ifTrue:[2 isNil . 2 asFloat]. ]  } asDictionary.
+
+	programs associations do: [ :assoc | 
+ 		| key value blockReturn | 
+		key := assoc key.
+		value := assoc value.
+
+		simulator := DevirtualizableCallSites new.
+		simulator block: value.
+		blockReturn := simulator execute.		
+	
+		(blockReturn isKindOf: Morph) ifTrue: [ 
+			blockReturn containingWindow ifNotNil: #close
+		].
+				
+	devirtualizableNodes := simulator getAllCallSites.
+	result := ProgramModel new name: key fromRaw: value -> devirtualizableNodes.
+	('NI_',key asFileReference withExtension: 'ston')
+		writeStreamDo: [:s | STON put: result onStream: s].
+] displayingProgress: [:assoc | assoc key].
+
+]
+
 { #category : 'parameters' }
 DevirtualizableCallSites class >> from: aBlock [
 
@@ -29,6 +254,109 @@ DevirtualizableCallSites class >> from: aBlock [
 		block: aBlock;
 		record;
 		calls
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> honneyGingerBenchs [
+	
+^ { 
+'HGSimulator impossibeRiverPressureMap' -> [ HGSimulator impossibeRiverPressureMap  ].
+'HGSimulator lagoonRefractionWorld' -> [ HGSimulator lagoonRefractionWorld  ].
+'HGSimulator sandbox4000' -> [ HGSimulator sandbox4000 ].
+'HGSimulator sandbox4000' -> [ HGSimulator capuccinoPower ].
+'HGSimulator rockAtMouse2' -> [ HGSimulator rockAtMouse2 ].
+'HGSimulator rainyWindow' -> [ HGSimulator rainyWindow ].
+'HGSimulator lagoonSmokeyWorld' -> [ HGSimulator lagoonSmokeyWorld ].
+'HGSimulator sandtrap3D' -> [ HGSimulator sandtrap3D ].
+'HGSimulator waterImageViewer' -> [ HGSimulator waterImageViewer ].
+'HGSimulator splashPressureBorderline' -> [ HGSimulator splashPressureBorderline ].
+'HGSimulator raftingDots' -> [ HGSimulator raftingDots ].
+'HGSimulator arrestingWire5' -> [ HGSimulator arrestingWire5 ].""
+'HGSimulator ramen' -> [ HGSimulator ramen ].
+'HGSimulator watershowPressureMap'->[ HGSimulator watershowPressureMap ].
+'HGSimulator impossibeRiverDots' -> [ HGSimulator impossibeRiverDots ].
+'HGSimulator capuccino' -> [ HGSimulator capuccino ].
+'HGSimulator nattoViewer' -> [ HGSimulator nattoViewer ].
+ }
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> honneyGingerBenchsSingle [
+
+	^ { ('HGSimulator impossibeRiverPressureMap' -> [
+	   [
+	   | simulator |
+	   simulator := HGSimulator impossibeRiverPressureMap.
+	   0 timesRepeat: [ World doOneCycle ].
+	   simulator ] value ]) }
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> honneyGingerVeritas [
+
+	^ { ('VeritasHoneyGinger new run' -> [
+	   [
+	   | simulator |
+	   simulator := VeritasHoneyGinger new run.
+	   0 timesRepeat: [ World doOneCycle ].
+	   simulator ] value ]) }
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> microSendRateCalculation [
+
+	<script>
+	| programs simulator devirtualizableNodes result |
+	programs := { ('microSendSetClass'
+	             -> [ CallerStaticInterpreter new microSendSetClass ]) }
+		            asDictionary.
+
+	programs associations do: [ :assoc |
+		| key value blockReturn |
+		key := assoc key.
+		value := assoc value.
+
+		simulator := DevirtualizableCallSites new.
+		simulator block: value.
+		blockReturn := simulator execute.
+
+		(blockReturn isKindOf: Morph) ifTrue: [
+			blockReturn containingWindow ifNotNil: #close ].
+
+		devirtualizableNodes := simulator getAllCallSites.
+		result := ProgramModel new
+				          name: key
+				          fromRaw: value -> devirtualizableNodes
+				].
+
+		1 halt.
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> mooseBenchs [
+
+^ {
+'Moose VeritasMoose' -> [  VeritasMoose new run   ].
+ }	
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> rewriterBenchs [
+
+^ {
+'Rewriter VeritasRewriter' -> [  VeritasRewriterTransformer new run   ].
+ }	
+]
+
+{ #category : 'benchs' }
+DevirtualizableCallSites class >> roassalBenchs [
+
+^ {
+'Roassal RSAlpharoExample example01Basic' ->[  RSAlpharoExample new example01Basic  ].
+'Roassal RSKiviatExample example01Basic'->[  RSKiviatExample new example01Basic   ].
+'Roassal RSLegendExamples example01Basic' -> [  RSLegendExamples new example01Basic   ].
+'Roassal RSPieExamples example01Basic ' -> [  RSPieExamples new example01Basic   ].
+ }	
 ]
 
 { #category : 'accessing' }
@@ -111,6 +439,18 @@ DevirtualizableCallSites >> initialize [
 	).
 	
 	callsites := IdentityDictionary new.
+]
+
+{ #category : 'accessing' }
+DevirtualizableCallSites >> inlinedMethods [
+
+	^ inlinedMethods
+]
+
+{ #category : 'accessing' }
+DevirtualizableCallSites >> inlinedMethods: anObject [
+
+	inlinedMethods := anObject
 ]
 
 { #category : 'testing' }
