@@ -1,8 +1,9 @@
 Class {
 	#name : 'CopyDownCostTest',
 	#superclass : 'TestCase',
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-CopyDowner',
+	#package : 'PolymorphicCallSites',
+	#tag : 'CopyDowner'
 }
 
 { #category : 'running' }

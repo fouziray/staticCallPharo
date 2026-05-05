@@ -140,6 +140,12 @@ CallSiteModel >> methodClass [
 ]
 
 { #category : 'accessing' }
+CallSiteModel >> methodClassName [
+
+	^ methodClassName
+]
+
+{ #category : 'accessing' }
 CallSiteModel >> methodName [
 
 	^ methodClassName , '>>#' , methodSelector

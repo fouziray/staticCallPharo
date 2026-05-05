@@ -18,8 +18,9 @@ Class {
 		'programBlock',
 		'maxModifications'
 	],
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-CopyDowner',
+	#package : 'PolymorphicCallSites',
+	#tag : 'CopyDowner'
 }
 
 { #category : 'as yet unclassified' }

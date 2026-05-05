@@ -4,8 +4,9 @@ I'm used in rebench, least possible rollbacks and evaluations are done by batch 
 Class {
 	#name : 'CopyDownCostRebench',
 	#superclass : 'CopyDownCost',
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-CopyDownerRebench',
+	#package : 'PolymorphicCallSites',
+	#tag : 'CopyDownerRebench'
 }
 
 { #category : 'as yet unclassified' }
@@ -13,6 +14,13 @@ CopyDownCostRebench class >> traceHGveritas [
 	<script>
 	
 	self forProgram: [ VeritasHoneyGinger new run ].
+]
+
+{ #category : 'as yet unclassified' }
+CopyDownCostRebench class >> traceMicroDownVeritas [
+	<script>
+	
+	self forProgram: [ VeritasMicrodown new run ].
 ]
 
 { #category : 'as yet unclassified' }

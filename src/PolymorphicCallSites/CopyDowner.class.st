@@ -77,8 +77,6 @@ CopyDowner >> evaluateProgram [
 
 	compilationTimeAfter := Smalltalk vm totalJITCompileTime.
 
-
-
 	^ (CopyDownResult
 		  runtimePerformance: resultMicroSec
 		  compilationInJitTime: compilationTimeAfter - compilationTimeBefore)
@@ -93,7 +91,7 @@ CopyDowner >> forProgram: aBlock [
 	programBlock := aBlock.
 	simulator block: aBlock.
 	blockReturn := simulator execute.
-
+1 halt.
 	[(blockReturn isKindOf: Morph) ifTrue: [
 		blockReturn containingWindow ifNotNil: #close ].
 ] onErrorDo: [  ].

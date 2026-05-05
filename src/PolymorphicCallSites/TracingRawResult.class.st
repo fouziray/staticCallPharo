@@ -33,6 +33,12 @@ TracingRawResult class >> from: aCollection ofProgram: aProgramBlock [
 	^ (self from: aCollection ) programBlock: aProgramBlock .
 ]
 
+{ #category : 'initialization' }
+TracingRawResult class >> resetInstance [ 
+
+	uniqueInstance := nil.
+]
+
 { #category : 'accessing' }
 TracingRawResult >> programBlock [
 
