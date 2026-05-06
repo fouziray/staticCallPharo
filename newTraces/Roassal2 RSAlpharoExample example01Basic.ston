@@ -1,0 +1,1 @@
+ProgramModel{#blockCode:'[  [RSAlpharoExample new example01Basic. 5 timesRepeat: [ WorldMorph doOneCycle ].]  ]',#callSites:[],#programName:'Roassal2 RSAlpharoExample example01Basic'}
