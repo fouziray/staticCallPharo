@@ -82,3 +82,11 @@ ProgramModel >> printOn: aStream [
 ProgramModel >> programName [
 	^ programName
 ]
+
+{ #category : 'as yet unclassified' }
+ProgramModel >> serializeModel [
+
+	(self programName asFileReference withExtension: 'ston')
+		writeStreamDo: [:s | STON put: self onStream: s].
+	
+]

@@ -291,6 +291,42 @@ ProgramResult >> numberOfCallsFor: aCallSiteModel [
 	^ aCallSiteModel numberOfCalls 
 ]
 
+{ #category : 'accessing' }
+ProgramResult >> numberOfMegaCalls [
+
+	^ numberOfMegaCalls
+]
+
+{ #category : 'accessing' }
+ProgramResult >> numberOfMegaCalls: anObject [
+
+	numberOfMegaCalls := anObject
+]
+
+{ #category : 'accessing' }
+ProgramResult >> numberOfMonoCalls [
+
+	^ numberOfMonoCalls
+]
+
+{ #category : 'accessing' }
+ProgramResult >> numberOfMonoCalls: anObject [
+
+	numberOfMonoCalls := anObject
+]
+
+{ #category : 'accessing' }
+ProgramResult >> numberOfPolyCalls [
+
+	^ numberOfPolyCalls
+]
+
+{ #category : 'accessing' }
+ProgramResult >> numberOfPolyCalls: anObject [
+
+	numberOfPolyCalls := anObject
+]
+
 { #category : 'as yet unclassified' }
 ProgramResult >> numberOfReceiverClasses: aCallSiteModel [ 
 	

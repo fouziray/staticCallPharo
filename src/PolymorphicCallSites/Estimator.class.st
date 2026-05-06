@@ -15,25 +15,81 @@ Estimator class >> estimate [
 	^ self new estimate: TracingRawResult defaultInstance.
 ]
 
+{ #category : 'as yet unclassified' }
+Estimator class >> estimateFromHGSimulator1 [
+<script>
+| files filesStoned |
+files:= (FileSystem disk workingDirectory / 'NI2_HGSimulator impossibeRiverPressureMap.ston' ).
+
+filesStoned :=  STON fromString: files  contents.
+	^ self new estimateFromModel: filesStoned.
+]
+
+{ #category : 'as yet unclassified' }
+Estimator class >> estimateFromMicroDownModel [
+<script>
+| files filesStoned |
+files:= (FileSystem disk workingDirectory / 'NI2_HGSimulator impossibeRiverPressureMap.ston' ).
+
+filesStoned :=  STON fromString: files  contents.
+	^ self new estimateFromModel: TracingRawResult defaultInstance.
+]
+
 { #category : 'calcul' }
 Estimator >> estimate: aTracingRawResult [ 
 	
-	| result sortedCallsFrequent frequentSelfMessages numberOfReceivers numberOfCalls NumberOfCallsForSubclasses totalGain |
+	| result sortedCallsFrequent frequentSelfMessages numberOfReceivers numberOfCallsToSelfPic totalGain program numberOfTotalCallsMONO numberOfTotalCallsPOLY numberOfTotalCallsMega |
 	result := ProgramModel new
 		          name: 'block'
 		          fromRaw: [ 'aBlock' ] -> aTracingRawResult traceDict.
-	aTracingRawResult.	
+	
+	program := ProgramResult for: result .	
+	
 	sortedCallsFrequent := (result callSites select: [ :e |
 		                        (e dominantTypeWithThreshold: 80) isNotNil ])
 		                       sorted: [ :a :b |
 		                       a numberOfCalls > b numberOfCalls ].
 
-	frequentSelfMessages := sortedCallsFrequent select: [ :c |
+	frequentSelfMessages := result callSites select: [ :c |
 		                       c isSelfSend and:[ c numberOfReceiverClasses > 1]].
-	numberOfReceivers :=frequentSelfMessages sum:[:e | e numberOfReceiverClasses ].
-	numberOfCalls := frequentSelfMessages sum:[:e | e numberOfCalls ].
-	totalGain := numberOfCalls * 0.497. 
-	^ ({  'potential copy downs :'-> numberOfReceivers . 'potential covered calls' -> numberOfCalls . 'potential gain' -> totalGain }) inspect
+	numberOfReceivers := frequentSelfMessages sum:[:e | e numberOfReceiverClasses ].
+	numberOfCallsToSelfPic := frequentSelfMessages sum:[:e | e numberOfCalls ].
+1 halt.
+	numberOfTotalCallsMONO := program .
+	numberOfTotalCallsPOLY := program.
+	numberOfTotalCallsMega := program.
+	
+	totalGain := numberOfCallsToSelfPic * 0.497. 
+	
+	^ ({  'potential copy downs :'-> numberOfReceivers . 'potential covered calls' -> numberOfCallsToSelfPic . 'potential gain' -> totalGain }) inspect
+
+]
+
+{ #category : 'calcul' }
+Estimator >> estimateFromModel: aModel [ 
+	
+	| result sortedCallsFrequent frequentSelfMessages numberOfReceivers numberOfCallsToSelfPic totalGain program numberOfTotalCallsMONO numberOfTotalCallsPOLY numberOfTotalCallsMega |
+	result := aModel. 
+	
+	program := ProgramResult for: result .	
+	
+	sortedCallsFrequent := (result callSites select: [ :e |
+		                        (e dominantTypeWithThreshold: 80) isNotNil ])
+		                       sorted: [ :a :b |
+		                       a numberOfCalls > b numberOfCalls ].
+
+	frequentSelfMessages := result callSites select: [ :c |
+		                       c isSelfSend and:[ c numberOfReceiverClasses > 1]].
+	numberOfReceivers := frequentSelfMessages sum:[:e | e numberOfReceiverClasses ].
+	numberOfCallsToSelfPic := frequentSelfMessages sum:[:e | e numberOfCalls ].
+
+	numberOfTotalCallsMONO := program numberOfMonoCalls "113913".
+	numberOfTotalCallsPOLY := program numberOfPolyCalls "14010".
+	numberOfTotalCallsMega := program numberOfMegaCalls "23130".
+	
+	totalGain := (numberOfTotalCallsMega + numberOfTotalCallsPOLY) * singleCallGain. 
+	
+	^ (   { 'numberOfTotalCallsMono'-> numberOfTotalCallsMONO . 'numberOfTotalCallsMega'-> numberOfTotalCallsMega . 'numberOfTotalCallsPoly'-> numberOfTotalCallsPOLY.  'potential copy downs :'-> numberOfReceivers . 'potential covered calls' -> numberOfCallsToSelfPic . 'potential gain' -> totalGain }) inspect
 
 ]
 
