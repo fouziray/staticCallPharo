@@ -35,6 +35,17 @@ filesStoned :=  STON fromString: files  contents.
 	^ self new estimateFromModel: TracingRawResult defaultInstance.
 ]
 
+{ #category : 'as yet unclassified' }
+Estimator class >> estimateFromStons [
+<script>
+| filesStoned estimator estimations |
+filesStoned := ((FileSystem disk workingDirectory /'pharo-local'/'iceberg'/'fouziray'/'staticCallPharo') files select: [ :f | f extension = 'ston' ] ) collect: [:f | STON fromString: f  contents].
+	
+	estimator:=self new. 
+	estimations :=filesStoned collect: [ :f | estimator estimateFromModel: f].
+	estimations inspect.
+]
+
 { #category : 'calcul' }
 Estimator >> estimate: aTracingRawResult [ 
 	
