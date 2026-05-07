@@ -38,6 +38,44 @@ PicPatternVisual >> visualize: anAssociation [
 	
 ]
 
+{ #category : 'as yet unclassified' }
+PicPatternVisual >> visualizeAllSites: aCollectionOfCallSites allPatterns: aCollectionOfPatterns [
+
+	^ self visualizeMultipleCallSites: aCollectionOfCallSites forPatterns: aCollectionOfPatterns. 
+	
+]
+
+{ #category : 'visual' }
+PicPatternVisual >> visualizeMultipleCallSites: aCallSiteModelCollection forPatterns: aCollectionOfPatterns [
+
+	|x y plt p |
+x := 1 to: (aCallSiteModelCollection collect:#numberOfCalls) max.
+	plt := RSCompositeChart new.
+
+
+	aCallSiteModelCollection doWithIndex: [ :aCallSiteModel :index | 
+		y := self getTransitionTriggerCounter: aCallSiteModel forPattern: (aCollectionOfPatterns at: index).
+		p := RSLinePlot new x: (1 to: (aCallSiteModel numberOfCalls)) y: y.
+		plt add: p.
+		
+	].
+	 
+	
+	
+"	p := RSLinePlot new x: x y: (x raisedTo: 3).
+	plt add: p.
+
+	p := RSLinePlot new x: x y: (x raisedTo: 4).
+	plt add: p.
+"
+	plt xlabel: 'Number Of Calls'.
+	plt ylabel: 'Site class'.
+	plt title: 'PIC Properties'.
+	^ plt
+
+
+]
+
 { #category : 'visual' }
 PicPatternVisual >> visualizeSingleCallSite: aCallSiteModel forPattern: aCollection [
 
