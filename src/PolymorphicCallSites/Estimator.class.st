@@ -16,6 +16,16 @@ Estimator class >> estimate [
 ]
 
 { #category : 'as yet unclassified' }
+Estimator class >> estimateFromHG2 [
+<script>
+| files filesStoned |
+files:= (FileSystem disk workingDirectory / '33VeritasHoneyGinger new run.ston' ).
+
+filesStoned :=  STON fromString: files  contents.
+	^ self new estimateFromModel: filesStoned .
+]
+
+{ #category : 'as yet unclassified' }
 Estimator class >> estimateFromHGSimulator1 [
 <script>
 | files filesStoned |
@@ -40,6 +50,17 @@ Estimator class >> estimateFromStons [
 <script>
 | filesStoned estimator estimations |
 filesStoned := ((FileSystem disk workingDirectory /'pharo-local'/'iceberg'/'fouziray'/'staticCallPharo') files select: [ :f | f extension = 'ston' ] ) collect: [:f | STON fromString: f  contents].
+	
+	estimator:=self new. 
+	estimations :=filesStoned collect: [ :f | estimator estimateFromModel: f].
+	estimations inspect.
+]
+
+{ #category : 'as yet unclassified' }
+Estimator class >> estimateFromStonsInCurrentDir [
+<script>
+| filesStoned estimator estimations |
+filesStoned := ((FileSystem disk workingDirectory / 'tracing' ) files select: [ :f | f extension = 'ston' ] ) collect: [:f | STON fromString: f  contents].
 	
 	estimator:=self new. 
 	estimations :=filesStoned collect: [ :f | estimator estimateFromModel: f].
@@ -84,10 +105,10 @@ Estimator >> estimateFromModel: aModel [
 	
 	program := ProgramResult for: result .	
 	
-	sortedCallsFrequent := (result callSites select: [ :e |
+	"sortedCallsFrequent := (result callSites select: [ :e |
 		                        (e dominantTypeWithThreshold: 80) isNotNil ])
 		                       sorted: [ :a :b |
-		                       a numberOfCalls > b numberOfCalls ].
+		                       a numberOfCalls > b numberOfCalls ]."
 
 	frequentSelfMessages := result callSites select: [ :c |
 		                       c isSelfSend and:[ c numberOfReceiverClasses > 1]].
@@ -100,7 +121,7 @@ Estimator >> estimateFromModel: aModel [
 	
 	totalGain := (numberOfTotalCallsMega + numberOfTotalCallsPOLY) * singleCallGain. 
 	
-	^ (   { 'numberOfTotalCallsMono'-> numberOfTotalCallsMONO . 'numberOfTotalCallsMega'-> numberOfTotalCallsMega . 'numberOfTotalCallsPoly'-> numberOfTotalCallsPOLY.  'potential copy downs :'-> numberOfReceivers . 'potential covered calls' -> numberOfCallsToSelfPic . 'potential gain' -> totalGain }) inspect
+	^ (   { aModel programName. 'numberOfTotalCallsMono'-> numberOfTotalCallsMONO . 'numberOfTotalCallsMega'-> numberOfTotalCallsMega . 'numberOfTotalCallsPoly'-> numberOfTotalCallsPOLY.  'potential copy downs :'-> numberOfReceivers . 'potential covered calls' -> numberOfCallsToSelfPic . 'potential gain' -> totalGain }) 
 
 ]
 

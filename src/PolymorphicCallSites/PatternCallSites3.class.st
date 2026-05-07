@@ -2,7 +2,7 @@
 ![TEst](```st self iceRepository```)
 "
 Class {
-	#name : 'DevirtualizableCallSites',
+	#name : 'PatternCallSites3',
 	#superclass : 'Object',
 	#instVars : [
 		'block',
@@ -10,7 +10,8 @@ Class {
 		'methods',
 		'callsites',
 		'devirtualize',
-		'inlinedMethods'
+		'inlinedMethods',
+		'typePatterns'
 	],
 	#classInstVars : [
 		'recorders',
@@ -23,19 +24,19 @@ Class {
 }
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> benchMarksToExecute [
+PatternCallSites3 class >> benchMarksToExecute [
 
 	^ self roassalBenchs , self honneyGingerBenchs 
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> benchRoassalProgram [
+PatternCallSites3 class >> benchRoassalProgram [
 
 	^ self roassalBenchs  
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> blocBenchs [
+PatternCallSites3 class >> blocBenchs [
 
 ^ {
 'Bloc VeritasBloc' -> [  VeritasBloc new run   ].
@@ -43,7 +44,7 @@ DevirtualizableCallSites class >> blocBenchs [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> executeBenchmarks [
+PatternCallSites3 class >> executeBenchmarks [
 
 	<script>
 	| programs simulator devirtualizableNodes result |
@@ -72,7 +73,7 @@ DevirtualizableCallSites class >> executeBenchmarks [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> executeHGV [
+PatternCallSites3 class >> executeHGV [
 
 	<script>
 	| programs simulator devirtualizableNodes result |
@@ -103,7 +104,7 @@ DevirtualizableCallSites class >> executeHGV [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> executeMRoassalFiltered [
+PatternCallSites3 class >> executeMRoassalFiltered [
 
 <script>
 	
@@ -133,7 +134,7 @@ programs associations do: [ :assoc |
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> executeMooseFiltered [
+PatternCallSites3 class >> executeMooseFiltered [
 
 <script>
 	
@@ -163,7 +164,7 @@ programs associations do: [ :assoc |
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> executeSingHGFiltered [
+PatternCallSites3 class >> executeSingHGFiltered [
 
 	<script>
 	| programs simulator devirtualizableNodes result |
@@ -191,7 +192,7 @@ DevirtualizableCallSites class >> executeSingHGFiltered [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> executeSingHGFiltered2 [
+PatternCallSites3 class >> executeSingHGFiltered2 [
 
 	<script>
 	| programs simulator devirtualizableNodes result |
@@ -221,7 +222,7 @@ DevirtualizableCallSites class >> executeSingHGFiltered2 [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> floatBenchs [
+PatternCallSites3 class >> floatBenchs [
 	<script>
 	| programs simulator devirtualizableNodes result |
 	programs := {  'asfloat' -> [ true ifTrue:[2 isNil . 2 asFloat]. ]  } asDictionary.
@@ -248,7 +249,7 @@ DevirtualizableCallSites class >> floatBenchs [
 ]
 
 { #category : 'parameters' }
-DevirtualizableCallSites class >> from: aBlock [
+PatternCallSites3 class >> from: aBlock [
 
 	<noInstrumentation>
 	
@@ -259,7 +260,7 @@ DevirtualizableCallSites class >> from: aBlock [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> honneyGingerBenchs [
+PatternCallSites3 class >> honneyGingerBenchs [
 	
 ^ { 
 'HGSimulator impossibeRiverPressureMap' -> [ HGSimulator impossibeRiverPressureMap  ].
@@ -283,7 +284,7 @@ DevirtualizableCallSites class >> honneyGingerBenchs [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> honneyGingerBenchsSingle [
+PatternCallSites3 class >> honneyGingerBenchsSingle [
 
 	^ { ('HGSimulator impossibeRiverPressureMap' -> [
 	   [
@@ -294,7 +295,7 @@ DevirtualizableCallSites class >> honneyGingerBenchsSingle [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> honneyGingerVeritas [
+PatternCallSites3 class >> honneyGingerVeritas [
 
 	^ { ('33VeritasHoneyGinger new run' -> [
 	   [
@@ -305,7 +306,7 @@ DevirtualizableCallSites class >> honneyGingerVeritas [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> microSendRateCalculation [
+PatternCallSites3 class >> microSendRateCalculation [
 
 	<script>
 	| programs simulator devirtualizableNodes result |
@@ -335,7 +336,7 @@ DevirtualizableCallSites class >> microSendRateCalculation [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> mooseBenchs [
+PatternCallSites3 class >> mooseBenchs [
 
 ^ {
 'Moose VeritasMoose' -> [  VeritasMoose new run   ].
@@ -343,7 +344,7 @@ DevirtualizableCallSites class >> mooseBenchs [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> rewriterBenchs [
+PatternCallSites3 class >> rewriterBenchs [
 
 ^ {
 'Rewriter VeritasRewriter' -> [  VeritasRewriterTransformer new run   ].
@@ -351,7 +352,7 @@ DevirtualizableCallSites class >> rewriterBenchs [
 ]
 
 { #category : 'benchs' }
-DevirtualizableCallSites class >> roassalBenchs [
+PatternCallSites3 class >> roassalBenchs [
 
 ^ {
 'Roassal RSAlpharoExample example01Basic' ->[  RSAlpharoExample new example01Basic  ].
@@ -362,13 +363,13 @@ DevirtualizableCallSites class >> roassalBenchs [
 ]
 
 { #category : 'accessing' }
-DevirtualizableCallSites >> block: aBlock [
+PatternCallSites3 >> block: aBlock [
 
 	block := aBlock
 ]
 
 { #category : 'testing' }
-DevirtualizableCallSites >> canInstrument: aMethod [
+PatternCallSites3 >> canInstrument: aMethod [
 
 	aMethod isInstrumented ifTrue: [ ^ false ].
 	aMethod isPrimitive ifTrue: [ ^ false ].
@@ -389,7 +390,7 @@ DevirtualizableCallSites >> canInstrument: aMethod [
 ]
 
 { #category : 'api actions' }
-DevirtualizableCallSites >> execute [
+PatternCallSites3 >> execute [
 
 	| method receiver |	
 	
@@ -404,13 +405,13 @@ DevirtualizableCallSites >> execute [
 ]
 
 { #category : 'api actions' }
-DevirtualizableCallSites >> getAllCallSites [
+PatternCallSites3 >> getAllCallSites [
 
 	^ callsites
 ]
 
 { #category : 'api actions' }
-DevirtualizableCallSites >> getDevirtualizableCallSites [
+PatternCallSites3 >> getDevirtualizableCallSites [
 
 	| devirtualizable |
 
@@ -428,7 +429,7 @@ DevirtualizableCallSites >> getDevirtualizableCallSites [
 ]
 
 { #category : 'initialization' }
-DevirtualizableCallSites >> initialize [
+PatternCallSites3 >> initialize [
 
 	methods := Dictionary new.
 	inlinedMethods := #( #isNil
@@ -456,25 +457,25 @@ DevirtualizableCallSites >> initialize [
 ]
 
 { #category : 'accessing' }
-DevirtualizableCallSites >> inlinedMethods [
+PatternCallSites3 >> inlinedMethods [
 
 	^ inlinedMethods
 ]
 
 { #category : 'accessing' }
-DevirtualizableCallSites >> inlinedMethods: anObject [
+PatternCallSites3 >> inlinedMethods: anObject [
 
 	inlinedMethods := anObject
 ]
 
 { #category : 'testing' }
-DevirtualizableCallSites >> isPartOfInstrumentation [
+PatternCallSites3 >> isPartOfInstrumentation [
 
 	^ true
 ]
 
 { #category : 'private - execution' }
-DevirtualizableCallSites >> lookup: aSelector in: aClass [
+PatternCallSites3 >> lookup: aSelector in: aClass [
 
 	| method |
 
@@ -494,7 +495,7 @@ DevirtualizableCallSites >> lookup: aSelector in: aClass [
 ]
 
 { #category : 'private - execution' }
-DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver arguments: aArguments [
+PatternCallSites3 >> message: aNode method: aMethod receiver: aReceiver arguments: aArguments [
 
 	<noInstrumentation>
    | arguments |
@@ -513,6 +514,15 @@ DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver a
 			ifTrue: [ ^ aReceiver withArgs: arguments executeMethod: aMethod
     ].
 
+	typePatterns at: aNode 
+		ifPresent: [ :m |  m add: aReceiver class ]
+		ifAbsentPut: [ "Dictionary new
+			at: aMethod put: (Bag new
+				add: aReceiver class;
+				yourself);
+			yourself"
+			OrderedCollection newFrom: { aReceiver }
+		].
 	callsites at: aNode 
 		ifPresent: [ :m | m at: aMethod 
 			ifPresent: [ :r | r add: aReceiver class ]
@@ -526,13 +536,15 @@ DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver a
 				yourself);
 			yourself
 		].
+	
+	
 	].
 	^ aReceiver withArgs: arguments executeMethod: aMethod
    
 ]
 
 { #category : 'private - execution' }
-DevirtualizableCallSites >> message: aNode sender: aSender receiver: aReceiver arguments: aArguments [
+PatternCallSites3 >> message: aNode sender: aSender receiver: aReceiver arguments: aArguments [
 
 	<noInstrumentation>
 	
