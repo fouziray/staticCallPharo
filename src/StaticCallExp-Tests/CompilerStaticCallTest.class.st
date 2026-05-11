@@ -5,12 +5,34 @@ Class {
 	#package : 'StaticCallExp-Tests'
 }
 
+{ #category : 'as yet unclassified' }
+CompilerStaticCallTest >> foo [ 
+	|aCol|
+	aCol := OrderedCollection new.
+	^ self _Object_as: CompilerStaticCallTest
+]
+
+{ #category : 'as yet unclassified' }
+CompilerStaticCallTest >> foo2 [ 
+	|aCol|
+	aCol := OrderedCollection new.
+	^ 2 _SmallInteger_+ 2
+]
+
+{ #category : 'tests - compiler' }
+CompilerStaticCallTest >> testFirstCompilerEmitCorrectBytecode [
+
+	| compiledMethod |
+	compiledMethod := OpalCompiler new compile: 'foo ^ 13 _asCharacter'.
+
+	self assert: (compiledMethod bytecodes at: 2) equals: 246
+]
+
 { #category : 'tests - parsing' }
 CompilerStaticCallTest >> testMethodContainsStaticCall [
 
 	| ast |
-	
-	ast := RBParser parseMethod: 'foo ^ 13 _factorial'.
+	ast := RBParser parseMethod: 'foo ^ 13 _asCharacter'.
 	self assert: ast children first statements first value class equals: RBStaticMessageNode 
 	
 ]
@@ -18,29 +40,29 @@ CompilerStaticCallTest >> testMethodContainsStaticCall [
 { #category : 'tests - compiler' }
 CompilerStaticCallTest >> testParsingBinaryStaticMessage [
 
-	| compiledMethod irMethod |
+	| ast |
 
-	compiledMethod := RBParser parseExpression: ' 
+	ast := RBParser parseExpression: ' 
 	|aCol|
 	aCol := OrderedCollection new.
 	^ 2 _SmallInteger_+ 2'.
 
-	self assert: (compiledMethod statements second children first isKindOf: RBStaticMessageNode) .
-	self assert: compiledMethod statements second children first isBinary.
+	self assert: (ast statements second children first isKindOf: RBStaticMessageNode) .
+	self assert: ast statements second children first isBinary.
 	
 ]
 
 { #category : 'tests - compiler' }
 CompilerStaticCallTest >> testParsingKeywordStaticMessage [
 
-	| compiledMethod irMethod |
+	| compiledMethod |
 
 	compiledMethod := RBParser parseExpression: ' 
 	|aCol|
 	aCol := OrderedCollection new.
 	^ 2 _Object_as: 2'.
 
-	self assert: (compiledMethod statements second children first isKindOf: RBStaticMessageNode) .
+	self assert: (compiledMethod statements second children first isKindOf: RBStaticMessageNode)
 
 	
 ]
@@ -49,11 +71,12 @@ CompilerStaticCallTest >> testParsingKeywordStaticMessage [
 CompilerStaticCallTest >> testStaticCallIrStaticNode [
 
 	| compiledMethod irMethod |
-	compiledMethod := OpalCompiler new compile: 'foo ^ 13 _myFactorial'.
-	
+	compiledMethod := OpalCompiler new compile: 'foo ^ 13 _asCharacter'.
 	irMethod := compiledMethod ast generateIR.
 	
-	self assert: irMethod allSequences first sequence second calledMethod equals: SmallInteger >>#myFactorial
+	self 
+		assert: irMethod allSequences first sequence second calledMethod 
+		equals: SmallInteger >> #asCharacter
 	
 ]
 
@@ -109,16 +132,9 @@ CompilerStaticCallTest >> testStaticCallWithClassTag [
 { #category : 'tests' }
 CompilerStaticCallTest >> testStaticInvokeMethodWithArgs [
 
-	self assert: (( Integer>>#factorial )  invokeWithReceiver:  6 withArgs: {} ) equals: ( 6 factorial)
-]
-
-{ #category : 'tests - compiler' }
-CompilerStaticCallTest >> testStaticMessageCompilerEmitCorrectBytecode [
-
-	| compiledMethod |
-	compiledMethod := OpalCompiler new compile: 'foo ^ 13 _myFactorial'.
-
-	self assert: (compiledMethod bytecodes at: 2) equals: 246
+	self 
+		assert: (( Integer>>#factorial ) invokeWithReceiver: 6 withArgs: {} ) 
+		equals: 6 factorial
 ]
 
 { #category : 'tests - compiler' }
