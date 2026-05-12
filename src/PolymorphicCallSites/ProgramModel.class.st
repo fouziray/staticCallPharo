@@ -41,6 +41,14 @@ ProgramModel >> fromRaw: anAssociation [
 ]
 
 { #category : 'instance creation' }
+ProgramModel >> fromRaw: anAssociation andPatterns: aDictionaryOfmsgToPattern [
+	
+	blockCode := anAssociation key compiledBlock sourceNode sourceCode.
+	callSites := (anAssociation value at: 2) associations reject: [ :e | e key isNil ] thenCollect: [ :e |  CallSiteModel fromRaw: e ].
+	callSites hasThisPattern: (aDictionaryOfmsgToPattern at: (anAssociation key)). 
+]
+
+{ #category : 'instance creation' }
 ProgramModel >> fromTraceMessages: traceAssociatons [
 	
 	callSites := (traceAssociatons) associations reject: [ :e | e key isNil ] thenCollect: [ :e | CallSiteModel fromRaw: e ]
@@ -55,9 +63,31 @@ ProgramModel >> name: aString fromRaw: anAssociation [
 ]
 
 { #category : 'instance creation' }
+ProgramModel >> name: aString fromRaw: anAssociation andPatterns: aDictionaryOfmsgToPattern [
+	
+	programName := aString.
+	blockCode := anAssociation key  ifNotNil: [ anAssociation key compiledBlock sourceNode sourceCode] .
+	callSites := (anAssociation value) associations reject: [ :e | e key isNil ] thenCollect: [ :e | 
+		|callsite|
+		callsite:= CallSiteModel fromRaw: e .
+		callsite hasThisPattern: (aDictionaryOfmsgToPattern at: (e key)). ]
+	
+]
+
+{ #category : 'instance creation' }
 ProgramModel >> name: aName fromTraceMessages: traceAssociatons [
 	programName := aName.
 	callSites := (traceAssociatons) associations reject: [ :e | e key isNil ] thenCollect: [ :e | CallSiteModel fromRaw: e ]
+]
+
+{ #category : 'instance creation' }
+ProgramModel >> name: aName fromTraceMessages: traceAssociatons andPatterns: aDictionaryOfmsgToPattern [
+	programName := aName.
+	callSites := (traceAssociatons) associations reject: [ :e | e key isNil ] thenCollect: [ :e | |callsite| callsite := CallSiteModel fromRaw: e.
+	callsite hasThisPattern: (aDictionaryOfmsgToPattern at: (e key)).  
+		callsite 
+		].
+	
 ]
 
 { #category : 'accessing' }

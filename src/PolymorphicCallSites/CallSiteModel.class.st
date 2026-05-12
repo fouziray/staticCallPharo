@@ -16,7 +16,8 @@ Class {
 		'numberOfReceiverClasses',
 		'allTypesFreq',
 		'flattenedTypes',
-		'isSelfSend'
+		'isSelfSend',
+		'typesPattern'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -123,6 +124,11 @@ CallSiteModel >> fromRaw: aCollection [
 	self computeTypes.
 ]
 
+{ #category : 'testing' }
+CallSiteModel >> hasThisPattern: aCollection [ 
+	typesPattern:= aCollection collect: #asString
+]
+
 { #category : 'accessing' }
 CallSiteModel >> isSelfSend [
 	^ isSelfSend
@@ -216,4 +222,16 @@ CallSiteModel >> receiverTypesBag [
 { #category : 'accessing' }
 CallSiteModel >> selector [
 	^ selector
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> typesPattern [
+
+	^ typesPattern
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> typesPattern: anObject [
+
+	typesPattern := anObject
 ]

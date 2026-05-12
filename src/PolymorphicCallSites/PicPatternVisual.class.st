@@ -7,8 +7,33 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+PicPatternVisual class >> callSitesFromHoneyGinger [
+
+	^ STON fromString: FileSystem workingDirectory / 'tracing'
+		  / '33VeritasHoneyGinger new run.ston'
+]
+
+{ #category : 'as yet unclassified' }
 PicPatternVisual class >> visualize: aDictionary [
-	^ self new visualize: aDictionary.
+
+	^ self new visualize: aDictionary
+]
+
+{ #category : 'as yet unclassified' }
+PicPatternVisual class >> visualizeCallSites: aListOfCallsSiteModels [
+	"There needs to be a type patterns in each calls site
+	We normalize the x axis, since we have different calls to each site
+	Some plots are disproportionate to others which makes observing or concluding difficult
+	"
+
+	^ PicPatternVisual new visualizeAllSites: aListOfCallsSiteModels
+]
+
+{ #category : 'as yet unclassified' }
+PicPatternVisual class >> visualizeHG [
+
+	<script>
+	^ self visualizeCallSites: self callSitesFromHoneyGinger
 ]
 
 { #category : 'visual' }
@@ -35,6 +60,13 @@ PicPatternVisual >> visualize: anAssociation [
 	anAssociation key. anAssociation value.
 	
 	^ self visualizeSingleCallSite: anAssociation key forPattern: anAssociation value.
+	
+]
+
+{ #category : 'as yet unclassified' }
+PicPatternVisual >> visualizeAllSites: aCollectionOfCallSites [ 
+
+	^ self visualizeMultipleCallSitesWithPatterns: aCollectionOfCallSites . 
 	
 ]
 
@@ -71,6 +103,38 @@ x := 1 to: (aCallSiteModelCollection collect:#numberOfCalls) max.
 	plt xlabel: 'Number Of Calls'.
 	plt ylabel: 'Site class'.
 	plt title: 'PIC Properties'.
+	^ plt
+
+
+]
+
+{ #category : 'visual' }
+PicPatternVisual >> visualizeMultipleCallSitesWithPatterns: aCallSiteModelCollection [
+
+	|x y plt p |
+x := 0 to: 1.
+	plt := RSCompositeChart new.
+
+
+	aCallSiteModelCollection doWithIndex: [ :aCallSiteModel :index | 
+		y := self getTransitionTriggerCounter: aCallSiteModel forPattern: (aCallSiteModel typesPattern ).
+		p := RSLinePlot new x: ((1 to: (aCallSiteModel typesPattern size)) / aCallSiteModel typesPattern size) y: y.
+		plt add: p.
+		self halt.
+	].
+	 
+	
+	
+"	p := RSLinePlot new x: x y: (x raisedTo: 3).
+	plt add: p.
+
+	p := RSLinePlot new x: x y: (x raisedTo: 4).
+	plt add: p.
+"
+	plt xlabel: 'Number Of Calls'.
+	plt ylabel: 'Site class'.
+	plt title: 'PIC Properties'.
+	plt.
 	^ plt
 
 
