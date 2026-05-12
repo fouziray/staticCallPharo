@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'calledMethod'
 	],
-	#category : 'StaticCallExp',
-	#package : 'StaticCallExp'
+	#category : 'StaticCallExp-IR',
+	#package : 'StaticCallExp',
+	#tag : 'IR'
 }
 
 { #category : 'as yet unclassified' }

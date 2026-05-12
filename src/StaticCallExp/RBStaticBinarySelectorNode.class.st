@@ -4,8 +4,9 @@ Class {
 	#classInstVars : [
 		'isBinary'
 	],
-	#category : 'StaticCallExp',
-	#package : 'StaticCallExp'
+	#category : 'StaticCallExp-Node',
+	#package : 'StaticCallExp',
+	#tag : 'Node'
 }
 
 { #category : 'instance creation' }

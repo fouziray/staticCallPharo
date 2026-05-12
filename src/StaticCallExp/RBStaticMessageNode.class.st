@@ -7,8 +7,9 @@ Class {
 	#classInstVars : [
 		'staticClass'
 	],
-	#category : 'StaticCallExp',
-	#package : 'StaticCallExp'
+	#category : 'StaticCallExp-Node',
+	#package : 'StaticCallExp',
+	#tag : 'Node'
 }
 
 { #category : 'instance creation' }
@@ -58,7 +59,7 @@ RBStaticMessageNode >> selector: aSelector [
 	keywordsPositions := nil.
 	selector := aSelector isString
 		            ifTrue: [ RBSelectorNode value: aSelector allButFirst ]
-		            ifFalse: [ aSelector value: aSelector value allButFirst ].
+		            ifFalse: [ aSelector value: aSelector value "allButFirst" ].
 	selector parent: self
 ]
 
@@ -70,10 +71,8 @@ RBStaticMessageNode >> staticClass [
 
 { #category : 'accessing' }
 RBStaticMessageNode >> staticClass: aStaticClass [
-	aStaticClass isString ifTrue:[ 
 
-			staticClass := Smalltalk globals classNamed: aStaticClass .
-		] ifFalse:[	
-	staticClass := aStaticClass
-	].
+	aStaticClass isString 
+		ifTrue: [ staticClass := Smalltalk globals classNamed: aStaticClass ] 
+		ifFalse: [	staticClass := aStaticClass ]
 ]

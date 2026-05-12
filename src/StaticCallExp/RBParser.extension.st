@@ -3,30 +3,37 @@ Extension { #name : 'RBParser' }
 { #category : '*StaticCallExp' }
 RBParser >> parseBinaryMessageWith: aNode [
 
-	| binaryNode |
-	binaryNode := self selectorNodeClass
+	| selectorNode |
+	selectorNode := self selectorNodeClass
 		              value: currentToken value
 		              keywordPositions: { currentToken start }.
 	self step.
-	^ (binaryNode value beginsWith: '_')
+	^ (selectorNode value beginsWith: '_')
 		  ifTrue: [
-			  self staticMessageNodeClass
-				  receiver: aNode
-				  selector:   (RBStaticBinarySelectorNode createFrom: binaryNode)
-				  keywordsPositions: binaryNode keywordPositions
-				  arguments: { self parseUnaryMessage } ]
+				| staticClassName |
+				self halt.
+				"Should extract first the class before mutating the selectorNode"
+				staticClassName := selectorNode extractStaticClass.
+				selectorNode setPrimarySelector.
+				(self staticMessageNodeClass
+					receiver: aNode
+					selector: selectorNode copy
+					keywordsPositions: selectorNode keywordPositions
+					arguments: { self parseUnaryMessage } )
+					staticClass: staticClassName; 
+					yourself ]
 		  ifFalse: [
 			  self messageNodeClass
 				  receiver: aNode
-				  selector: binaryNode
-				  keywordsPositions: binaryNode keywordPositions
+				  selector: selectorNode
+				  keywordsPositions: selectorNode keywordPositions
 				  arguments: { self parseUnaryMessage } ]
 ]
 
 { #category : '*StaticCallExp' }
 RBParser >> parseKeywordMessageWith: node [
 
-	| args isKeyword keywordsStartPositions selector |
+	| args isKeyword keywordsStartPositions selector selectorNode |
 	args := OrderedCollection new: 3.
 	keywordsStartPositions := OrderedCollection new: 3.
 	selector := ''.
@@ -38,68 +45,57 @@ RBParser >> parseKeywordMessageWith: node [
 		self step.
 		args add: self parseBinaryMessage.
 		isKeyword := true ].
-	selector := self selectorNodeClass value: selector.
-	selector keywordPositions: keywordsStartPositions.
+	
+	selectorNode := self selectorNodeClass value: selector.
+	selectorNode keywordPositions: keywordsStartPositions.
 	^ isKeyword
 		  ifTrue: [
-			  (selector value beginsWith: '_')
+			  (selectorNode value beginsWith: '_')
 				  ifFalse: [
-					  self messageNodeClass
+					self messageNodeClass
 						  receiver: node
-						  selector: selector
+						  selector: selectorNode
 						  keywordsPositions: keywordsStartPositions
 						  arguments: args ]
 				  ifTrue: [
-					  (self staticMessageNodeClass
+					| staticClassName |
+					"Should extract first the class before mutating the selectorNode"
+					staticClassName := selectorNode extractStaticClass.
+					selectorNode setPrimarySelector.
+					(self staticMessageNodeClass
 						  receiver: node
-						  selector: selector
+						  selector: selectorNode copy
 						  keywordsPositions: keywordsStartPositions
 						  arguments: args)
-						staticClass: (selector value substrings: '_') first  ] ]
+						staticClass: staticClassName; yourself  ] ]
 		  ifFalse: [ node ]
 ]
 
 { #category : '*StaticCallExp' }
 RBParser >> parseUnaryMessageWith: aNode [
 
-	| selector classTagDelimiter staticClassToCall |
-	selector := self selectorNodeClass
+	| selectorNode |
+	selectorNode := self selectorNodeClass
 		            value: currentToken value
 		            keywordPositions: { currentToken start }.
 	self step.
-	^ (selector value beginsWith: '_')
+	^ (selectorNode value beginsWith: '_')
 		  ifFalse: [
 			  self messageNodeClass
 				  receiver: aNode
-				  selector: selector
-				  keywordsPositions: selector keywordPositions
+				  selector: selectorNode
+				  keywordsPositions: selectorNode keywordPositions
 				  arguments: #(  ) ]
 		  ifTrue: [
-			  classTagDelimiter := selector value allButFirst
-				                       indexOf: $_
-				                       ifAbsent: [ 0 ].
-			 " 1 haltIf: (selector value endsWith: '_')."
-			  classTagDelimiter > 1
-				  ifTrue: [
-					  staticClassToCall := selector value
-						                       copyFrom: 2
-						                       to:
-						                       (selector value allButFirst indexOf: $_).
-					  (self staticMessageNodeClass
-						  receiver: aNode
-						  selector: (selector value: (selector value
-									    copyFrom: (selector value allButFirst indexOf: $_) + 1
-									    to: selector value size))
-						  keywordsPositions: selector keywordPositions
-						  arguments: #(  )) staticClass: staticClassToCall. ]
-				  ifFalse: [
-					  self staticMessageNodeClass
-						  receiver: aNode
-						  selector: selector
-						  keywordsPositions: selector keywordPositions
-						  arguments: #(  ).
-						
-						 ] ]
+			| staticClassName |
+			"Should extract first the class before mutating the selectorNode"
+			staticClassName := selectorNode extractStaticClass.
+			selectorNode setPrimarySelector.
+			(self staticMessageNodeClass
+				receiver: aNode
+				selector: selectorNode copy
+				keywordsPositions: selectorNode keywordPositions
+				arguments: #(  )) staticClass: staticClassName ]
 ]
 
 { #category : '*StaticCallExp' }

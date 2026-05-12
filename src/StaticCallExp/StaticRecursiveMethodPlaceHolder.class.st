@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'selector'
 	],
-	#category : 'StaticCallExp',
-	#package : 'StaticCallExp'
+	#category : 'StaticCallExp-IR',
+	#package : 'StaticCallExp',
+	#tag : 'IR'
 }
 
 { #category : 'accessing' }
