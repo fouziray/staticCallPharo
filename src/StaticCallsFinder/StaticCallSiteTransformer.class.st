@@ -27,6 +27,19 @@ StaticCallSiteTransformer >> backupMethod: method [
 	backupMethods at: method ifAbsentPut: method sourceCode
 ]
 
+{ #category : 'bubbleUp' }
+StaticCallSiteTransformer >> bubbleUpChangesInExecutionPath: aScpExecutionRecordTree startingFrom: firstNodeToBeTransformed [ 
+|found index scpNodeOrNil |
+found:= false.	
+index := 1.
+scpNodeOrNil := nil.
+scpNodeOrNil := aScpExecutionRecordTree methods collect:[ :methodScp |  methodScp findCorrespondingScpMessageNode: firstNodeToBeTransformed with: found] thenSelect: #isNotNil. 
+
+scpNodeOrNil ifNotNil: [ self rewriteAndDuplicateParentNode: scpNodeOrNil  ].
+
+1 halt.
+]
+
 { #category : 'compiling' }
 StaticCallSiteTransformer >> compileAstWithStaticNodes: newAst [
 
@@ -394,6 +407,7 @@ aMethod ast acceptVisitor: visitor. "" ^ aStaticCallCandidate callSite replaceWi
 			  newNode := (RBStaticMessageNode fromMessageNode:
 				              aStaticCallCandidate callSite) staticClass:
 				             aStaticCallCandidate receiverType.
+				newNode propertyAt: #oldNode put: aStaticCallCandidate callSite.
 			  aStaticCallCandidate callSite replaceWith: newNode.
 			  result := newNode methodNode ]
 		  ifFalse: [ aMethodNode ]

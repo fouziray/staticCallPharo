@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'transformer',
 		'candidate',
-		'assocToModify'
+		'assocToModify',
+		'executionPath'
 	],
 	#category : 'StaticCallsFinder-rewriting',
 	#package : 'StaticCallsFinder',
@@ -12,9 +13,17 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+PathRewritingTest >> iCallMethodSecondLevel [
+
+" We await a change to bubble up from the first level up to this call site, and it should be prefixedWith the new compiled method prefix too (to distinguish from other executions we also want to add a distinct id) "
+	self iCallMethodToBeRewritten
+
+]
+
+{ #category : 'as yet unclassified' }
 PathRewritingTest >> iCallMethodToBeRewritten [
 
-	self methodToBeRewritten 
+	self methodToBeRewritten
 ]
 
 { #category : 'as yet unclassified' }
@@ -45,7 +54,8 @@ PathRewritingTest >> rwSTiCallMethodToBeRewritten2 [
 
 { #category : 'running' }
 PathRewritingTest >> setUp [ 
-
+| receiverObject methodInTrace upperMethodInTrace |
+	
 	transformer:= StaticCallSiteTransformer new.
 	
 
@@ -65,6 +75,17 @@ PathRewritingTest >> setUp [
 			                        receiverType:
 			                        (assocToModify key receiver acceptVisitor: transformer).
 
+
+methodInTrace := ScpMethodTrace new result: (receiverObject := PathRewritingTest new); object:receiverObject ; yourself.
+methodInTrace addChild:( ScpMessageTrace new parent: methodInTrace; receiver: receiverObject ; object: receiverObject ; node: (PathRewritingTest >>#iCallMethodToBeRewritten) ast sendNodes first  ); node: (PathRewritingTest >>#iCallMethodToBeRewritten) ast.
+
+upperMethodInTrace := ScpMethodTrace new result: (receiverObject := PathRewritingTest new); object:receiverObject; yourself.
+upperMethodInTrace addChild:(  ScpMessageTrace new receiver: methodInTrace; object: methodInTrace; node: (PathRewritingTest >>#iCallMethodSecondLevel) ast sendNodes first; addChild: methodInTrace) ; node: (PathRewritingTest >>#iCallMethodSecondLevel) ast.
+upperMethodInTrace   .
+methodInTrace parent: upperMethodInTrace.
+ 
+executionPath := ScpExecutionRecordTree new method: upperMethodInTrace.
+executionPath methods: { upperMethodInTrace } asOrderedCollection.
 ]
 
 { #category : 'running' }
@@ -152,6 +173,51 @@ PathRewritingTest >> testRewritingPath1LevelsRenamesCallerAndDuplicatedIt [
 			  
 	           astCachePerModifiedMethod associationsDo: [ :a |
 		           transformer compileAstWithStaticNodesAndDuplicateMethod: a value.
+		RollbackImageStaticBytecodes default replaceMsgs: a key ast sendNodes first.
+		
+		self deny: (a key ast sendNodes anySatisfy:[:each | each isStaticCall]) . 
+		self assert: (a key compiledMethod classBinding value lookupSelector: ('rwST',a key selector) asSymbol ) equals: PathRewritingTest>>#rwSTiCallMethodToBeRewritten.
+		
+			"[ self runBenchProgram ] on: Error do:[
+			RollbackImageStaticBytecodes replaceMsgs:( newAst sendNodes select: #isStaticCall).
+			self compileAstWithStaticNodes: a value
+			]" .
+		RollbackImageStaticBytecodes default replaceSMsgWithNormal .
+		
+		
+		].
+	
+	
+]
+
+{ #category : 'tests' }
+PathRewritingTest >> testRewritingPath1LevelsRenamesCallerCallSite [
+	
+	 | newAst astCachePerModifiedMethod methodBefore |
+	
+	astCachePerModifiedMethod := Dictionary new.
+	
+	candidate receiverType ifNotNil: [ " transformMethod:
+		          candidate callSite methodNode compiledMethod
+		          forCandidate: candidate."
+			methodBefore := candidate callSite methodNode compiledMethod.
+			transformer backupMethod: methodBefore.
+			newAst := astCachePerModifiedMethod
+				                     at:
+				                     methodBefore
+				                     ifAbsentPut: [ candidate callSite methodNode ].
+			newAst := transformer 
+				                     transformMethodNode: newAst
+				                     forCandidate: candidate.
+			astCachePerModifiedMethod
+				           at: methodBefore
+				           put: newAst ].
+			
+			"Treatement of every candidate must be done before compiling ast, to cumulate all changes and avoid duplicating or overriding modifications"
+			
+	           astCachePerModifiedMethod associationsDo: [ :a |
+		           transformer compileAstWithStaticNodesAndDuplicateMethod: a value.
+					transformer bubbleUpChangesInExecutionPath: executionPath startingFrom: (a value sendNodes first propertyAt: #oldNode).
 		RollbackImageStaticBytecodes default replaceMsgs: a key ast sendNodes first.
 		
 		self deny: (a key ast sendNodes anySatisfy:[:each | each isStaticCall]) . 
