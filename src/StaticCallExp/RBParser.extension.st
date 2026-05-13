@@ -11,7 +11,7 @@ RBParser >> parseBinaryMessageWith: aNode [
 	^ (selectorNode value beginsWith: '_')
 		  ifTrue: [
 				| staticClassName |
-				self halt.
+
 				"Should extract first the class before mutating the selectorNode"
 				staticClassName := selectorNode extractStaticClass.
 				selectorNode setPrimarySelector.
