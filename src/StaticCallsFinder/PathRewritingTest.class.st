@@ -83,7 +83,8 @@ upperMethodInTrace := ScpMethodTrace new result: (receiverObject := PathRewritin
 upperMethodInTrace addChild:(  ScpMessageTrace new receiver: methodInTrace; object: methodInTrace; node: (PathRewritingTest >>#iCallMethodSecondLevel) ast sendNodes first; addChild: methodInTrace) ; node: (PathRewritingTest >>#iCallMethodSecondLevel) ast.
 upperMethodInTrace   .
 methodInTrace parent: upperMethodInTrace.
- 
+methodInTrace callSite: (PathRewritingTest >>#iCallMethodSecondLevel) ast sendNodes first. 
+
 executionPath := ScpExecutionRecordTree new method: upperMethodInTrace.
 executionPath methods: { upperMethodInTrace } asOrderedCollection.
 ]
