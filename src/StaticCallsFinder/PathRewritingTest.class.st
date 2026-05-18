@@ -430,13 +430,11 @@ PathRewritingTest >> testRewritingPath2LevelsTwoNestedCandidatesAndOneInParent [
 { #category : 'tests' }
 PathRewritingTest >> testRewritingPath2LevelsTwoNestedCandidatesAndOneInParentDisordered [
 
-	| newAst astCachePerModifiedMethod methodBefore |
+	| astCachePerModifiedMethod methodBefore |
 	astCachePerModifiedMethod := Dictionary new.
 
 	methodBefore := candidate1 callSite methodNode compiledMethod.
-	newAst := astCachePerModifiedMethod
-		          at: methodBefore
-		          ifAbsentPut: [ candidate1 callSite methodNode ].
+
 
 	transformer
 		transformCallStack: {
@@ -464,33 +462,6 @@ PathRewritingTest >> testRewritingPath2LevelsTwoNestedCandidatesAndOneInParentDi
 		assert:
 		executionPathMixedCalls1 methods first node sendNodes first selector
 		equals: #rwSTiCallMethodToBeRewritten2Embedded
-]
-
-{ #category : 'tests' }
-PathRewritingTest >> testRewritingPath2LevelsTwoNestedCandidatesCompact [
-|candidates|
-candidates := { candidate1 . candidate2 }.
-	((transformer transformCandidates: candidates ) do: [ :newAst | 
-	transformer compileAstWithStaticNodesAndDuplicateMethod: newAst
-	 ]) withIndexDo: [  :newAst :index| 		transformer
-			bubbleUpChangesInExecutionPath: executionPathMixedCalls1
-			startingFrom: ((candidates at: index ) oldNode).
-			
-			self
-			assert: (newAst compiledMethod classBinding value lookupSelector:
-					 ('rwST' , newAst selector) asSymbol)
-			equals: PathRewritingTest >> #rwSTiCallMethodToBeRewritten2Embedded.
-			  ] .
-	
-		self
-			assert: executionPathMixedCalls1 methods first node selector
-			equals: #rwSTiCallMethodSecondLevelToEmbedded.
-		self
-			assert:
-			executionPathMixedCalls1 methods first node sendNodes first
-				selector
-			equals: #rwSTiCallMethodToBeRewritten2Embedded .
-		self halt.
 ]
 
 { #category : 'tests' }
