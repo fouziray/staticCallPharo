@@ -411,6 +411,7 @@ PathRewritingTest >> testRewritingPath2LevelsTwoNestedCandidatesAndOneInParent [
 			
 		transformer transformCallStack: {candidate1. candidate2 . candidateSecondLevel} withinPath: executionPathMixedCalls1 .
 		
+		self assert: (executionPathMixedCalls1 methods first node methodClass >>#rwSTiCallMethodSecondLevelToEmbedded) ast sendNodes first isStaticCall  .
 		self
 			assert: (methodBefore methodClass lookupSelector:
 					 ('rwST' , methodBefore selector) asSymbol)
@@ -424,7 +425,45 @@ PathRewritingTest >> testRewritingPath2LevelsTwoNestedCandidatesAndOneInParent [
 				selector
 			equals: #rwSTiCallMethodToBeRewritten2Embedded.
 
+]
 
+{ #category : 'tests' }
+PathRewritingTest >> testRewritingPath2LevelsTwoNestedCandidatesAndOneInParentDisordered [
+
+	| newAst astCachePerModifiedMethod methodBefore |
+	astCachePerModifiedMethod := Dictionary new.
+
+	methodBefore := candidate1 callSite methodNode compiledMethod.
+	newAst := astCachePerModifiedMethod
+		          at: methodBefore
+		          ifAbsentPut: [ candidate1 callSite methodNode ].
+
+	transformer
+		transformCallStack: {
+				candidate1.
+				candidateSecondLevel.
+				candidate2 }
+		withinPath: executionPathMixedCalls1.
+
+	self assert:
+		(executionPathMixedCalls1 methods first node methodClass
+		 >> #rwSTiCallMethodToBeRewritten2Embedded) ast sendNodes first
+			isStaticCall.
+	self assert:
+		(executionPathMixedCalls1 methods first node methodClass
+		 >> #rwSTiCallMethodToBeRewritten2Embedded) ast sendNodes second
+			isStaticCall.
+	self
+		assert: (methodBefore methodClass lookupSelector:
+				 ('rwST' , methodBefore selector) asSymbol)
+		equals: PathRewritingTest >> #rwSTiCallMethodToBeRewritten2Embedded.
+	self
+		assert: executionPathMixedCalls1 methods first node selector
+		equals: #rwSTiCallMethodSecondLevelToEmbedded.
+	self
+		assert:
+		executionPathMixedCalls1 methods first node sendNodes first selector
+		equals: #rwSTiCallMethodToBeRewritten2Embedded
 ]
 
 { #category : 'tests' }

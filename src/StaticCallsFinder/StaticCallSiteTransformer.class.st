@@ -7,7 +7,8 @@ Class {
 		'message',
 		'nestedCallsVisitor',
 		'filteredRecordedTypes',
-		'messageToRecord'
+		'messageToRecord',
+		'changes'
 	],
 	#category : 'StaticCallsFinder-rewriting',
 	#package : 'StaticCallsFinder',
@@ -356,10 +357,15 @@ aColOfCandidates do:[:candidate |
 { #category : 'refactoring' }
 StaticCallSiteTransformer >> transformCandidate: aStaticCallCandidate [
 
-	| newNode methodCopy nodeToRewriteInCopy |
-
-	methodCopy := aStaticCallCandidate callSite methodNode copy.
-	nodeToRewriteInCopy := methodCopy childAtPath:
+	| newNode methodCopy nodeToRewriteInCopy methodNode writtenMethod |
+	methodNode:= aStaticCallCandidate callSite methodNode .
+	writtenMethod := methodNode methodClass lookupSelector: ('rwST', methodNode selector) asSymbol.
+	writtenMethod ifNotNil:[
+		methodCopy := writtenMethod methodNode copy.
+		]ifNil: [
+			methodCopy := aStaticCallCandidate callSite methodNode copy.
+		].
+		nodeToRewriteInCopy := methodCopy childAtPath:
 		                       aStaticCallCandidate callSite pathInParent.
 
 	newNode := (RBStaticMessageNode fromMessageNode: nodeToRewriteInCopy)
