@@ -8,7 +8,8 @@ Class {
 		'receiver',
 		'receiverType',
 		'confidence',
-		'benefit'
+		'benefit',
+		'modifiedNode'
 	],
 	#category : 'StaticCallsFinder-core',
 	#package : 'StaticCallsFinder',
@@ -73,6 +74,18 @@ StaticCallCandidate >> method [
 StaticCallCandidate >> method: aMethod [ 
  method := aMethod 
 
+]
+
+{ #category : 'accessing' }
+StaticCallCandidate >> modifiedNode: aRBMessageNode [
+
+	modifiedNode := aRBMessageNode
+]
+
+{ #category : 'accessing' }
+StaticCallCandidate >> oldNode [
+
+	^ modifiedNode
 ]
 
 { #category : 'accessing' }

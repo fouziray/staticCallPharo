@@ -2,7 +2,6 @@ Class {
 	#name : 'StaticCallSiteTransformer',
 	#superclass : 'RBProgramNodeVisitor',
 	#instVars : [
-		'backupMethods',
 		'recordedTypes',
 		'receiver',
 		'message',
@@ -21,23 +20,34 @@ StaticCallSiteTransformer class >> transform: aCandidate [
 	1 halt.
 ]
 
-{ #category : 'as yet unclassified' }
-StaticCallSiteTransformer >> backupMethod: method [
+{ #category : 'accessing' }
+StaticCallSiteTransformer >> assignReceiverArgsToParent: newNode [
 
-	backupMethods at: method ifAbsentPut: method sourceCode
+	{  newNode receiver.
+		newNode arguments } flattened collect: [ :e | e parent: newNode ]
 ]
 
 { #category : 'bubbleUp' }
-StaticCallSiteTransformer >> bubbleUpChangesInExecutionPath: aScpExecutionRecordTree startingFrom: firstNodeToBeTransformed [ 
-|found index scpNodeOrNil |
-found:= false.	
-index := 1.
-scpNodeOrNil := nil.
-scpNodeOrNil := aScpExecutionRecordTree methods collect:[ :methodScp |  methodScp findCorrespondingScpMessageNode: firstNodeToBeTransformed with: found] thenSelect: #isNotNil. 
+StaticCallSiteTransformer >> bubbleUpChangesInExecutionPath: aScpExecutionRecordTree startingFrom: firstNodeToBeTransformed [
 
-scpNodeOrNil ifNotNil: [ self rewriteAndDuplicateParentNode: scpNodeOrNil  ].
+	| found index scpNodeOrNil |
+	found := false.
+	index := 1.
+	scpNodeOrNil := nil.
+	scpNodeOrNil := aScpExecutionRecordTree methods
+		                collect: [ :methodScp |
+			                methodScp
+				                findCorrespondingScpMessageNode:
+				                firstNodeToBeTransformed
+				                with: found ]
+		                thenSelect: #isNotNil.
 
-1 halt.
+	scpNodeOrNil ifNotNil: [
+		self rewriteAndDuplicateParentNode: scpNodeOrNil ].
+
+
+
+
 ]
 
 { #category : 'compiling' }
@@ -60,21 +70,18 @@ newAst doSemanticAnalysis .
 { #category : 'compiling' }
 StaticCallSiteTransformer >> compileAstWithStaticNodesAndDuplicateMethod: newAst [
 
-	| newMethod |
-	
-	newAst renameSelector: ('rwST', newAst selector) asSymbol andArguments: newAst arguments .
-	 
-	ASTCache default at: newAst compiledMethod put: newAst.
-	
-newAst doSemanticAnalysis .
-	newMethod := newAst generateMethod.
-	newMethod propertyAt: #source put: newAst reformatSource.
-	ASTCache default at: newAst compiledMethod put: newAst.
+	| newMethod oldMethod |
+	oldMethod := newAst compiledMethod.
+	(newAst selector beginsWith: 'rwST') ifFalse: [
+		newAst
+			renameSelector: ('rwST' , newAst selector) asSymbol
+			andArguments: newAst arguments ].
 
-	newMethod classBinding value
-	addSelector: ( newMethod selector) asSymbol 
-	withMethod: newMethod.
-		
+	newAst doSemanticAnalysis.
+	newMethod := newAst generateMethod.
+	newMethod propertyAt: #source put: newAst formattedCode.
+
+	newMethod methodClass compile: newMethod sourceCode.
 
 ]
 
@@ -109,50 +116,43 @@ StaticCallSiteTransformer >> getNewMethodOfDevirtualizing: candidate [
 { #category : 'as yet unclassified' }
 StaticCallSiteTransformer >> getNewMethodOfDevirtualizingAll [
 
-	           | newAst newMethod candidate astCachePerModifiedMethod |
-	           astCachePerModifiedMethod := Dictionary new.
-	           filteredRecordedTypes := PolymorphicCallSitesVisitor
-		                                    filterFakePoly: recordedTypes.
-	           filteredRecordedTypes do: [ :each |
-		           | currentAssociation |
-		           currentAssociation := each.
+	| newAst newMethod candidate astCachePerModifiedMethod |
+	astCachePerModifiedMethod := Dictionary new.
+	filteredRecordedTypes := PolymorphicCallSitesVisitor filterFakePoly:
+		                         recordedTypes.
+	filteredRecordedTypes do: [ :each |
+		| currentAssociation |
+		currentAssociation := each.
 
-		           "	(each key parent isMessage or:[ each key isStaticCall ]) ifTrue:[ 1 halt. ]"
-		           self receiver:
-			           each value values first asOrderedCollection first.
-		           candidate := StaticCallCandidate
-			                        method: each value keys first
-			                        callSite: each key
-			                        selector: each key methodNode selector
-			                        receiver:
-			                        each value values first asOrderedCollection
-				                        first
-			                        receiverType:
-			                        (each key receiver acceptVisitor: self).
-	candidate receiverType ifNotNil: [ " transformMethod:
+		"	(each key parent isMessage or:[ each key isStaticCall ]) ifTrue:[ 1 halt. ]"
+		self receiver: each value values first asOrderedCollection first.
+		candidate := StaticCallCandidate
+			             method: each value keys first
+			             callSite: each key
+			             selector: each key methodNode selector
+			             receiver:
+			             each value values first asOrderedCollection first
+			             receiverType: (each key receiver acceptVisitor: self).
+		candidate receiverType ifNotNil: [ " transformMethod:
 		          candidate callSite methodNode compiledMethod
 		          forCandidate: candidate."
-			self backupMethod:
-			candidate callSite methodNode compiledMethod.
+			self backupMethod: candidate callSite methodNode compiledMethod.
 			newAst := astCachePerModifiedMethod
-				                     at:
-				                     candidate callSite methodNode compiledMethod
-				                     ifAbsentPut: [ candidate callSite methodNode ].
-			newAst := self
-				                     transformMethodNode: newAst
-				                     forCandidate: candidate.
+				          at: candidate callSite methodNode compiledMethod
+				          ifAbsentPut: [ candidate callSite methodNode ].
+			newAst := self transformCandidate: candidate.
 			astCachePerModifiedMethod
-				           at: candidate callSite methodNode compiledMethod
-				           put: newAst ] 
-	].
+				at: candidate callSite methodNode compiledMethod
+				put: newAst ] ].
 
-	           astCachePerModifiedMethod associationsDo: [ :a |
-		           self compileAstWithStaticNodes: a value.
-			[ self runBenchProgram ] on: Error do:[
-			RollbackImageStaticBytecodes replaceMsgs:( newAst sendNodes select: #isStaticCall).
-			self compileAstWithStaticNodes: a value
-			] .
-		 ]
+	astCachePerModifiedMethod associationsDo: [ :a |
+		self compileAstWithStaticNodes: a value.
+		[ self runBenchProgram ]
+			on: Error
+			do: [
+				RollbackImageStaticBytecodes replaceMsgs:
+					(newAst sendNodes select: #isStaticCall).
+				self compileAstWithStaticNodes: a value ] ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -252,7 +252,8 @@ StaticCallSiteTransformer >> graduallyDevirtualize [
 
 { #category : 'as yet unclassified' }
 StaticCallSiteTransformer >> initialize [ 
-	backupMethods := Dictionary new.
+
+	super initialize.
 	nestedCallsVisitor:= NestedCallVisitor new
 ]
 
@@ -311,19 +312,71 @@ record parent isMessage ifTrue: [ self replaceNodeRenameCallers: record parent n
 1 halt.
 ]
 
+{ #category : 'accessing' }
+StaticCallSiteTransformer >> rewriteAndDuplicateParentNode: aCollection [
+
+	| parent |
+	parent := aCollection first parent.
+	parent ifNotNil: [
+"		self haltIf: (parent callSite selector beginsWith: 'rwST')."
+		parent callSite
+			propertyAt: #oldSelector
+			ifAbsentPut: parent callSite selector.
+		parent callSite selector:
+			('rwST' , (parent callSite propertyAt: #oldSelector)) asSymbol.
+		self compileAstWithStaticNodesAndDuplicateMethod:
+			parent callSite methodNode ]
+]
+
 { #category : 'running' }
 StaticCallSiteTransformer >> rollbackBackedUpAst [
-
-	backupMethods keysAndValuesDo: [ :method :originalSource |
-		[
-		method methodClass
-			compile: originalSource
-			classified: method protocol ] ]
 ]
 
 { #category : 'as yet unclassified' }
 StaticCallSiteTransformer >> runBenchProgram [
 	HGSimulator capuccinoPower .
+]
+
+{ #category : 'as yet unclassified' }
+StaticCallSiteTransformer >> transformCallStack: aColOfCandidates withinPath: executionPath [
+| newAst |
+aColOfCandidates do:[:candidate | 
+	newAst := self transformCandidate: candidate.
+
+	"Treatement of every candidate must be done before compiling ast, to cumulate all changes and avoid duplicating or overriding modifications"
+
+	self compileAstWithStaticNodesAndDuplicateMethod: newAst.
+
+	self
+		bubbleUpChangesInExecutionPath: executionPath
+		startingFrom: (candidate callSite "propertyAt: #oldNode").
+]
+]
+
+{ #category : 'refactoring' }
+StaticCallSiteTransformer >> transformCandidate: aStaticCallCandidate [
+
+	| newNode methodCopy nodeToRewriteInCopy |
+
+	methodCopy := aStaticCallCandidate callSite methodNode copy.
+	nodeToRewriteInCopy := methodCopy childAtPath:
+		                       aStaticCallCandidate callSite pathInParent.
+
+	newNode := (RBStaticMessageNode fromMessageNode: nodeToRewriteInCopy)
+		           staticClass: aStaticCallCandidate receiverType.
+	newNode propertyAt: #oldNode put: aStaticCallCandidate callSite.
+	nodeToRewriteInCopy replaceWith: newNode.
+	self assignReceiverArgsToParent: newNode.
+	aStaticCallCandidate modifiedNode: (newNode propertyAt: #oldNode). 
+	
+	^ newNode methodNode
+]
+
+{ #category : 'transform' }
+StaticCallSiteTransformer >> transformCandidates: candidateCollection [
+
+	^ candidateCollection collect: [ :candidate |
+		  self transformCandidate: candidate ]
 ]
 
 { #category : 'refactoring' }
@@ -385,32 +438,6 @@ aMethod ast acceptVisitor: visitor. "" ^ aStaticCallCandidate callSite replaceWi
 			  aStaticCallCandidate callSite replaceWith: newNode.
 			  result := newNode methodNode ]
 		  ifFalse: [ aStaticCallCandidate callSite methodNode ]
-]
-
-{ #category : 'refactoring' }
-StaticCallSiteTransformer >> transformMethodNode: aMethodNode forCandidate: aStaticCallCandidate [
-
-	| visitor newNode result |
-	"visitor:= ASTNodeReplacer new .
-visitor replace: aStaticCallCandidate callSite  with: ((RBStaticMessageNode fromMessageNode:
-			    aStaticCallCandidate callSite) staticClass:
-			   aStaticCallCandidate receiverType).
-aMethod ast acceptVisitor: visitor. "" ^ aStaticCallCandidate callSite replaceWith:
-		  ((RBStaticMessageNode fromMessageNode:
-			    aStaticCallCandidate callSite) staticClass:
-			   aStaticCallCandidate receiverType)"
-
-	^ (aStaticCallCandidate callSite isBinary not and: [
-		   aStaticCallCandidate receiverType ~= 'temp' ])
-		  ifTrue: [
-		self haltIf: aStaticCallCandidate receiverType isNil.
-			  newNode := (RBStaticMessageNode fromMessageNode:
-				              aStaticCallCandidate callSite) staticClass:
-				             aStaticCallCandidate receiverType.
-				newNode propertyAt: #oldNode put: aStaticCallCandidate callSite.
-			  aStaticCallCandidate callSite replaceWith: newNode.
-			  result := newNode methodNode ]
-		  ifFalse: [ aMethodNode ]
 ]
 
 { #category : 'refactoring' }
