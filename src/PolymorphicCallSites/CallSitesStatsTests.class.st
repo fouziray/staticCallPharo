@@ -6,8 +6,9 @@ Class {
 		'devirtualizer',
 		'callSitesReceiversAssociations'
 	],
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-Tests',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Tests'
 }
 
 { #category : 'display' }

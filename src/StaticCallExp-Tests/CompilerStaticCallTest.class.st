@@ -109,6 +109,18 @@ CompilerStaticCallTest >> testStaticCallIrStaticNodeKeyword [
 	
 ]
 
+{ #category : 'tests - compiler' }
+CompilerStaticCallTest >> testStaticCallIsInLiteralFrame [
+
+	| compiledMethod irMethod |
+	compiledMethod := OpalCompiler new compile: 'foo ^ 13 _myFactorial'.
+
+compiledMethod literal.
+	self
+		assert: irMethod allSequences first sequence second calledMethod
+		equals: SmallInteger >> #myFactorial
+]
+
 { #category : 'tests' }
 CompilerStaticCallTest >> testStaticCallOnVariableWithClassTag [
 

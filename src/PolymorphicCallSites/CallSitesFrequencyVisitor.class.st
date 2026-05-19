@@ -1,8 +1,9 @@
 Class {
 	#name : 'CallSitesFrequencyVisitor',
 	#superclass : 'ScpExecutionRecordVisitor',
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-Visitors',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Visitors'
 }
 
 { #category : 'as yet unclassified' }

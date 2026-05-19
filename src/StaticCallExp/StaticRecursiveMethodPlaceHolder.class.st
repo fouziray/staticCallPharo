@@ -9,6 +9,12 @@ Class {
 	#tag : 'IR'
 }
 
+{ #category : 'as yet unclassified' }
+StaticRecursiveMethodPlaceHolder >> factooo [
+
+	self _StaticRecursiveMethodPlaceHolder_factooo
+]
+
 { #category : 'accessing' }
 StaticRecursiveMethodPlaceHolder >> numArgs [
 

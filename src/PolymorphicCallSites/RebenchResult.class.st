@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'result'
 	],
-	#category : 'PolymorphicCallSites',
-	#package : 'PolymorphicCallSites'
+	#category : 'PolymorphicCallSites-Tests',
+	#package : 'PolymorphicCallSites',
+	#tag : 'Tests'
 }
 
 { #category : 'instance creation' }
