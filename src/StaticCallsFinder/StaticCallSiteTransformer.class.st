@@ -81,7 +81,7 @@ StaticCallSiteTransformer >> compileAstWithStaticNodesAndDuplicateMethod: newAst
 	newAst doSemanticAnalysis.
 	newMethod := newAst generateMethod.
 	newMethod propertyAt: #source put: newAst formattedCode.
-
+	
 	newMethod methodClass compile: newMethod sourceCode.
 
 ]
@@ -255,6 +255,7 @@ StaticCallSiteTransformer >> graduallyDevirtualize [
 StaticCallSiteTransformer >> initialize [ 
 
 	super initialize.
+	changes:= OrderedCollection new.
 	nestedCallsVisitor:= NestedCallVisitor new
 ]
 

@@ -51,23 +51,24 @@ ApplyChangeOnCandidateTest >> testApplyChangeOntodo [
 	originalSource := method sourceCode.
 	"method ast hasBlock ifFalse: [
 		"
-			backupMethods at: method put: originalSource.
+	backupMethods at: method put: originalSource.
 	candidate := StaticCallCandidate
 		             method: method
 		             callSite: (method ast allChildren at: 4)
 		             selector: method selector
 		             receiver: (method ast allChildren at: 4) receiver
 		             receiverType: Number.
-	newAst := transformer transformMethodNode: method forCandidate: candidate.
-	
+	newAst := transformer transformCandidate: candidate.
+
 	ASTCache default at: newAst compiledMethod put: newAst.
-	
+
 	newMethod := newAst generateMethod.
 
 	ASTCache default at: newAst compiledMethod put: newAst.
 
-	self assert: ((newMethod ast allChildren at:4) isKindOf: RBStaticMessageNode ).
-	
+	self assert:
+		((newMethod ast allChildren at: 4) isKindOf: RBStaticMessageNode)
+
 	"self class
 		addSelectorSilently: newMethod selector
 		withMethod: newMethod.

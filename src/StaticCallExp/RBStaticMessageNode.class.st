@@ -23,6 +23,7 @@ RBStaticMessageNode class >> fromMessageNode: aMessageNode [
 		newStaticMessageNode
 			instVarNamed: varName
 			put: (aMessageNode instVarNamed: varName) ].
+		
 	^ newStaticMessageNode
 ]
 
