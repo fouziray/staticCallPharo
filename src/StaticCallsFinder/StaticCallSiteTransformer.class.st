@@ -43,8 +43,9 @@ StaticCallSiteTransformer >> bubbleUpChangesInExecutionPath: aScpExecutionRecord
 				                with: found ]
 		                thenSelect: #isNotNil.
 
-	scpNodeOrNil ifNotNil: [
+	scpNodeOrNil ifNotEmpty: [
 		self rewriteAndDuplicateParentNode: scpNodeOrNil ].
+	1 halt.
 
 
 

@@ -37,8 +37,11 @@ EFFormatter >> formatStaticSelectorAndArguments: aMessageNode firstSeparator: fi
 codeStream nextPutAll: aMessageNode selector ] ] ifFalse: [ aMessageNode selectorParts with: aMessageNode arguments do: [:selector :argument |  i := i + 1.
               self handleLineForSelector: selector withSeparatorBlock: separatorBlock.
               separatorBlock := restBlock.
-              self indent: ((((self willBeMultiline: argument) and: [ i < aMessageNode selectorParts size or: [ self newLineBefore ] ]) or: [ self isInCascadeNode ]) ifTrue: [ 1 ] ifFalse: [ 0 ]) around: [ 
-	codeStream nextPutAll: ({#_ . aMessageNode staticClass instanceSide name . #_} joinUsing: '') asSymbol.
+              self indent: ((((self willBeMultiline: argument) and: [ i < aMessageNode selectorParts size or: [ self newLineBefore ] ]) or: [ self isInCascadeNode ]) ifTrue: [ 1 ] ifFalse: [ 0 ]) around: [
+	i = 1 ifTrue: [ 
+            codeStream nextPutAll: ({#_ . aMessageNode staticClass instanceSide name . #_} joinUsing: '') asSymbol.
+        ]. 
+	
 	codeStream nextPutAll: selector.
                     self handleLineForArgument: argument ].
               ((self willBeMultiline: argument) and: [ i < aMessageNode selectorParts size ]) ifTrue: [ separatorBlock := self newLine ] ] ]

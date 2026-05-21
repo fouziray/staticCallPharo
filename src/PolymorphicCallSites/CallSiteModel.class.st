@@ -33,6 +33,11 @@ CallSiteModel class >> fromRaw: aCollection [
 ]
 
 { #category : 'accessing' }
+CallSiteModel >> bytecodeStart [
+	^ bytecodeStart
+]
+
+{ #category : 'accessing' }
 CallSiteModel >> computeTypes [
 
 	flattenedTypes := (methodsActivated collect: #receiverTypes )flattened asBag
@@ -222,6 +227,11 @@ CallSiteModel >> receiverTypesBag [
 { #category : 'accessing' }
 CallSiteModel >> selector [
 	^ selector
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> sourceStart [
+	^ sourceStart
 ]
 
 { #category : 'accessing' }
