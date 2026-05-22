@@ -37,7 +37,7 @@ PatternCallSites class >> deserializeTracePatternsHg [
 { #category : 'class initialization' }
 PatternCallSites class >> initialize [
 	super initialize.
-	tracePatternsDir:= FileSystem workingDirectory / 'patternTrace'.
+	tracePatternsDir:= FileSystem  workingDirectory /'pharo-local' /'iceberg'/'fouziray'/'staticCallPharo'/'patternTrace'.
 	
 	(tracePatternsDir ) asFileReference exists ifFalse:[self error: 'gotta create a directory named: patternTrace
 	- regenerate the trace using tracePatterns... for all program or copy it from elsewhere']
@@ -69,10 +69,9 @@ PatternCallSites class >> typeSwitchAnalysis [
 	| program patternsVisualizer ordered |
 	patternsVisualizer := PicPatternVisual new.
 	program :=  self deserializeTracePatternsForFile: 'waterMap.ston'.
-	1 halt.
- 
+	
 	ordered := (program callSites do:[:site | patternsVisualizer switchRatioPerSite: site. ]) sort: [ :a :b | a switchRatio > b switchRatio ].
-	patternsVisualizer plotSwitchRatio: ordered.	
+	^ patternsVisualizer plotSwitchRatio: ordered.	
 	
 
 ]
