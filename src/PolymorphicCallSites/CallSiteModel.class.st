@@ -17,7 +17,8 @@ Class {
 		'allTypesFreq',
 		'flattenedTypes',
 		'isSelfSend',
-		'typesPattern'
+		'typesPattern',
+		'switchRatio'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -232,6 +233,16 @@ CallSiteModel >> selector [
 { #category : 'accessing' }
 CallSiteModel >> sourceStart [
 	^ sourceStart
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> switchRatio [
+	^ switchRatio
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> switchRatio: aNumber [ 
+	switchRatio:= aNumber 
 ]
 
 { #category : 'accessing' }

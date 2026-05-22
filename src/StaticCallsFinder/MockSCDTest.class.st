@@ -4,9 +4,3 @@ Class {
 	#category : 'StaticCallsFinder',
 	#package : 'StaticCallsFinder'
 }
-
-{ #category : 'as yet unclassified' }
-MockSCDTest class >> sampleMethodWithSuperReceiver [
-
-	^ super sampleMethodWithLiteralReceiver .
-]

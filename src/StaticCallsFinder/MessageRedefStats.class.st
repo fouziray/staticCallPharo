@@ -8,15 +8,3 @@ Class {
 	#package : 'StaticCallsFinder',
 	#tag : 'core'
 }
-
-{ #category : 'accessing' }
-MessageRedefStats >> devirtualizables [
-
-	^ devirtualizables
-]
-
-{ #category : 'accessing' }
-MessageRedefStats >> devirtualizables: anObject [
-
-	devirtualizables := anObject
-]

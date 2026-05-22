@@ -14,6 +14,12 @@ PicPatternVisual class >> callSitesFromHoneyGinger [
 ]
 
 { #category : 'as yet unclassified' }
+PicPatternVisual class >> callSitesFromNewTraceHoneyGinger [
+
+	^ STON fromString: FileSystem workingDirectory / 'tracePattern' / 'hgWater.ston'
+]
+
+{ #category : 'as yet unclassified' }
 PicPatternVisual class >> visualize: aDictionary [
 
 	^ self new visualize: aDictionary
@@ -51,6 +57,39 @@ PicPatternVisual >> getTransitionTriggerCounter: aCallSiteModel forPattern: aCol
 	
 	^ y
 
+]
+
+{ #category : 'plot' }
+PicPatternVisual >> plotSwitchRatio: aCollection [ 
+	| values c plot |
+	"
+	To interpret this histogram take into consideration the following rule to calculate the ratio
+	--> switchCounter / aCallSite numberOfCalls
+	This means, higher ratio means more switches --> unstable pics. Less ration is proof of low switch rate.
+	"
+	
+	c := RSCompositeChart new.
+	plot := RSHistogramPlot new x: (aCollection collect:#switchRatio) .
+	c add: plot.
+	c title: 'Hisotgram Of ratio of switch X number of callsites '.
+	
+	
+	^ c
+]
+
+{ #category : 'visual' }
+PicPatternVisual >> switchRatioPerSite: aCallSite [
+
+	|y switchCounter | 
+		y := self getTransitionTriggerCounter: aCallSite forPattern: aCallSite typesPattern.
+		y size.
+		switchCounter :=0.
+		y inject: 0  into: [ :prev :current | prev ~= current ifTrue:[ switchCounter :=switchCounter+1  ]. current].
+		"
+		We get the ratio the switch calls among all calls in the site
+		Helps us order them from most to least stable.
+		"
+		^ aCallSite switchRatio: (switchCounter / aCallSite numberOfCalls) asFloat 
 ]
 
 { #category : 'as yet unclassified' }
