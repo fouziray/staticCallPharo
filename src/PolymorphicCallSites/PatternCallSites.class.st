@@ -44,6 +44,19 @@ PatternCallSites class >> initialize [
 
 ]
 
+{ #category : 'divide' }
+PatternCallSites class >> partitionIntoSublists: aCollectionOfCallSiteModels usingBins: bins [ 
+
+    ^ bins allButLast collectWithIndex: [ :val1 :index |
+        | val2 condition |
+        val2 := bins at: index + 1.
+        condition := index + 1 = bins size
+            ifTrue: [ [ :value | value switchRatio between: val1 and: val2 ] ]
+            ifFalse: [ [ :value | val1 <= value switchRatio and: [ value switchRatio < val2 ] ] ].
+        aCollectionOfCallSiteModels select: condition
+    ]
+]
+
 { #category : 'as yet unclassified' }
 PatternCallSites class >> tracePatternsOfHg [
 	<script>
@@ -66,14 +79,16 @@ PatternCallSites class >> typeSwitchAnalysis [
 	
 	<script>
 
-	| program patternsVisualizer ordered |
+	| program callSitesPartitions patternsVisualizer ordered plot plot2 |
 	patternsVisualizer := PicPatternVisual new.
 	program :=  self deserializeTracePatternsForFile: 'waterMap.ston'.
-	
-	ordered := (program callSites do:[:site | patternsVisualizer switchRatioPerSite: site. ]) sort: [ :a :b | a switchRatio > b switchRatio ].
-	^ patternsVisualizer plotSwitchRatio: ordered.	
-	
 
+	ordered := (program callSites do:[:site | patternsVisualizer switchRatioPerSite: site. ]) sort: [ :a :b | a switchRatio > b switchRatio ].
+	plot:= 	(patternsVisualizer plotSwitchRatio: ordered) inspect .	
+	plot plots first bins inject: 0 into:[:prev :cur | ] .
+	callSitesPartitions := self partitionIntoSublists: ordered usingBins: plot plots first bins.
+   plot2:= patternsVisualizer plotSwitchRatioWithCallNum: callSitesPartitions fromTotalCalls: program numberOfCalls .
+	plot2 inspect
 ]
 
 { #category : 'initialization' }

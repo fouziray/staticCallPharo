@@ -77,6 +77,56 @@ PicPatternVisual >> plotSwitchRatio: aCollection [
 	^ c
 ]
 
+{ #category : 'plot' }
+PicPatternVisual >> plotSwitchRatioWithCallNum: aCollection [ 
+	|composite hist |
+	composite := self plotSwitchRatio: aCollection flattened.
+	composite  build.
+
+	
+	hist := composite plots first.
+	hist bars doWithIndex: [ :bar :i |
+    | label value |
+    value := (aCollection at: i) sum:[:e| e numberOfCalls] .
+    label := RSLabel new
+        text: value printString;
+        color: Color black;
+        yourself.
+    label translateTo: bar position + (0 @ (bar height / 2 + 10) negated).
+    composite canvas add: label.
+
+
+].
+	composite canvas  signalUpdate .
+^composite canvas
+	
+]
+
+{ #category : 'plot' }
+PicPatternVisual >> plotSwitchRatioWithCallNum: aCollection fromTotalCalls: aTotalCallNumber [
+
+	| composite hist |
+	composite := self plotSwitchRatio: aCollection flattened.
+	composite build.
+
+
+	hist := composite plots first.
+	hist bars doWithIndex: [ :bar :i |
+		| label value |
+		value := ((((aCollection at: i) sum: [ :e | e numberOfCalls ])
+		         / aTotalCallNumber) * 100) asFloat .
+		label := RSLabel new
+			         text: (value printShowingDecimalPlaces: 1) , '%';
+			         color: Color black;
+			         yourself.
+
+		label translateTo:
+			bar position + (0 @ (bar height / 2 + 10) negated).
+		composite canvas add: label ].
+	composite canvas signalUpdate.
+	^ composite canvas
+]
+
 { #category : 'visual' }
 PicPatternVisual >> switchRatioPerSite: aCallSite [
 
