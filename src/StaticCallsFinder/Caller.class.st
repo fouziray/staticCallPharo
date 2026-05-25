@@ -2,7 +2,8 @@ Class {
 	#name : 'Caller',
 	#superclass : 'CallerStaticInterpreter',
 	#instVars : [
-		'object'
+		'object',
+		'iterations'
 	],
 	#category : 'StaticCallsFinder',
 	#package : 'StaticCallsFinder'
@@ -90,6 +91,20 @@ Caller >> fullPrintString64TimesTo: x [
 Caller >> initialize [ 
 	super initialize.
 	object:= Object new.
+	iterations := 20000.
+	
+]
+
+{ #category : 'accessing' }
+Caller >> iterations [
+
+	^ iterations
+]
+
+{ #category : 'accessing' }
+Caller >> iterations: anObject [
+
+	iterations := anObject
 ]
 
 { #category : 'as yet unclassified' }
@@ -157,7 +172,7 @@ Caller >> performMicroBytestring [
 { #category : 'bench - object new' }
 Caller >> performMicroObjectInstance [
 
-	1 to: 20000 do: [ :e | self sending64TimeMessageTo: object ]
+	1 to: iterations do: [ :e | self sending64TimeMessageTo: object ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -175,7 +190,7 @@ Caller >> performMicroSetStatic [
 { #category : 'as yet unclassified' }
 Caller >> performMicroSetStaticObjectInstance [
 
-	1 to: 20000 do: [ :e | self sending64TimeMessageToSt: object ]
+	1 to: iterations do: [ :e | self sending64TimeMessageToSt: object ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -438,6 +453,13 @@ Caller >> warmupSendAsMegaMorphic [
 		sending64TimeMessageTo: 1->5 ]
 ]
 
+{ #category : 'warmup - mono' }
+Caller >> warmupSendAsMonoMorphic [
+	3 timesRepeat: [
+          self
+          	sending64TimeMessageTo: Object new ]
+]
+
 { #category : 'warmup -  poly' }
 Caller >> warmupSendAsPolyMorphic [
 	3 timesRepeat: [
@@ -450,9 +472,15 @@ Caller >> warmupSendAsPolyMorphic [
 		sending64TimeMessageTo: Object ]
 ]
 
-{ #category : 'warmup - mono' }
-Caller >> warmupSendMonoMorphic [
+{ #category : 'warmup - static' }
+Caller >> warmupSendStatic [
+
 	3 timesRepeat: [
-          self
-          	sending64TimeMessageTo: Object new ]
+		self
+			sending64TimeMessageToSt: Set;
+			sending64TimeMessageToSt: 1;
+			sending64TimeMessageToSt: OrderedCollection new;
+			sending64TimeMessageToSt: 1.0;
+			sending64TimeMessageToSt: 'toto';
+			sending64TimeMessageToSt: object ]
 ]
