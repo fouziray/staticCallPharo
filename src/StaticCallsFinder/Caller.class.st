@@ -1,6 +1,9 @@
 Class {
 	#name : 'Caller',
-	#superclass : 'Object',
+	#superclass : 'CallerStaticInterpreter',
+	#instVars : [
+		'object'
+	],
 	#category : 'StaticCallsFinder',
 	#package : 'StaticCallsFinder'
 }
@@ -83,6 +86,12 @@ Caller >> fullPrintString64TimesTo: x [
 	x fullPrintString
 ]
 
+{ #category : 'bench - object new' }
+Caller >> initialize [ 
+	super initialize.
+	object:= Object new.
+]
+
 { #category : 'as yet unclassified' }
 Caller >> microPrintStringOnByteStringSt [
 	"self new microPrintStringOnByteString iterations"
@@ -145,6 +154,12 @@ Caller >> performMicroBytestring [
 	1 to: 20000 do: [ :e | self sending64TimeMessageTo: 'toto' ]
 ]
 
+{ #category : 'bench - object new' }
+Caller >> performMicroObjectInstance [
+
+	1 to: 20000 do: [ :e | self sending64TimeMessageTo: object ]
+]
+
 { #category : 'as yet unclassified' }
 Caller >> performMicroSet [
 
@@ -155,6 +170,12 @@ Caller >> performMicroSet [
 Caller >> performMicroSetStatic [
 
 	1 to: 20000 do: [ :e | self sending64TimeMessageToSt: Set ]
+]
+
+{ #category : 'as yet unclassified' }
+Caller >> performMicroSetStaticObjectInstance [
+
+	1 to: 20000 do: [ :e | self sending64TimeMessageToSt: object ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -400,4 +421,38 @@ Caller >> warmupSend [
           	sending64TimeMessageTo: 1.0;
 		sending64TimeMessageTo: 'toto';
 		sending64TimeMessageTo: Object ]
+]
+
+{ #category : 'warmup -  poly' }
+Caller >> warmupSendAsMegaMorphic [
+	3 timesRepeat: [
+          self
+          	sending64TimeMessageTo: Set;
+	 	sending64TimeMessageTo: 1;
+	  	sending64TimeMessageTo: Object new;
+          	sending64TimeMessageTo: 1.0;
+		sending64TimeMessageTo: 'toto';
+		sending64TimeMessageTo: Object;
+		sending64TimeMessageTo: {2. 5};
+		sending64TimeMessageTo: Set new;
+		sending64TimeMessageTo: 1->5 ]
+]
+
+{ #category : 'warmup -  poly' }
+Caller >> warmupSendAsPolyMorphic [
+	3 timesRepeat: [
+          self
+          	sending64TimeMessageTo: Set;
+	 	sending64TimeMessageTo: 1;
+	  	sending64TimeMessageTo: Object new;
+          	sending64TimeMessageTo: 1.0;
+		sending64TimeMessageTo: 'toto';
+		sending64TimeMessageTo: Object ]
+]
+
+{ #category : 'warmup - mono' }
+Caller >> warmupSendMonoMorphic [
+	3 timesRepeat: [
+          self
+          	sending64TimeMessageTo: Object new ]
 ]
