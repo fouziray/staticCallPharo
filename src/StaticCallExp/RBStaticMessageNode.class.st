@@ -55,11 +55,12 @@ RBStaticMessageNode >> isStaticCall [
 
 { #category : 'accessing' }
 RBStaticMessageNode >> selector: aSelector [
-
-	staticClass := nil.
-	keywordsPositions := nil.
+	"staticClass :=  nil.
+	keywordsPositions := nil."
 	selector := aSelector isString
-		            ifTrue: [ RBSelectorNode value: aSelector allButFirst ]
+		            ifTrue: [ 
+									(aSelector beginsWith:'_') ifFalse:[ RBSelectorNode value: aSelector ] ifTrue:[
+									RBSelectorNode value: aSelector allButFirst ]. ]
 		            ifFalse: [ aSelector value: aSelector value "allButFirst" ].
 	selector parent: self
 ]

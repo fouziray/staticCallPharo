@@ -12,6 +12,15 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+PatternCallSites class >> deserializeButterBallAtDie [	
+	<script>
+
+	^  self deserializeStonFor: tracePatternsDir / 'butterBallAtDie.ston' 
+	
+	
+]
+
+{ #category : 'as yet unclassified' }
 PatternCallSites class >> deserializeStonFor: aFileReference [
 
 	^ aFileReference readStreamDo: [ :stream | STON fromStream: stream ]
@@ -42,6 +51,20 @@ PatternCallSites class >> initialize [
 	(tracePatternsDir ) asFileReference exists ifFalse:[self error: 'gotta create a directory named: patternTrace
 	- regenerate the trace using tracePatterns... for all program or copy it from elsewhere']
 
+]
+
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> tracePatternsOfButterBalll [
+	<script>
+	| simulator blockReturn program |
+	simulator := self new .
+	simulator block: [ HGSimulator butterBallAtDie . WorldMorph doOneCycle . WorldMorph doOneCycle ].
+	blockReturn := simulator execute.		
+	
+	program := ProgramModel new name:'	ButterBallAtDie '  fromRaw: ( [ HGSimulator butterBallAtDie . WorldMorph doOneCycle . WorldMorph doOneCycle ]) -> simulator getAllCallSites andPatterns: simulator typePatterns. 
+	( tracePatternsDir / 'butterBallAtDie.ston' ) asFileReference writeStreamDo: [ :stream |
+    STON put: program onStream: stream
+].
 ]
 
 { #category : 'as yet unclassified' }
