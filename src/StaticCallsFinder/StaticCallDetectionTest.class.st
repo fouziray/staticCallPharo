@@ -3,8 +3,7 @@ Class {
 	#superclass : 'TestCase',
 	#instVars : [
 		'analyzer',
-		'visitor',
-		'interproceduralVisitor'
+		'visitor'
 	],
 	#category : 'StaticCallsFinder-tests',
 	#package : 'StaticCallsFinder',

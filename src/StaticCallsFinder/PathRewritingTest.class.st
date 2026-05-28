@@ -12,7 +12,9 @@ Class {
 		'assocToModifyEmbeddedSecond',
 		'candidate1',
 		'assocToModifyCallToEmbed',
-		'candidateSecondLevel'
+		'candidateSecondLevel',
+		'binaryCandidate',
+		'assocBinarySelector'
 	],
 	#category : 'StaticCallsFinder-rewriting',
 	#package : 'StaticCallsFinder',
@@ -223,6 +225,12 @@ PathRewritingTest >> setUpCandidates [
 		                 (Dictionary newFrom:
 			                  { (PathRewritingTest >> #methodToBeRewritten2
 			                   -> (Bag newFrom: { PathRewritingTest })). }).
+			
+			
+			
+	assocBinarySelector := (PathRewritingTest >> #methodToBeRewritten) ast allChildren third -> (Dictionary newFrom:
+			                  { ( SmallInteger>>#+
+			                   -> (Bag newFrom: { SmallInteger })). }).
 
 	candidate := StaticCallCandidate
 		             method: assocToModify value keys first
@@ -257,6 +265,15 @@ candidate1 := StaticCallCandidate
 			
 	"This candidate has to be taken in consideration when rewriting its method selector a second time when bubbling up"
 		"Two scenarios may happen"	
+		binaryCandidate := StaticCallCandidate method: assocBinarySelector value keys first
+		              callSite: assocBinarySelector key
+		              selector: assocBinarySelector key methodNode selector
+		              receiver:
+		              assocBinarySelector value values first asOrderedCollection
+			              first
+		              receiverType:
+		              (SmallInteger).
+ 
 		assocToModifyCallToEmbed := (PathRewritingTest >> #iCallMethodSecondLevelToEmbedded ) ast
 		                 allChildren third
 	                 ->
@@ -295,6 +312,18 @@ PathRewritingTest >> testAddingRewrittenDuplicatedMethodDoesNotModifyOriginalMet
 	transformer compileAstWithStaticNodesAndDuplicateMethod: newAst.
 
 	self assert: originalMethod ast == originalAST.
+]
+
+{ #category : 'tests' }
+PathRewritingTest >> testRewritingCallsiteBinary [
+
+	| newAst |
+	newAst := transformer transformCandidate: binaryCandidate.
+
+	self assert:
+		(newAst sendNodes anySatisfy: [ :each | each isStaticCall ]).
+
+	self assert: newAst sendNodes first selector equals: #pluss: .
 ]
 
 { #category : 'tests' }

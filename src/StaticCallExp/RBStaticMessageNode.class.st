@@ -17,13 +17,22 @@ RBStaticMessageNode class >> fromMessageNode: aMessageNode [
 
 	| newStaticMessageNode |
 	newStaticMessageNode := self new.
-
+	
+	aMessageNode isBinary  ifTrue: [
+	
+	RBMessageNode allInstVarNames do: [ :varName |
+	newStaticMessageNode
+		instVarNamed: varName
+		put: (aMessageNode instVarNamed: varName) ].
+	newStaticMessageNode selector: (BinarySelectorsReplacements at: aMessageNode selector) 	
+	] ifFalse: [
 	"Copy all instance variables from superclass"
 	RBMessageNode allInstVarNames do: [ :varName |
 		newStaticMessageNode
 			instVarNamed: varName
 			put: (aMessageNode instVarNamed: varName) ].
-		
+	].
+	
 	^ newStaticMessageNode
 ]
 

@@ -94,9 +94,10 @@ StaticCallSiteTransformer >> eee [
 
 { #category : 'check' }
 StaticCallSiteTransformer >> existsDuplicateFor: aScpMethodTrace [
-
-	^ (aScpMethodTrace node methodClass lookupSelector:
-		 ('rwST' , aScpMethodTrace node selector) asSymbol) 
+	
+	| selector |
+	selector := aScpMethodTrace node selector.
+	^ aScpMethodTrace node methodClass lookupSelector: ((selector beginsWith: 'rwST') ifTrue:[ selector ] ifFalse: [ ('rwST' , selector) asSymbol ])
 ]
 
 { #category : 'as yet unclassified' }
@@ -326,8 +327,9 @@ record parent isMessage ifTrue: [ self replaceNodeRenameCallers: record parent n
 StaticCallSiteTransformer >> rewriteAndDuplicateParentNode: aCollection [
 
 	| parent |
+
 	parent := aCollection first parent.
-	[ parent ] whileNotNil: [ "		self haltIf: (parent callSite selector beginsWith: 'rwST')."
+	[ parent ]  whileNotNil: [ "		self haltIf: (parent callSite selector beginsWith: 'rwST')."
 		parent callSite
 			propertyAt: #oldSelector
 			ifAbsentPut: parent callSite selector.
@@ -344,14 +346,23 @@ StaticCallSiteTransformer >> rewriteAndDuplicateParentNode: aCollection [
 					^ self compileAstWithStaticNodesAndDuplicateMethod:
 						  correspondingNode methodNode ]
 				ifTrue: [ ^ nil ] ].
-		parent callSite selector:
-			('rwST' , (parent callSite propertyAt: #oldSelector)) asSymbol.
-		self compileAstWithStaticNodesAndDuplicateMethod:
-			parent callSite methodNode.
+			
+		parent callSite selector: ('rwST' , (parent callSite propertyAt: #oldSelector)) asSymbol.
+		
+		self compileAstWithStaticNodesAndDuplicateMethod: parent callSite methodNode.
+		
 
+		
+		
 		parent parent isMessage
 			ifTrue: [ parent := parent parent parent ]
-			ifFalse: [ parent := parent parent ] ]
+			ifFalse: [ parent := parent parent ].
+			
+		parent callSite ifNil:[
+
+			^ nil
+		].
+	]
 ]
 
 { #category : 'running' }
