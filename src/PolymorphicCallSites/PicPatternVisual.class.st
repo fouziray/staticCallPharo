@@ -59,6 +59,27 @@ PicPatternVisual >> getTransitionTriggerCounter: aCallSiteModel forPattern: aCol
 
 ]
 
+{ #category : 'visual' }
+PicPatternVisual >> nbCallsBeforeSecondTypeOccurence: aCallSite [
+
+	|y previous switched index | 
+		y :=  aCallSite typesPattern.
+		previous:= nil.
+		switched:= false.
+		index:=1.
+		
+		self assert: y size > 1.
+		previous:= y at: 1.
+		[switched] whileFalse: [ 
+			
+			index := index+1.
+			( ( y at: index ) ~= previous ) ifTrue: [ switched := true ].		
+			previous:= y at: index.	
+		].
+	aCallSite firstSwitchAt: index.
+	^ index.
+]
+
 { #category : 'plot' }
 PicPatternVisual >> plotSwitchRatio: aCollection [ 
 	| values c plot |

@@ -18,7 +18,8 @@ Class {
 		'flattenedTypes',
 		'isSelfSend',
 		'typesPattern',
-		'switchRatio'
+		'switchRatio',
+		'firstSwitchIndex'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -119,6 +120,18 @@ CallSiteModel >> findDisparities [
 
 	allTypesFreq := (orderedByFrequ collect:[:e | (e key / totalCalls) asFloat ]). 
 	^ allTypesFreq first	
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> firstSwitchAt: index [
+
+	firstSwitchIndex:= index
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> firstSwitchIndex [
+
+	^ firstSwitchIndex
 ]
 
 { #category : 'instance creation' }

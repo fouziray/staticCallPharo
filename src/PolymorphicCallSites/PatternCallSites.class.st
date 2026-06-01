@@ -34,10 +34,28 @@ PatternCallSites class >> deserializeTracePatternsHg [
 	
 ]
 
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> firstTypeSwitchAnalysis [
+	"this gives  how many calls before a new type pops up X number of call sites "
+	<script>
+
+	| program callSitesPartitions patternsVisualizer ordered plot plot2 callsites |
+	patternsVisualizer := PicPatternVisual new.
+	program :=  self deserializeTracePatternsForFile: 'hgWater.ston'.
+	callsites := program callSites select:[ :site | site numberOfReceiverClasses  > 1]. 
+	ordered := (callsites do:[:site | patternsVisualizer nbCallsBeforeSecondTypeOccurence: site. ]) sort: [ :a :b | a firstSwitchIndex > b firstSwitchIndex ].
+"	plot:= 	(patternsVisualizer plotSwitchRatio: ordered) inspect .	
+	plot plots first bins inject: 0 into:[:prev :cur | ] .
+	callSitesPartitions := self partitionIntoSublists: ordered usingBins: plot plots first bins.
+   plot2:= patternsVisualizer plotSwitchRatioWithCallNum: callSitesPartitions fromTotalCalls: program numberOfCalls .
+	plot2 inspect"
+	1 halt.
+]
+
 { #category : 'class initialization' }
 PatternCallSites class >> initialize [
 	super initialize.
-	tracePatternsDir:= FileSystem  workingDirectory /'pharo-local' /'iceberg'/'fouziray'/'staticCallPharo'/'patternTrace'.
+	tracePatternsDir := FileSystem  workingDirectory /'pharo-local' /'iceberg'/'fouziray'/'staticCallPharo'/'patternTrace'.
 	
 	(tracePatternsDir ) asFileReference exists ifFalse:[self error: 'gotta create a directory named: patternTrace
 	- regenerate the trace using tracePatterns... for all program or copy it from elsewhere']
@@ -63,13 +81,13 @@ PatternCallSites class >> tracePatternsOfHg [
 	| simulator blockReturn program |
 	simulator := self new .
 	simulator block: [ HGSimulator watershowPressureMap. WorldMorph doOneCycle . WorldMorph doOneCycle .
-		(Duration seconds: 3) wait ].
+		"(Duration seconds: 3) wait" ].
 	blockReturn := simulator execute.		
 	
 	program := ProgramModel new name:'	hgWater '  fromRaw: ([ HGSimulator watershowPressureMap. WorldMorph doOneCycle . WorldMorph doOneCycle .
 	
 	(Duration seconds: 3) wait ]) -> simulator getAllCallSites andPatterns: simulator typePatterns. 
-	( tracePatternsDir ) asFileReference writeStreamDo: [ :stream |
+	( tracePatternsDir /'hgWater.ston') asFileReference writeStreamDo: [ :stream |
     STON put: program onStream: stream
 ].
 ]
@@ -124,7 +142,7 @@ PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments
 				add: aReceiver class;
 				yourself);
 			yourself"
-			OrderedCollection newFrom: { aReceiver }
+			OrderedCollection newFrom: { aReceiver class }
 		].
 	callsites at: aNode 
 		ifPresent: [ :m | m at: aMethod 
