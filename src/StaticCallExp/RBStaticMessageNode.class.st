@@ -17,13 +17,22 @@ RBStaticMessageNode class >> fromMessageNode: aMessageNode [
 
 	| newStaticMessageNode |
 	newStaticMessageNode := self new.
-
+	
+	aMessageNode isBinary  ifTrue: [
+	
+	RBMessageNode allInstVarNames do: [ :varName |
+	newStaticMessageNode
+		instVarNamed: varName
+		put: (aMessageNode instVarNamed: varName) ].
+	newStaticMessageNode selector: (BinarySelectorsReplacements at: aMessageNode selector) 	
+	] ifFalse: [
 	"Copy all instance variables from superclass"
 	RBMessageNode allInstVarNames do: [ :varName |
 		newStaticMessageNode
 			instVarNamed: varName
 			put: (aMessageNode instVarNamed: varName) ].
-		
+	].
+	
 	^ newStaticMessageNode
 ]
 
@@ -55,11 +64,12 @@ RBStaticMessageNode >> isStaticCall [
 
 { #category : 'accessing' }
 RBStaticMessageNode >> selector: aSelector [
-
-	staticClass := nil.
-	keywordsPositions := nil.
+	"staticClass :=  nil.
+	keywordsPositions := nil."
 	selector := aSelector isString
-		            ifTrue: [ RBSelectorNode value: aSelector allButFirst ]
+		            ifTrue: [ 
+									(aSelector beginsWith:'_') ifFalse:[ RBSelectorNode value: aSelector ] ifTrue:[
+									RBSelectorNode value: aSelector allButFirst ]. ]
 		            ifFalse: [ aSelector value: aSelector value "allButFirst" ].
 	selector parent: self
 ]

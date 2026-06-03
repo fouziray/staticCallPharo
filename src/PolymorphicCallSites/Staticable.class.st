@@ -21,14 +21,13 @@ Staticable class >> traceFromRewriter [
 	<script>
 	| veritasHg filesStoned trace callSites method callsite candidates |
 	filesStoned := STON fromString:
-		               (FileSystem disk workingDirectory / 'tracing'
-		                / '33VeritasHoneyGinger new run.ston') contents.
-	1 halt.
+		               (FileSystem disk workingDirectory / 'patternTrace'
+		                / 'waterMap.ston') contents.
 	"trace extraction"
 	trace := ScpExecutionRecorder
 		         recordBlock: [
 			         | simulator |
-			         simulator := VeritasHoneyGinger new run.
+			         simulator := HGSimulator watershowPressureMap.
 			         5 timesRepeat: [ World doOneCycle ].
 			         simulator ]
 		         as: ScpExecutionRecordTree.

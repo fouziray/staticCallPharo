@@ -12,7 +12,9 @@ Class {
 		'assocToModifyEmbeddedSecond',
 		'candidate1',
 		'assocToModifyCallToEmbed',
-		'candidateSecondLevel'
+		'candidateSecondLevel',
+		'binaryCandidate',
+		'assocBinarySelector'
 	],
 	#category : 'StaticCallsFinder-rewriting',
 	#package : 'StaticCallsFinder',
@@ -35,8 +37,7 @@ PathRewritingTest >> iCallMethodSecondLevel [
 { #category : 'method examples' }
 PathRewritingTest >> iCallMethodSecondLevelToEmbedded [
 
-
-	self iCallMethodToBeRewritten2Embedded  
+	self iCallMethodToBeRewritten2Embedded
 ]
 
 { #category : 'method examples' }
@@ -64,7 +65,6 @@ PathRewritingTest >> iCallMethodToBeRewritten [
 PathRewritingTest >> iCallMethodToBeRewritten2Embedded [
 
 		self methodToBeRewritten2 methodToBeRewritten .
- 
 ]
 
 { #category : 'method examples' }
@@ -225,6 +225,12 @@ PathRewritingTest >> setUpCandidates [
 		                 (Dictionary newFrom:
 			                  { (PathRewritingTest >> #methodToBeRewritten2
 			                   -> (Bag newFrom: { PathRewritingTest })). }).
+			
+			
+			
+	assocBinarySelector := (PathRewritingTest >> #methodToBeRewritten) ast allChildren third -> (Dictionary newFrom:
+			                  { ( SmallInteger>>#+
+			                   -> (Bag newFrom: { SmallInteger })). }).
 
 	candidate := StaticCallCandidate
 		             method: assocToModify value keys first
@@ -259,6 +265,15 @@ candidate1 := StaticCallCandidate
 			
 	"This candidate has to be taken in consideration when rewriting its method selector a second time when bubbling up"
 		"Two scenarios may happen"	
+		binaryCandidate := StaticCallCandidate method: assocBinarySelector value keys first
+		              callSite: assocBinarySelector key
+		              selector: assocBinarySelector key methodNode selector
+		              receiver:
+		              assocBinarySelector value values first asOrderedCollection
+			              first
+		              receiverType:
+		              (SmallInteger).
+ 
 		assocToModifyCallToEmbed := (PathRewritingTest >> #iCallMethodSecondLevelToEmbedded ) ast
 		                 allChildren third
 	                 ->
@@ -297,6 +312,18 @@ PathRewritingTest >> testAddingRewrittenDuplicatedMethodDoesNotModifyOriginalMet
 	transformer compileAstWithStaticNodesAndDuplicateMethod: newAst.
 
 	self assert: originalMethod ast == originalAST.
+]
+
+{ #category : 'tests' }
+PathRewritingTest >> testRewritingCallsiteBinary [
+
+	| newAst |
+	newAst := transformer transformCandidate: binaryCandidate.
+
+	self assert:
+		(newAst sendNodes anySatisfy: [ :each | each isStaticCall ]).
+
+	self assert: newAst sendNodes first selector equals: #pluss: .
 ]
 
 { #category : 'tests' }
@@ -462,6 +489,38 @@ PathRewritingTest >> testRewritingPath2LevelsTwoNestedCandidatesAndOneInParentDi
 		assert:
 		executionPathMixedCalls1 methods first node sendNodes first selector
 		equals: #rwSTiCallMethodToBeRewritten2Embedded
+]
+
+{ #category : 'tests' }
+PathRewritingTest >> testRewritingPath2LevelsTwoNestedCandidatesAndOneInParentFirstChanged [
+
+	| astCachePerModifiedMethod methodBefore |
+	astCachePerModifiedMethod := Dictionary new.
+
+	methodBefore := candidate1 callSite methodNode compiledMethod.
+
+	transformer
+		transformCallStack: {
+			candidateSecondLevel.
+				candidate1.
+			
+				candidate2 }
+		withinPath: executionPathMixedCalls1.
+
+	self assert:
+		(executionPathMixedCalls1 methods first node methodClass
+		 >> #rwSTiCallMethodToBeRewritten2Embedded) ast sendNodes first
+			isStaticCall.
+	self assert:
+		(executionPathMixedCalls1 methods first node methodClass
+		 >> #rwSTiCallMethodToBeRewritten2Embedded) ast sendNodes second
+			isStaticCall.
+	self
+		assert: (methodBefore methodClass lookupSelector:
+				 ('rwST' , methodBefore selector) asSymbol)
+		equals: PathRewritingTest >> #rwSTiCallMethodToBeRewritten2Embedded.
+	self assert: ((PathRewritingTest >> #rwSTiCallMethodSecondLevelToEmbedded  ) ast sendNodes select:#isStaticCall ) isNotEmpty.
+
 ]
 
 { #category : 'tests' }

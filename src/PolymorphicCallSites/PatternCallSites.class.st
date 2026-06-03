@@ -2,9 +2,7 @@ Class {
 	#name : 'PatternCallSites',
 	#superclass : 'DevirtualizableCallSites',
 	#instVars : [
-		'typePatterns',
-		'messageDepthDictionary',
-		'depth'
+		'typePatterns'
 	],
 	#classInstVars : [
 		'tracePatternsDir'
@@ -12,6 +10,15 @@ Class {
 	#category : 'PolymorphicCallSites',
 	#package : 'PolymorphicCallSites'
 }
+
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> deserializeButterBallAtDie [	
+	<script>
+
+	^  self deserializeStonFor: tracePatternsDir / 'butterBallAtDie.ston' 
+	
+	
+]
 
 { #category : 'as yet unclassified' }
 PatternCallSites class >> deserializeStonFor: aFileReference [
@@ -94,6 +101,20 @@ PatternCallSites class >> partitionIntoSublists: aCollectionOfCallSiteModels usi
             ifFalse: [ [ :value | val1 <= value switchRatio and: [ value switchRatio < val2 ] ] ].
         aCollectionOfCallSiteModels select: condition
     ]
+]
+
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> tracePatternsOfButterBalll [
+	<script>
+	| simulator blockReturn program |
+	simulator := self new .
+	simulator block: [ HGSimulator butterBallAtDie . WorldMorph doOneCycle . WorldMorph doOneCycle ].
+	blockReturn := simulator execute.		
+	
+	program := ProgramModel new name:'	ButterBallAtDie '  fromRaw: ( [ HGSimulator butterBallAtDie . WorldMorph doOneCycle . WorldMorph doOneCycle ]) -> simulator getAllCallSites andPatterns: simulator typePatterns. 
+	( tracePatternsDir / 'butterBallAtDie.ston' ) asFileReference writeStreamDo: [ :stream |
+    STON put: program onStream: stream
+].
 ]
 
 { #category : 'as yet unclassified' }
