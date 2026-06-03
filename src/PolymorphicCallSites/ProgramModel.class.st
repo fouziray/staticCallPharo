@@ -75,6 +75,19 @@ ProgramModel >> name: aString fromRaw: anAssociation andPatterns: aDictionaryOfm
 ]
 
 { #category : 'instance creation' }
+ProgramModel >> name: aString fromRaw: anAssociation andPatterns: aDictionaryOfmsgToPattern withDepthOfMessages: aCollection [
+	
+	programName := aString.
+	blockCode := anAssociation key  ifNotNil: [ anAssociation key compiledBlock sourceNode sourceCode] .
+	callSites := (anAssociation value) associations reject: [ :e | e key isNil ] thenCollect: [ :e | 
+		|callsite|
+		callsite:= CallSiteModel fromRaw: e .
+		callsite depth: (aCollection at: e key) sortedCounts first value.
+		callsite hasThisPattern: (aDictionaryOfmsgToPattern at: (e key)). ]
+	
+]
+
+{ #category : 'instance creation' }
 ProgramModel >> name: aName fromTraceMessages: traceAssociatons [
 	programName := aName.
 	callSites := (traceAssociatons) associations reject: [ :e | e key isNil ] thenCollect: [ :e | CallSiteModel fromRaw: e ]

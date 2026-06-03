@@ -2,7 +2,9 @@ Class {
 	#name : 'PatternCallSites',
 	#superclass : 'DevirtualizableCallSites',
 	#instVars : [
-		'typePatterns'
+		'typePatterns',
+		'messageDepthDictionary',
+		'depth'
 	],
 	#classInstVars : [
 		'tracePatternsDir'
@@ -35,6 +37,15 @@ PatternCallSites class >> deserializeTracePatternsHg [
 ]
 
 { #category : 'as yet unclassified' }
+PatternCallSites class >> deserializeTracePatternsHgWithDepth [	
+	<script>
+
+	^  self deserializeStonFor: tracePatternsDir / 'hgWaterDepth.ston' 
+	
+	
+]
+
+{ #category : 'as yet unclassified' }
 PatternCallSites class >> firstTypeSwitchAnalysis [
 	"this gives  how many calls before a new type pops up X number of call sites "
 	<script>
@@ -49,6 +60,16 @@ PatternCallSites class >> firstTypeSwitchAnalysis [
 	callSitesPartitions := self partitionIntoSublists: ordered usingBins: plot plots first bins.
    plot2:= patternsVisualizer plotSwitchRatioWithCallNum: callSitesPartitions fromTotalCalls: program numberOfCalls .
 	plot2 inspect"
+	1 halt.
+]
+
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> generatePositionalTableOfCallSites [
+	<script>
+	| traceProgram toExport |
+	"export sites data Position-wise, lacks depth in call graph"
+	traceProgram := self deserializeTracePatternsForFile: 'waterMap.ston'.
+	toExport := traceProgram callSites collect: [:site | {site methodName. site selector. site bytecodeStart }  ].
 	1 halt.
 ]
 
@@ -86,8 +107,8 @@ PatternCallSites class >> tracePatternsOfHg [
 	
 	program := ProgramModel new name:'	hgWater '  fromRaw: ([ HGSimulator watershowPressureMap. WorldMorph doOneCycle . WorldMorph doOneCycle .
 	
-	(Duration seconds: 3) wait ]) -> simulator getAllCallSites andPatterns: simulator typePatterns. 
-	( tracePatternsDir /'hgWater.ston') asFileReference writeStreamDo: [ :stream |
+	"(Duration seconds: 3) wait" ]) -> simulator getAllCallSites andPatterns: simulator typePatterns withDepthOfMessages: simulator messageDepthDictionary. 
+	( tracePatternsDir /'hgWaterDepth.ston') asFileReference writeStreamDo: [ :stream |
     STON put: program onStream: stream
 ].
 ]
@@ -113,13 +134,15 @@ PatternCallSites class >> typeSwitchAnalysis [
 PatternCallSites >> initialize [
 	super initialize.
 	typePatterns := IdentityDictionary new. 
+	depth:= 0.
+	messageDepthDictionary := IdentityDictionary new.
 ]
 
 { #category : 'private - execution' }
 PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments: aArguments [
 
 	<noInstrumentation>
-   | arguments |
+   | arguments result |
 	arguments := aArguments.
 	(aMethod selector = #doesNotUnderstand:) ifTrue: [ 
 			arguments := { (MessageSend
@@ -158,10 +181,26 @@ PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments
 			yourself
 		].
 	
+		messageDepthDictionary
+            at: aNode
+            ifPresent: [ :depths | depths add:   depth ]
+            
+				ifAbsentPut: [ Bag new add: depth; yourself ] 
 	
 	].
-	^ aReceiver withArgs: arguments executeMethod: aMethod
-   
+ 	 
+	depth := depth + 1.   
+    result := aReceiver withArgs: arguments executeMethod: aMethod.
+    depth := depth - 1. 
+    ^ result
+
+
+
+]
+
+{ #category : 'accessing' }
+PatternCallSites >> messageDepthDictionary [
+	^ messageDepthDictionary
 ]
 
 { #category : 'accessing' }

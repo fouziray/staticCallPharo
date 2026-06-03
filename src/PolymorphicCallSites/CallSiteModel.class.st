@@ -19,7 +19,8 @@ Class {
 		'isSelfSend',
 		'typesPattern',
 		'switchRatio',
-		'firstSwitchIndex'
+		'firstSwitchIndex',
+		'depth'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -43,6 +44,16 @@ CallSiteModel >> bytecodeStart [
 CallSiteModel >> computeTypes [
 
 	flattenedTypes := (methodsActivated collect: #receiverTypes )flattened asBag
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> depth [
+	^ depth
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> depth: aNumber [
+	depth := aNumber 
 ]
 
 { #category : 'as yet unclassified' }

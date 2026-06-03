@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'matrixRowLabels',
 		'values',
-		'name'
+		'name',
+		'programModel'
 	],
 	#category : 'PolymorphicCallSites-Objects',
 	#package : 'PolymorphicCallSites',
@@ -33,7 +34,7 @@ MatrixSiteType >> intializeWith: aProgramModel [
 	name := aProgramModel programName.
 		
 	siteTypesFrequencies doWithIndex:[:e :i| values at: i put:( self rowFrequenciesFor: e)].
-	matrixRowLabels :=  (values collectAsSet: #keys) flattened.
+	matrixRowLabels :=  (values collect: #keys) values first .
 	self numpyFormat.
 ]
 
@@ -76,6 +77,82 @@ Output:
 row1,1,2,3
 row2,4,5,6
 row3,7,8,9"
+]
+
+{ #category : 'export' }
+MatrixSiteType >> octaveFormat [
+
+| matrix rowLabels colLabels stream |
+
+matrix :=  values collect:#values.
+rowLabels := values keys .
+colLabels := matrixRowLabels.
+
+stream := WriteStream on: String new.
+
+"Header row"
+stream nextPutAll: ','.  "empty top-left cell"
+colLabels doWithIndex: [:col :i |
+    stream nextPutAll: col.
+    i < colLabels size ifTrue: [stream nextPutAll: ',']].
+stream nextPut: Character cr.
+
+"Data rows with label"
+matrix doWithIndex: [:row :ri |
+    stream nextPutAll: (rowLabels at: ri) asString.
+    stream nextPutAll: ','.
+    row doWithIndex: [:val :ci |
+        stream nextPutAll: val printString.
+        ci < row size ifTrue: [stream nextPutAll: ',']].
+    stream nextPut: Character cr.].
+^ stream contents
+"('typeFreqNoInlinedMsg_', name ,'.csv') asFileReference writeStreamDo: [:f |
+    f nextPutAll: stream contents].
+"
+"```
+
+
+Output:
+```
+,col1,col2,col3
+row1,1,2,3
+row2,4,5,6
+row3,7,8,9"
+]
+
+{ #category : 'export' }
+MatrixSiteType >> octaveFormat: aProgramModel [ 
+
+	| stream callNumber|
+	stream := WriteStream on: String new.
+	stream nextPutAll: 'callsite_id,call_number,type_observed,depth, selector, callerMethod'.
+	stream nextPut: Character cr.
+	callNumber :=0.
+	aProgramModel callSites doWithIndex: [ :callSite :index|
+		| siteId |
+		siteId := index asString .
+		
+		callSite typesPattern do: [ :type  |
+				callNumber := callNumber +1.
+				stream nextPutAll: siteId; nextPutAll: ','.
+				stream print: callNumber; nextPutAll: ','.
+				stream nextPutAll: type; nextPutAll: ','.
+				stream print: callSite depth;nextPutAll: ','.
+				stream nextPutAll: callSite selector;nextPutAll:','.
+				stream nextPutAll: callSite methodName.
+				stream nextPut: Character cr ] ] .
+
+
+	('octave_', aProgramModel programName , '.csv') asFileReference
+		writeStreamDo: [ :f | f nextPutAll: stream contents ]
+
+]
+
+{ #category : 'as yet unclassified' }
+MatrixSiteType >> octaveFromProgram: aProgramModel [ 
+	
+	programModel:= aProgramModel .
+	^ self octaveFormat 
 ]
 
 { #category : 'transformation' }

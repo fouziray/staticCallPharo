@@ -452,7 +452,7 @@ DevirtualizableCallSites >> initialize [
 					 selector;
 			 yourself).
 
-	callsites := IdentityDictionary new
+	callsites := OrderedIdentityDictionary new
 ]
 
 { #category : 'accessing' }
@@ -526,6 +526,19 @@ DevirtualizableCallSites >> message: aNode method: aMethod receiver: aReceiver a
 				yourself);
 			yourself
 		].
+	
+	
+		"messageDepthDictionary
+            at: aNode
+            ifPresent: [ :depths | depths add:   depth ]
+            
+				ifAbsentPut: [ Bag new add: aScpMethodTrace depth; yourself ] ]
+            ifAbsentPut: [
+                Dictionary new
+                    at: aScpMethodTrace node compiledMethod put: (Bag new
+                        add: aScpMethodTrace depth; yourself);
+                    yourself ]."
+	
 	].
 	^ aReceiver withArgs: arguments executeMethod: aMethod
    
