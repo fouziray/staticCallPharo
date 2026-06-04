@@ -125,21 +125,20 @@ MatrixSiteType >> octaveFormat: aProgramModel [
 
 	| stream callNumber|
 	stream := WriteStream on: String new.
-	stream nextPutAll: 'callsite_id,call_number,type_observed,depth, selector, callerMethod'.
+	stream nextPutAll: 'callsite_id,call_number,type_observed,depth, selector, callerMethod, callercallsite'.
 	stream nextPut: Character cr.
 	callNumber :=0.
 	aProgramModel callSites doWithIndex: [ :callSite :index|
-		| siteId |
-		siteId := index asString .
 		
 		callSite typesPattern do: [ :type  |
 				callNumber := callNumber +1.
-				stream nextPutAll: siteId; nextPutAll: ','.
+				stream print: callSite callsiteid; nextPutAll: ','.
 				stream print: callNumber; nextPutAll: ','.
 				stream nextPutAll: type; nextPutAll: ','.
 				stream print: callSite depth;nextPutAll: ','.
 				stream nextPutAll: callSite selector;nextPutAll:','.
-				stream nextPutAll: callSite methodName.
+				stream nextPutAll: callSite methodName;nextPutAll:','.
+				stream print: callSite parentCallSiteModel .
 				stream nextPut: Character cr ] ] .
 
 

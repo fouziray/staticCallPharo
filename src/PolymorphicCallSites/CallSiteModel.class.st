@@ -21,24 +21,54 @@ Class {
 		'switchRatio',
 		'firstSwitchIndex',
 		'depth',
-		'parentCallSiteModel'
+		'parentCallSiteModel',
+		'callsiteid'
+	],
+	#classInstVars : [
+		'callsiteid'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
 	#tag : 'Model'
 }
 
+{ #category : 'accessing' }
+CallSiteModel class >> callsiteid [
+
+	^ callsiteid
+]
+
+{ #category : 'accessing' }
+CallSiteModel class >> callsiteid: anObject [
+
+	callsiteid := anObject
+]
+
 { #category : 'instance creation' }
-CallSiteModel class >> fromRaw: aCollection [ 
-	
+CallSiteModel class >> fromRaw: aCollection [
+
+	callsiteid := callsiteid + 1.
 	^ self new
-		fromRaw: aCollection;
-		yourself
+		  fromRaw: aCollection;
+		  callsiteid: callsiteid;
+		  yourself
 ]
 
 { #category : 'accessing' }
 CallSiteModel >> bytecodeStart [
 	^ bytecodeStart
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> callsiteid [
+
+	^ callsiteid
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> callsiteid:number [
+
+	callsiteid := number
 ]
 
 { #category : 'instance creation' }
@@ -171,6 +201,7 @@ CallSiteModel >> fromRaw: aCollection [
 	methodsActivated := aCollection value associations collect: [ :e | MethodActivatedModel fromRaw: e ].
  	self fetchSelector.
 	self computeTypes.
+	aCollection key propertyAt:#callsiteModel put: self.
 ]
 
 { #category : 'testing' }
@@ -242,8 +273,15 @@ CallSiteModel >> numberOfReceiverClasses [
 ]
 
 { #category : 'graph' }
-CallSiteModel >> pointTo: aCallSiteModel [ 
-	parentCallSiteModel:= aCallSiteModel 
+CallSiteModel >> parentCallSiteModel [
+
+	^ parentCallSiteModel
+]
+
+{ #category : 'graph' }
+CallSiteModel >> pointTo: aCallSiteModel [
+
+	parentCallSiteModel := aCallSiteModel
 ]
 
 { #category : 'as yet unclassified' }

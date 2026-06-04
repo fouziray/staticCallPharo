@@ -139,6 +139,22 @@ PatternCallSites class >> tracePatternsOfHg [
 ]
 
 { #category : 'as yet unclassified' }
+PatternCallSites class >> tracePatternsOfHgWithGraph [
+	<script>
+	| simulator blockReturn program |
+	simulator := self new .
+	simulator block: [ HGSimulator watershowPressureMap. WorldMorph doOneCycle . WorldMorph doOneCycle .
+		"(Duration seconds: 3) wait" ].
+	blockReturn := simulator execute.		
+	
+	program:=  simulator constructProgram .
+	1 halt.
+	"( tracePatternsDir /'hgWaterDepth.ston') asFileReference writeStreamDo: [ :stream |
+    STON put: program onStream: stream
+]".
+]
+
+{ #category : 'as yet unclassified' }
 PatternCallSites class >> typeSwitchAnalysis [
 	
 	<script>
@@ -164,7 +180,7 @@ PatternCallSites >> arrowsToParentMessages [
 { #category : 'initialize' }
 PatternCallSites >> constructProgram [
 
-	| siteModel program |
+	| siteModels program |
 	program := ProgramModel new
 		           name: self block asString
 		           fromRaw: self block -> self getAllCallSites
@@ -172,9 +188,10 @@ PatternCallSites >> constructProgram [
 		           withDepthOfMessages: self messageDepthDictionary.
 
 	arrowsToParentMessages associationsDo: [ :a |
-		a value ifNotNil: [
-			siteModel := program siteWith: a key.
-			siteModel first pointTo: (program siteWith: a value) first ] ].
+		a value  ifNotNil: [
+			siteModels := a key propertyAt: #callsiteModel. "program siteWith: a key"
+			a value do: [ :parentsite | parentsite ifNotNil: [ 
+				siteModels pointTo: (parentsite propertyAt: #callsiteModel) callsiteid ] ] ] ].
 	^ program
 ]
 
@@ -230,8 +247,10 @@ PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments
 				yourself);
 			yourself
 		].
-	
-		arrowsToParentMessages at: aNode put: previousNode.
+	arrowsToParentMessages at: aNode
+    ifPresent: [ :parents | parents add: previousNode ]
+    ifAbsentPut: [ Set new add: previousNode; yourself ].
+
 		messageDepthDictionary
             at: aNode
             ifPresent: [ :depths | depths add:   depth ]
