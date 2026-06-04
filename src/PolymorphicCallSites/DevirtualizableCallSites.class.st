@@ -362,6 +362,12 @@ DevirtualizableCallSites class >> roassalBenchs [
 ]
 
 { #category : 'accessing' }
+DevirtualizableCallSites >> block [
+
+	^ block
+]
+
+{ #category : 'accessing' }
 DevirtualizableCallSites >> block: aBlock [
 
 	block := aBlock

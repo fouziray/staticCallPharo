@@ -20,7 +20,8 @@ Class {
 		'typesPattern',
 		'switchRatio',
 		'firstSwitchIndex',
-		'depth'
+		'depth',
+		'parentCallSiteModel'
 	],
 	#category : 'PolymorphicCallSites-Model',
 	#package : 'PolymorphicCallSites',
@@ -38,6 +39,24 @@ CallSiteModel class >> fromRaw: aCollection [
 { #category : 'accessing' }
 CallSiteModel >> bytecodeStart [
 	^ bytecodeStart
+]
+
+{ #category : 'instance creation' }
+CallSiteModel >> compareWithMessageNode: messageNode [
+	
+	| isIdentical |
+	isIdentical:= (methodClassName = messageNode methodNode methodClass name) & 
+	(methodSelector = messageNode methodNode selector) &
+	(sourceStart = messageNode start) &
+	(sourceEnd = messageNode stop) &
+	(source = messageNode sourceCode) &
+	(isSelfSend = messageNode receiver isSelfVariable) .
+
+	(messageNode methodNode pcsForNode: messageNode) ifNotEmpty: [
+		isIdentical:= isIdentical & (bytecodeStart = (messageNode methodNode pcsForNode: messageNode)
+			                 first) &
+		(bytecodeEnd = (messageNode methodNode pcsForNode: messageNode) last )].
+	^ isIdentical 
 ]
 
 { #category : 'accessing' }
@@ -220,6 +239,11 @@ CallSiteModel >> numberOfDifferentMethods [
 CallSiteModel >> numberOfReceiverClasses [
 	
 	^ numberOfReceiverClasses ifNil: [ numberOfReceiverClasses := methodsActivated sum: [ :m | m numberOfReceiverClasses ] ]
+]
+
+{ #category : 'graph' }
+CallSiteModel >> pointTo: aCallSiteModel [ 
+	parentCallSiteModel:= aCallSiteModel 
 ]
 
 { #category : 'as yet unclassified' }

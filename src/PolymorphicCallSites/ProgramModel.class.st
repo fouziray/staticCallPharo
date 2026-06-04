@@ -133,3 +133,16 @@ ProgramModel >> serializeModel [
 		writeStreamDo: [:s | STON put: self onStream: s].
 	
 ]
+
+{ #category : 'filtering' }
+ProgramModel >> siteWith: aRBMessageNode [ 
+	| c |
+	c := callSites select: [ :c | 
+		c compareWithMessageNode: 	aRBMessageNode  
+		
+		].
+	
+	self assert: c size <= 1.
+	^ c.
+	
+]
