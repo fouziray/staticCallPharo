@@ -138,7 +138,7 @@ PatternCallSites class >> tracePatternsOfHg [
 ].
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'Full example' }
 PatternCallSites class >> tracePatternsOfHgWithGraph [
 	<script>
 	| simulator blockReturn program |
@@ -147,8 +147,14 @@ PatternCallSites class >> tracePatternsOfHgWithGraph [
 		"(Duration seconds: 3) wait" ].
 	blockReturn := simulator execute.		
 	
-	program:=  simulator constructProgram .
+	program :=  simulator constructProgram .
 	1 halt.
+	
+	"Matrixify - for thourough analysis in python"
+	"MatrixSiteType new octaveFormat: program "
+	
+	"export trace into directory local"
+	
 	"( tracePatternsDir /'hgWaterDepth.ston') asFileReference writeStreamDo: [ :stream |
     STON put: program onStream: stream
 ]".
