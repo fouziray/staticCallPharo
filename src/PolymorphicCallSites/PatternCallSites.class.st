@@ -2,7 +2,11 @@ Class {
 	#name : 'PatternCallSites',
 	#superclass : 'DevirtualizableCallSites',
 	#instVars : [
-		'typePatterns'
+		'typePatterns',
+		'messageDepthDictionary',
+		'depth',
+		'arrowsToParentMessages',
+		'previousNode'
 	],
 	#classInstVars : [
 		'tracePatternsDir'
@@ -151,19 +155,27 @@ PatternCallSites class >> typeSwitchAnalysis [
 	plot2 inspect
 ]
 
+{ #category : 'accessing' }
+PatternCallSites >> arrowsToParentMessages [
+
+	^ arrowsToParentMessages 
+]
+
 { #category : 'initialization' }
 PatternCallSites >> initialize [
 	super initialize.
 	typePatterns := IdentityDictionary new. 
 	depth:= 0.
 	messageDepthDictionary := IdentityDictionary new.
+	arrowsToParentMessages := IdentityDictionary new.
+	previousNode := nil. "initial do it message"
 ]
 
 { #category : 'private - execution' }
 PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments: aArguments [
 
 	<noInstrumentation>
-   | arguments result |
+   | arguments result parentSave |
 	arguments := aArguments.
 	(aMethod selector = #doesNotUnderstand:) ifTrue: [ 
 			arguments := { (MessageSend
@@ -202,6 +214,7 @@ PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments
 			yourself
 		].
 	
+		arrowsToParentMessages at: aNode put: previousNode.
 		messageDepthDictionary
             at: aNode
             ifPresent: [ :depths | depths add:   depth ]
@@ -210,10 +223,20 @@ PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments
 	
 	].
  	 
+	
+	parentSave := previousNode.
+	depth := depth + 1.
+	previousNode := aNode.
+	result := aReceiver withArgs: arguments executeMethod: aMethod.
+	depth := depth - 1.
+	previousNode := parentSave.
+"
 	depth := depth + 1.   
     result := aReceiver withArgs: arguments executeMethod: aMethod.
     depth := depth - 1. 
-    ^ result
+	previousNode:= aNode."
+	 
+   ^ result
 
 
 
