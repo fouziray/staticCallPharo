@@ -43,6 +43,6 @@ BaselineOfStaticCallExp >> baseline: spec [
 			group: 'buildAVM'
 			with: #( 'StaticCallExpBuilder-Tests' 'StaticCallExp-Tests' ).
 		spec group: 'min' with: #( 'StaticCallExp-Tests' 'PolymorphicCallSites').
-		spec group: 'min' with: #( 'StaticCallExp-Tests' 'PolymorphicCallSites' 'HoneyGinger').
+		spec group: 'mintracing' with: #( 'StaticCallExp-Tests' 'PolymorphicCallSites' 'HoneyGinger').
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
