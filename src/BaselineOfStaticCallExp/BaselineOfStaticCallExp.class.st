@@ -16,10 +16,18 @@ BaselineOfStaticCallExp >> baseline: spec [
 			baseline: 'VMMaker' with: [
 				spec repository:
 						'github://fouziray/pharo-vm:staticSendFixTrampolineFromJitToInterpreter/smalltalksrc' ];
-			baseline: 'ScopeoExecutionRecorder' with:[
-				spec repository: 'github://scopeo-project/scopeo-execution-recorder:main'
-				];
-			baseline: 'HoneyGinger' with:[ spec repository: 'github://tomooda/HoneyGinger:main/repository' ]; 
+			baseline: 'ScopeoExecutionRecorder' with: [
+				spec repository:
+						'github://scopeo-project/scopeo-execution-recorder:main' ];
+			
+			baseline: 'HoneyGinger'
+			with: [
+				spec repository: 'github://tomooda/HoneyGinger:main/repository' ];
+			
+			baseline: 'VeritasHoneyGinger'
+			with: [
+				spec repository:
+						'github://jordanmontt/PharoVeritasBenchSuite:main' ];
 			package: 'StaticCallExp';
 			package: 'StaticCallExpBuilder'
 			with: [ spec requires: #( 'VMMaker' 'StaticCallExp' ) ];
@@ -30,7 +38,7 @@ BaselineOfStaticCallExp >> baseline: spec [
 			package: 'StaticCallExp-Tests'
 			with: [ spec requires: #( 'StaticCallExp' ) ];
 			package: 'PolymorphicCallSites'
-			with: [ spec requires: #('ScopeoExecutionRecorder') ];
+			with: [ spec requires: #( 'ScopeoExecutionRecorder' ) ];
 			package: 'StaticCallsFinder' with: [ spec requires: #( 'SMark' ) ].
 
 
@@ -42,7 +50,14 @@ BaselineOfStaticCallExp >> baseline: spec [
 		spec
 			group: 'buildAVM'
 			with: #( 'StaticCallExpBuilder-Tests' 'StaticCallExp-Tests' ).
-		spec group: 'min' with: #( 'StaticCallExp-Tests' 'PolymorphicCallSites').
-		spec group: 'mintracing' with: #( 'PolymorphicCallSites' 'HoneyGinger').
+		spec
+			group: 'min'
+			with: #( 'StaticCallExp-Tests' 'PolymorphicCallSites' ).
+		spec
+			group: 'mintracing'
+			with: #( 'PolymorphicCallSites' 'HoneyGinger' ).
+		spec
+			group: 'mintracingveritas'
+			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' ).
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
