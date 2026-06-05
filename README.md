@@ -1,5 +1,8 @@
 # Installation
-
+## Requirements
+  We run this project in Pharo 12.
+  The external libraries we use are automatically handleded by the baseline. And include: (HoneyGinger, and Scopeo tracing)
+  
 ## Load the program tracing tool, its dependency to HoneyGinger, and launch the tracing script:
   
 ``` Smalltalk
