@@ -19,7 +19,7 @@ BaselineOfStaticCallExp >> baseline: spec [
 			baseline: 'ScopeoExecutionRecorder' with:[
 				spec repository: 'github://scopeo-project/scopeo-execution-recorder:main'
 				];
-					
+			baseline: 'HoneyGinger' with:[ spec repository: 'github://tomooda/HoneyGinger:main/repository' ]; 
 			package: 'StaticCallExp';
 			package: 'StaticCallExpBuilder'
 			with: [ spec requires: #( 'VMMaker' 'StaticCallExp' ) ];
@@ -43,5 +43,6 @@ BaselineOfStaticCallExp >> baseline: spec [
 			group: 'buildAVM'
 			with: #( 'StaticCallExpBuilder-Tests' 'StaticCallExp-Tests' ).
 		spec group: 'min' with: #( 'StaticCallExp-Tests' 'PolymorphicCallSites').
+		spec group: 'min' with: #( 'StaticCallExp-Tests' 'PolymorphicCallSites' 'HoneyGinger').
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
