@@ -107,57 +107,41 @@ PatternCallSites class >> partitionIntoSublists: aCollectionOfCallSiteModels usi
     ]
 ]
 
-{ #category : 'as yet unclassified' }
-PatternCallSites class >> tracePatternsOfButterBalll [
-	<script>
-	| simulator blockReturn program |
-	simulator := self new .
-	simulator block: [ HGSimulator butterBallAtDie . WorldMorph doOneCycle . WorldMorph doOneCycle ].
-	blockReturn := simulator execute.		
-	
-	program := ProgramModel new name:'	ButterBallAtDie '  fromRaw: ( [ HGSimulator butterBallAtDie . WorldMorph doOneCycle . WorldMorph doOneCycle ]) -> simulator getAllCallSites andPatterns: simulator typePatterns. 
-	( tracePatternsDir / 'butterBallAtDie.ston' ) asFileReference writeStreamDo: [ :stream |
-    STON put: program onStream: stream
-].
-]
+{ #category : 'Full example' }
+PatternCallSites class >> trace: aBlock outputFileSuffix: suffix [
 
-{ #category : 'as yet unclassified' }
-PatternCallSites class >> tracePatternsOfHg [
-	<script>
 	| simulator blockReturn program |
-	simulator := self new .
-	simulator block: [ HGSimulator watershowPressureMap. WorldMorph doOneCycle . WorldMorph doOneCycle .
-		"(Duration seconds: 3) wait" ].
-	blockReturn := simulator execute.		
-	
-	program := ProgramModel new name:'	hgWater '  fromRaw: ([ HGSimulator watershowPressureMap. WorldMorph doOneCycle . WorldMorph doOneCycle .
-	
-	"(Duration seconds: 3) wait" ]) -> simulator getAllCallSites andPatterns: simulator typePatterns withDepthOfMessages: simulator messageDepthDictionary. 
-	( tracePatternsDir /'hgWaterDepth.ston') asFileReference writeStreamDo: [ :stream |
-    STON put: program onStream: stream
-].
+	simulator := self new.
+	simulator block: aBlock.
+	blockReturn := simulator execute.
+
+	program := simulator constructProgram.
+
+	"Matrixify - for thourough analysis in python"
+	MatrixSiteType new octaveFormat: program.
+
+	"export trace into directory local"
+
+	(tracePatternsDir / 'trace-' , suffix , '.ston') asFileReference
+		writeStreamDo: [ :stream | STON put: program onStream: stream ]
 ]
 
 { #category : 'Full example' }
-PatternCallSites class >> tracePatternsOfHgWithGraph [
-	<script>
-	| simulator blockReturn program |
-	simulator := self new .
-	simulator block: [ HGSimulator watershowPressureMap. WorldMorph doOneCycle . WorldMorph doOneCycle .
-		"(Duration seconds: 3) wait" ].
-	blockReturn := simulator execute.		
-	
-	program :=  simulator constructProgram .
+PatternCallSites class >> tracePatternsOfDataFrame [
 
-	
-	"Matrixify - for thourough analysis in python"
-	MatrixSiteType new octaveFormat: program .
-	
-	"export trace into directory local"
-	
-	( tracePatternsDir /'hgWaterDepth.ston') asFileReference writeStreamDo: [ :stream |
-    STON put: program onStream: stream
-].
+	<script>
+	self
+		trace: [ VeritasDataFrame new runTinySynthetic ]
+		outputFileSuffix: 'veritasdf'
+]
+
+{ #category : 'Full example' }
+PatternCallSites class >> tracePatternsOfHoneyGinger [
+
+	<script>
+	self
+		trace: [ VeritasHoneyGinger new run ]
+		outputFileSuffix: 'veritashg'
 ]
 
 { #category : 'as yet unclassified' }
