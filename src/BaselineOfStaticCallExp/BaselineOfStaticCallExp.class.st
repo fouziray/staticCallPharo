@@ -19,12 +19,11 @@ BaselineOfStaticCallExp >> baseline: spec [
 			baseline: 'ScopeoExecutionRecorder' with: [
 				spec repository:
 						'github://scopeo-project/scopeo-execution-recorder:main' ];
-			
-			baseline: 'HoneyGinger'
-			with: [
-				spec repository: 'github://tomooda/HoneyGinger:main/repository' ];
-			
 			baseline: 'VeritasHoneyGinger'
+			with: [
+				spec repository:
+						'github://jordanmontt/PharoVeritasBenchSuite:main' ];
+			baseline: 'VeritasDataFrame'
 			with: [
 				spec repository:
 						'github://jordanmontt/PharoVeritasBenchSuite:main' ];
@@ -58,6 +57,6 @@ BaselineOfStaticCallExp >> baseline: spec [
 			with: #( 'PolymorphicCallSites' 'HoneyGinger' ).
 		spec
 			group: 'mintracingveritas'
-			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' ).
+			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' 'VeritasDataFrame' ).
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
