@@ -199,73 +199,80 @@ PatternCallSites >> initialize [
 PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments: aArguments [
 
 	<noInstrumentation>
-   | arguments result parentSave |
+	| arguments result parentSave |
 	arguments := aArguments.
-	(aMethod selector = #doesNotUnderstand:) ifTrue: [ 
-			arguments := { (MessageSend
-						receiver: aReceiver
-                 selector: aMethod selector 
-                 arguments: aArguments) }
-   	].
+	aMethod selector = #doesNotUnderstand: ifTrue: [
+		arguments := { (MessageSend
+			              receiver: aReceiver
+			              selector: aMethod selector
+			              arguments: aArguments) } ].
 
-	(aNode isNotNil and: [ aNode methodNode isNil ]) 
-		ifTrue: [ ^ aReceiver withArgs: arguments executeMethod: aMethod ].
-	aNode ifNotNil: [ 
-		(inlinedMethods includes: aNode selector) 
-			ifTrue: [ ^ aReceiver withArgs: arguments executeMethod: aMethod
-    ].
+	(aNode isNotNil and: [ aNode methodNode isNil ]) ifTrue: [
+		^ aReceiver withArgs: arguments executeMethod: aMethod ].
+	aNode ifNotNil: [
+		(inlinedMethods includes: aNode selector) ifTrue: [
+			^ aReceiver withArgs: arguments executeMethod: aMethod ].
 
-	typePatterns at: aNode 
-		ifPresent: [ :m |  m add: aReceiver class ]
-		ifAbsentPut: [ "Dictionary new
+		typePatterns
+			at: aNode
+			ifPresent: [ :m | m add: aReceiver class ]
+			ifAbsentPut: [ "Dictionary new
 			at: aMethod put: (Bag new
 				add: aReceiver class;
 				yourself);
 			yourself"
-			OrderedCollection newFrom: { aReceiver class }
-		].
-	callsites at: aNode 
-		ifPresent: [ :m | m at: aMethod 
-			ifPresent: [ :r | r add: aReceiver class ]
-			ifAbsentPut: [ Bag new
-				add: aReceiver class;
-				yourself ]
-		]
-		ifAbsentPut: [ Dictionary new
-			at: aMethod put: (Bag new
-				add: aReceiver class;
-				yourself);
-			yourself
-		].
-	arrowsToParentMessages at: aNode
-    ifPresent: [ :parents | parents add: previousNode ]
-    ifAbsentPut: [ Set new add: previousNode; yourself ].
+				OrderedCollection newFrom: { aReceiver class } ].
+		callsites
+			at: aNode
+			ifPresent: [ :m |
+				m
+					at: aMethod
+					ifPresent: [ :r | r add: aReceiver class ]
+					ifAbsentPut: [
+						Bag new
+							add: aReceiver class;
+							yourself ] ]
+			ifAbsentPut: [
+				Dictionary new
+					at: aMethod put: (Bag new
+							 add: aReceiver class;
+							 yourself);
+					yourself ].
+		arrowsToParentMessages
+			at: aNode
+			ifPresent: [ :parents | parents add: previousNode ]
+			ifAbsentPut: [
+				Set new
+					add: previousNode;
+					yourself ].
 
 		messageDepthDictionary
-            at: aNode
-            ifPresent: [ :depths | depths add:   depth ]
-            
-				ifAbsentPut: [ Bag new add: depth; yourself ] 
-	
-	].
- 	 
-	
+			at: aNode
+			ifPresent: [ :depths | depths add: depth ]
+			ifAbsentPut: [
+				Bag new
+					add: depth;
+					yourself ] ].
+
+
 	parentSave := previousNode.
 	depth := depth + 1.
 	previousNode := aNode.
-	result := aReceiver withArgs: arguments executeMethod: aMethod.
+
+	result := aMethod selector = #whileFalse:
+		          ifTrue: [ aReceiver whileFalse: [ arguments first value ] ]
+		          ifFalse: [
+		          aReceiver withArgs: arguments executeMethod: aMethod ].
+
 	depth := depth - 1.
 	previousNode := parentSave.
-"
+	"
 	depth := depth + 1.   
     result := aReceiver withArgs: arguments executeMethod: aMethod.
     depth := depth - 1. 
 	previousNode:= aNode."
-	 
-   ^ result
 
-
-
+	^ result
 ]
 
 { #category : 'accessing' }

@@ -445,13 +445,16 @@ DevirtualizableCallSites >> initialize [
 								#ifNil:ifNotNil: #ifNotNil:ifNil:
 								
 								#or: #and:
-								#not #'==' ) asSet.
+								#not #'==' 
+								#whileFalse: 
+								#whileTrue: ) asSet.
 	instrumentation := ScpMethodInstrumentation new.
 	instrumentation addIndirection: (ScpMessageIndirection new
 			 reifyNode;
 			 reifySender;
 			 reifyReceiver;
 			 reifyArguments;
+			condition: [ :n | (inlinedMethods includes: n selector) not  ];
 			 handler: self;
 			 handlerSelector:
 				 (self class lookupSelector: #message:sender:receiver:arguments:)
