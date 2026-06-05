@@ -24,7 +24,8 @@ And an extra trace model saved into the relative path to your local directory:
 
 We have the following script to reproduce the instructions above :
 
-```wget -O - get.pharo.org/120+vm | bash
+```bash
+wget -O - get.pharo.org/120+vm | bash
 ./pharo Pharo.image metacello install github://fouziray/staticCallPharo:traceWithTypePattern BaselineOfStaticCallExp  --groups=mintracing
 ./pharo Pharo.image eval “PatternCallSites tracePatternsOfHgWithGraph”
 ```
