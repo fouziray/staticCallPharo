@@ -154,6 +154,24 @@ PatternCallSites class >> tracePatternsOfHoneyGinger [
 		outputFileSuffix: 'veritashg'
 ]
 
+{ #category : 'Full example' }
+PatternCallSites class >> tracePatternsOfMicrodown [
+
+	<script>
+	self
+		trace: [ VeritasMicrodown new run ]
+		outputFileSuffix: 'veritasmd'
+]
+
+{ #category : 'Full example' }
+PatternCallSites class >> tracePatternsOfMoose [
+
+	<script>
+	self
+		trace: [ VeritasMoose new run ]
+		outputFileSuffix: 'veritasmoo'
+]
+
 { #category : 'as yet unclassified' }
 PatternCallSites class >> typeSwitchAnalysis [
 	

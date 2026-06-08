@@ -23,6 +23,10 @@ BaselineOfStaticCallExp >> baseline: spec [
 			with: [
 				spec repository:
 						'github://fouziray/PharoVeritasBenchSuite:main' ];
+			baseline: 'VeritasMoose'
+			with: [
+				spec repository:
+						'github://fouziray/PharoVeritasBenchSuite:main' ];
 			baseline: 'VeritasBloc' with: [
 				spec repository:
 						'github://fouziray/PharoVeritasBenchSuite:main' ];
@@ -60,6 +64,9 @@ BaselineOfStaticCallExp >> baseline: spec [
 			with: #( 'PolymorphicCallSites' 'HoneyGinger' ).
 		spec
 			group: 'mintracingveritas'
-			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' 'VeritasDataFrame' 'VeritasBloc' ).
+			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' 'VeritasDataFrame' 'VeritasBloc''VeritasMicroDown'  ).
+			spec
+			group: 'mintracingmoose'
+			with: #( 'PolymorphicCallSites' 'VeritasMoose').
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
