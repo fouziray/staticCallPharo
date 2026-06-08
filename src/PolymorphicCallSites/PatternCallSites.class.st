@@ -6,7 +6,8 @@ Class {
 		'messageDepthDictionary',
 		'depth',
 		'arrowsToParentMessages',
-		'previousNode'
+		'previousNode',
+		'finished'
 	],
 	#classInstVars : [
 		'tracePatternsDir'
@@ -132,7 +133,7 @@ PatternCallSites class >> tracePatternsOfBloc [
 	<script>
 	self
 		trace: [ VeritasBloc new run ]
-		outputFileSuffix: 'veritashg'
+		outputFileSuffix: 'veritasbloc'
 ]
 
 { #category : 'Full example' }
@@ -194,6 +195,16 @@ PatternCallSites >> constructProgram [
 	^ program
 ]
 
+{ #category : 'initialize' }
+PatternCallSites >> execute [
+
+	super execute.
+
+	"Some benchmarks launch concurrent threads that keep sending messages.
+	Stop tracing now to handle all data collected up to this point"
+	self stopTracing.
+]
+
 { #category : 'initialization' }
 PatternCallSites >> initialize [
 	super initialize.
@@ -201,7 +212,9 @@ PatternCallSites >> initialize [
 	depth:= 0.
 	messageDepthDictionary := IdentityDictionary new.
 	arrowsToParentMessages := IdentityDictionary new.
-	previousNode := nil. "initial do it message"
+	previousNode := nil. "initial do it message".
+	
+	finished := false.
 ]
 
 { #category : 'private - execution' }
@@ -209,6 +222,9 @@ PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments
 
 	<noInstrumentation>
 	| arguments result parentSave |
+	
+	finished ifTrue: [ ^ aReceiver withArgs: aArguments executeMethod: aMethod ].
+	
 	arguments := aArguments.
 	aMethod selector = #doesNotUnderstand: ifTrue: [
 		arguments := { (MessageSend
@@ -287,6 +303,12 @@ PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments
 { #category : 'accessing' }
 PatternCallSites >> messageDepthDictionary [
 	^ messageDepthDictionary
+]
+
+{ #category : 'initialization' }
+PatternCallSites >> stopTracing [
+
+	finished := true
 ]
 
 { #category : 'accessing' }
