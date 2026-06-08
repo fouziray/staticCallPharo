@@ -127,6 +127,15 @@ PatternCallSites class >> trace: aBlock outputFileSuffix: suffix [
 ]
 
 { #category : 'Full example' }
+PatternCallSites class >> tracePatternsOfBloc [
+
+	<script>
+	self
+		trace: [ VeritasBloc new run ]
+		outputFileSuffix: 'veritashg'
+]
+
+{ #category : 'Full example' }
 PatternCallSites class >> tracePatternsOfDataFrame [
 
 	<script>
