@@ -22,14 +22,14 @@ BaselineOfStaticCallExp >> baseline: spec [
 			baseline: 'VeritasHoneyGinger'
 			with: [
 				spec repository:
-						'github://fouziray/PharoVeritasBenchSuite' ];
+						'github://fouziray/PharoVeritasBenchSuite:main' ];
 			baseline: 'VeritasBloc' with: [
 				spec repository:
-						'github://fouziray/PharoVeritasBenchSuite' ];
+						'github://fouziray/PharoVeritasBenchSuite:main' ];
 			baseline: 'VeritasDataFrame'
 			with: [
 				spec repository:
-						'github://fouziray/PharoVeritasBenchSuite' ];
+						'github://fouziray/PharoVeritasBenchSuite:main' ];
 			package: 'StaticCallExp';
 			package: 'StaticCallExpBuilder'
 			with: [ spec requires: #( 'VMMaker' 'StaticCallExp' ) ];
