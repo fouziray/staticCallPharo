@@ -60,6 +60,6 @@ BaselineOfStaticCallExp >> baseline: spec [
 			with: #( 'PolymorphicCallSites' 'HoneyGinger' ).
 		spec
 			group: 'mintracingveritas'
-			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' 'VeritasDataFrame' ).
+			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' 'VeritasDataFrame' 'VeritasBloc' ).
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
