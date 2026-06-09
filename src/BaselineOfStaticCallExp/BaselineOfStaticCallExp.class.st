@@ -23,6 +23,10 @@ BaselineOfStaticCallExp >> baseline: spec [
 			with: [
 				spec repository:
 						'github://fouziray/PharoVeritasBenchSuite:main' ];
+			baseline: 'VeritasMicrodown'
+			with: [
+				spec repository:
+						'github://fouziray/PharoVeritasBenchSuite:main' ];
 			baseline: 'VeritasMoose'
 			with: [
 				spec repository:
@@ -78,6 +82,9 @@ BaselineOfStaticCallExp >> baseline: spec [
 			spec
 			group: 'mintracingcormas'
 			with: #( 'PolymorphicCallSites' 'VeritasCormas').
+			spec
+			group: 'mintracingmicrodown'
+			with: #( 'PolymorphicCallSites' 'VeritasMicrodown').
 			
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
