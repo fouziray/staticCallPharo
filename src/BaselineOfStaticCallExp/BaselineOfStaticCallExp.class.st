@@ -71,5 +71,9 @@ BaselineOfStaticCallExp >> baseline: spec [
 			spec
 			group: 'mintracingmoose'
 			with: #( 'PolymorphicCallSites' 'VeritasMoose').
+			spec
+			group: 'mintracingcormas'
+			with: #( 'PolymorphicCallSites' 'VeritasCormas').
+			
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
