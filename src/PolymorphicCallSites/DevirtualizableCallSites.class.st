@@ -437,28 +437,22 @@ DevirtualizableCallSites >> getDevirtualizableCallSites [
 DevirtualizableCallSites >> initialize [
 
 	methods := Dictionary new.
-	inlinedMethods := #( #isNil
-								#ifTrue: #ifFalse:
-								#ifTrue:ifFalse: #ifFalse:ifTrue:
-								
-								#ifNotNil: #ifNil:
-								#ifNil:ifNotNil: #ifNotNil:ifNil:
-								
-								#or: #and:
-								#not #'==' 
-								#whileFalse: 
-								#whileTrue: ) asSet.
+	inlinedMethods := #( #isNil #ifTrue: #ifFalse: #ifTrue:ifFalse:
+	                     #ifFalse:ifTrue: #ifNotNil: #ifNil: #ifNil:ifNotNil:
+	                     #ifNotNil:ifNil: #or: #and: #not #'==' #whileFalse:
+	                     #whileTrue: whileTrue whileFalse ) asSet.
 	instrumentation := ScpMethodInstrumentation new.
+	instrumentation instrumenter: (DevirtualizerInstrumenter new
+			 instrumentation: instrumentation;
+			 yourself).
 	instrumentation addIndirection: (ScpMessageIndirection new
 			 reifyNode;
 			 reifySender;
 			 reifyReceiver;
 			 reifyArguments;
-			condition: [ :n | (inlinedMethods includes: n selector) not  ];
+			 condition: [ :n | (inlinedMethods includes: n selector) not ];
 			 handler: self;
-			 handlerSelector:
-				 (self class lookupSelector: #message:sender:receiver:arguments:)
-					 selector;
+			 handlerSelector: #message:sender:receiver:arguments:;
 			 yourself).
 
 	callsites := OrderedIdentityDictionary new

@@ -311,11 +311,15 @@ PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments
 	depth := depth + 1.
 	previousNode := aNode.
 
-	result := aMethod selector = #whileFalse:
-		          ifTrue: [ aReceiver whileFalse: [ arguments first value ] ]
-		          ifFalse: [
-		          aReceiver withArgs: arguments executeMethod: aMethod ].
-
+	result := aMethod selector = #whileFalse: ifTrue: [ 
+			[aReceiver value] whileFalse: [ arguments first value ] ]
+	ifFalse: [
+		(aMethod selector = #whileFalse ) ifTrue:[
+			[aReceiver value] whileFalse.
+	] ifFalse:[
+		aReceiver withArgs: arguments executeMethod: aMethod ] ].
+	
+	
 	depth := depth - 1.
 	previousNode := parentSave.
 	"
