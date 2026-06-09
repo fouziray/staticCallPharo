@@ -34,6 +34,10 @@ BaselineOfStaticCallExp >> baseline: spec [
 			with: [
 				spec repository:
 						'github://fouziray/PharoVeritasBenchSuite:main' ];
+			baseline: 'VeritasCormas'
+			with: [
+				spec repository:
+						'github://fouziray/PharoVeritasBenchSuite:main' ];
 			package: 'StaticCallExp';
 			package: 'StaticCallExpBuilder'
 			with: [ spec requires: #( 'VMMaker' 'StaticCallExp' ) ];
