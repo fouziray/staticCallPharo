@@ -18,7 +18,7 @@ BaselineOfStaticCallExp >> baseline: spec [
 						'github://fouziray/pharo-vm:staticSendFixTrampolineFromJitToInterpreter/smalltalksrc' ];
 			baseline: 'ScopeoExecutionRecorder' with: [
 				spec repository:
-						'github://scopeo-project/scopeo-execution-recorder:main' ];
+						'github://fouziray/scopeo-execution-recorder:main' ];
 			baseline: 'VeritasHoneyGinger'
 			with: [
 				spec repository:

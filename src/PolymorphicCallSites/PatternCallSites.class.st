@@ -137,6 +137,15 @@ PatternCallSites class >> tracePatternsOfBloc [
 ]
 
 { #category : 'Full example' }
+PatternCallSites class >> tracePatternsOfCormas [
+
+	<script>
+	self
+		trace: [ VeritasCormas new run ]
+		outputFileSuffix: 'veritascormas'
+]
+
+{ #category : 'Full example' }
 PatternCallSites class >> tracePatternsOfDataFrame [
 
 	<script>
