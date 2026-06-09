@@ -441,7 +441,7 @@ DevirtualizableCallSites >> initialize [
 	                     #ifFalse:ifTrue: #ifNotNil: #ifNil: #ifNil:ifNotNil:
 	                     #ifNotNil:ifNil: #or: #and: #not #'==' #whileFalse:
 	                     #whileTrue: whileTrue whileFalse ) asSet.
-	instrumentation := ScpMethodInstrumentation new.
+	instrumentation := DevirtualizationInstrumentation new.
 	instrumentation instrumenter: (DevirtualizerInstrumenter new
 			 instrumentation: instrumentation;
 			 yourself).
