@@ -1,18 +1,12 @@
 #!/bin/bash
 set -x;
 
-#benches=("HoneyGinger" "DataFrame" "Bloc" "Microdown")
-#veritas standsfor Dataframe baseline
-
-benches=("DataFrame")
+#benches=("DataFrame")
+benches=("HoneyGinger" "DataFrame" "Bloc" "Microdown")
 
 for bench in "${benches[@]}"; do
 	mkdir temp
 	cd temp
-
-	if [ "$bench" = "Microdown" ]; then
-		git clone --quiet --depth=1 https://github.com/SquareBracketAssociates/BuildingApplicationWithSpec2.git Spec2Book
-	fi
 
 	#Load a Pharo12 image and patch it to allow loading of packages such as Moose
 	wget -O - get.pharo.org/120+vm | bash
@@ -28,9 +22,8 @@ for bench in "${benches[@]}"; do
 		cp pharo-local/iceberg/fouziray/PharoVeritasBenchSuite/files/tiny_dataset.csv .
 	fi
 	
-	
 	if [ "$bench" = "Microdown" ]; then
-			git clone --quiet --depth=1 https://github.com/SquareBracketAssociates/BuildingApplicationWithSpec2.git Spec2Book
+		git clone --quiet --depth=1 https://github.com/SquareBracketAssociates/BuildingApplicationWithSpec2.git Spec2Book
 	fi
 	
 	./pharo Pharo.image eval "PatternCallSites tracePatternsOf${bench}"
