@@ -249,9 +249,9 @@ PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments
 
 	<noInstrumentation>
 	| arguments result parentSave |
-	
-	finished ifTrue: [ ^ aReceiver withArgs: aArguments executeMethod: aMethod ].
-	
+	finished ifTrue: [
+		^ aReceiver withArgs: aArguments executeMethod: aMethod ].
+
 	arguments := aArguments.
 	aMethod selector = #doesNotUnderstand: ifTrue: [
 		arguments := { (MessageSend
@@ -311,15 +311,23 @@ PatternCallSites >> message: aNode method: aMethod receiver: aReceiver arguments
 	depth := depth + 1.
 	previousNode := aNode.
 
-	result := aMethod selector = #whileFalse: ifTrue: [ 
-			[aReceiver value] whileFalse: [ arguments first value ] ]
-	ifFalse: [
-		(aMethod selector = #whileFalse ) ifTrue:[
-			[aReceiver value] whileFalse.
-	] ifFalse:[
-		aReceiver withArgs: arguments executeMethod: aMethod ] ].
-	
-	
+	result := aMethod selector = #whileFalse:
+		          ifTrue: [
+		          [ aReceiver value ] whileFalse: [ arguments first value ] ]
+		          ifFalse: [
+			          aMethod selector = #whileFalse
+				          ifTrue: [ [ aReceiver value ] whileFalse ]
+				          ifFalse: [
+					          aMethod selector = #whileTrue
+						          ifTrue: [ [ aReceiver value ] whileTrue ]
+						          ifFalse: [
+							          aMethod selector = #whileTrue:
+								          ifTrue: [
+								          [ aReceiver value ] whileTrue: [
+									          arguments first value ] ]
+								          ifFalse: [
+								          aReceiver withArgs: arguments executeMethod: aMethod ] ] ] ].
+
 	depth := depth - 1.
 	previousNode := parentSave.
 	"
