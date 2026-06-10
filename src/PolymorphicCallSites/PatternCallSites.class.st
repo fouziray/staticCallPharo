@@ -123,7 +123,7 @@ PatternCallSites class >> trace: aBlock outputFileSuffix: suffix [
 
 	"export trace into directory local"
 
-	(tracePatternsDir / 'trace-' , suffix , '.ston') asFileReference
+	('trace-' , suffix , '.ston') asFileReference
 		writeStreamDo: [ :stream | STON put: program onStream: stream ]
 ]
 
