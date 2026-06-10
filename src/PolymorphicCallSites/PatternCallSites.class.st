@@ -181,6 +181,15 @@ PatternCallSites class >> tracePatternsOfMoose [
 		outputFileSuffix: 'veritasmoo'
 ]
 
+{ #category : 'Full example' }
+PatternCallSites class >> tracePatternsOfReMobidyc [
+
+	<script>
+	self
+		trace: [ VeritasReMobidyc new run ]
+		outputFileSuffix: 'veritasmobidyc'
+]
+
 { #category : 'as yet unclassified' }
 PatternCallSites class >> typeSwitchAnalysis [
 	
