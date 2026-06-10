@@ -73,15 +73,15 @@ BaselineOfStaticCallExp >> baseline: spec [
 		spec
 			group: 'mintracingveritasAll'
 			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' 'VeritasDataFrame' 'VeritasBloc''VeritasMicroDown'  ).
-		spec
-			group: 'mintracingveritas'
-			with: #( 'PolymorphicCallSites' 'VeritasDataFrame'  ).
 			spec
 			group: 'mintracingmoose'
 			with: #( 'PolymorphicCallSites' 'VeritasMoose').
 			spec
 			group: 'mintracingcormas'
 			with: #( 'PolymorphicCallSites' 'VeritasCormas').
+			spec
+			group: 'mintracingdataframe'
+			with: #( 'PolymorphicCallSites' 'VeritasDataFrame').
 			spec
 			group: 'mintracingmicrodown'
 			with: #( 'PolymorphicCallSites' 'VeritasMicrodown').
