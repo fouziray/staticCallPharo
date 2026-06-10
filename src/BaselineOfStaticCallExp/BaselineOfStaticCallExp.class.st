@@ -16,32 +16,31 @@ BaselineOfStaticCallExp >> baseline: spec [
 			baseline: 'VMMaker' with: [
 				spec repository:
 						'github://fouziray/pharo-vm:staticSendFixTrampolineFromJitToInterpreter/smalltalksrc' ];
-			baseline: 'ScopeoExecutionRecorder' with: [
+			baseline: 'ScopeoExecutionRecorder'
+			with: [
 				spec repository:
 						'github://fouziray/scopeo-execution-recorder:main' ];
 			baseline: 'VeritasHoneyGinger'
 			with: [
-				spec repository:
-						'github://fouziray/PharoVeritasBenchSuite:main' ];
+				spec repository: 'github://fouziray/PharoVeritasBenchSuite:main' ];
 			baseline: 'VeritasMicrodown'
 			with: [
-				spec repository:
-						'github://fouziray/PharoVeritasBenchSuite:main' ];
+				spec repository: 'github://fouziray/PharoVeritasBenchSuite:main' ];
 			baseline: 'VeritasMoose'
 			with: [
-				spec repository:
-						'github://fouziray/PharoVeritasBenchSuite:main' ];
-			baseline: 'VeritasBloc' with: [
-				spec repository:
-						'github://fouziray/PharoVeritasBenchSuite:main' ];
+				spec repository: 'github://fouziray/PharoVeritasBenchSuite:main' ];
+			baseline: 'VeritasBloc'
+			with: [
+				spec repository: 'github://fouziray/PharoVeritasBenchSuite:main' ];
 			baseline: 'VeritasDataFrame'
 			with: [
-				spec repository:
-						'github://fouziray/PharoVeritasBenchSuite:main' ];
+				spec repository: 'github://fouziray/PharoVeritasBenchSuite:main' ];
 			baseline: 'VeritasCormas'
 			with: [
-				spec repository:
-						'github://fouziray/PharoVeritasBenchSuite:main' ];
+				spec repository: 'github://fouziray/PharoVeritasBenchSuite:main' ];
+			baseline: 'VeritasReMobidyc'
+			with: [
+				spec repository: 'github://fouziray/PharoVeritasBenchSuite:main' ];
 			package: 'StaticCallExp';
 			package: 'StaticCallExpBuilder'
 			with: [ spec requires: #( 'VMMaker' 'StaticCallExp' ) ];
@@ -72,19 +71,24 @@ BaselineOfStaticCallExp >> baseline: spec [
 			with: #( 'PolymorphicCallSites' 'HoneyGinger' ).
 		spec
 			group: 'mintracingveritasAll'
-			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' 'VeritasDataFrame' 'VeritasBloc''VeritasMicroDown'  ).
-			spec
+			with:
+				#( 'PolymorphicCallSites' 'VeritasHoneyGinger'
+				   'VeritasDataFrame' 'VeritasBloc''VeritasMicroDown' ).
+		spec
 			group: 'mintracingmoose'
-			with: #( 'PolymorphicCallSites' 'VeritasMoose').
-			spec
+			with: #( 'PolymorphicCallSites' 'VeritasMoose' ).
+		spec
 			group: 'mintracingcormas'
-			with: #( 'PolymorphicCallSites' 'VeritasCormas').
-			spec
+			with: #( 'PolymorphicCallSites' 'VeritasCormas' ).
+		spec
 			group: 'mintracingdataframe'
-			with: #( 'PolymorphicCallSites' 'VeritasDataFrame').
-			spec
+			with: #( 'PolymorphicCallSites' 'VeritasDataFrame' ).
+		spec
 			group: 'mintracingmicrodown'
-			with: #( 'PolymorphicCallSites' 'VeritasMicrodown').
-			
+			with: #( 'PolymorphicCallSites' 'VeritasMicrodown' ).
+		spec
+			group: 'mintracingremobidyc'
+			with: #( 'PolymorphicCallSites' 'VeritasReMobidyc' ).
+
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
