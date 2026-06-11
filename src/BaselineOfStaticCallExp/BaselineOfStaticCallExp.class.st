@@ -68,7 +68,7 @@ BaselineOfStaticCallExp >> baseline: spec [
 			with: #( 'StaticCallExp-Tests' 'PolymorphicCallSites' ).
 		spec
 			group: 'mintracing'
-			with: #( 'PolymorphicCallSites' 'HoneyGinger' ).
+			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' ).
 		spec
 			group: 'mintracingveritasAll'
 			with:
