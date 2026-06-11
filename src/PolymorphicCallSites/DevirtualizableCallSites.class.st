@@ -554,6 +554,8 @@ DevirtualizableCallSites >> message: aNode sender: aSender receiver: aReceiver a
 	
 	| method class |
 	
+	(aNode selector beginsWith: 'while') ifTrue: [ self halt ].
+	
 	class := aNode isSuperSend
 		ifTrue: [ aNode methodNode methodClass superclass ]
   		ifFalse: [ aReceiver class ].

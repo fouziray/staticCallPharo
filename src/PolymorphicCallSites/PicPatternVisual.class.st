@@ -80,9 +80,27 @@ PicPatternVisual >> nbCallsBeforeSecondTypeOccurence: aCallSite [
 	^ index.
 ]
 
+{ #category : 'as yet unclassified' }
+PicPatternVisual >> plotSwitch: aProgram [
+
+	| ordered plot callSitesPartitions plot2 |
+	ordered := (aProgram callSites do: [ :site |
+		            self switchRatioPerSite: site ]) sort: [ :a :b |
+		           a switchRatio > b switchRatio ].
+	plot := self plotSwitchRatio: ordered.
+	plot plots first bins inject: 0 into: [ :prev :cur |  ].
+	callSitesPartitions := self class
+		                       partitionIntoSublists: ordered
+		                       usingBins: plot plots first bins.
+	plot2 := self
+		         plotSwitchRatioWithCallNum: callSitesPartitions
+		         fromTotalCalls: aProgram numberOfCalls.
+	plot2 exportToPNG
+]
+
 { #category : 'plot' }
 PicPatternVisual >> plotSwitchRatio: aCollection [ 
-	| values c plot |
+	| c plot |
 	"
 	To interpret this histogram take into consideration the following rule to calculate the ratio
 	--> switchCounter / aCallSite numberOfCalls
@@ -92,9 +110,7 @@ PicPatternVisual >> plotSwitchRatio: aCollection [
 	c := RSCompositeChart new.
 	plot := RSHistogramPlot new x: (aCollection collect:#switchRatio) .
 	c add: plot.
-	c title: 'Hisotgram Of ratio of switch X number of callsites '.
-	
-	
+	c title: 'Histogram Of ratio of switch X number of callsites'.
 	^ c
 ]
 

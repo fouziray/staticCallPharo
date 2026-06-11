@@ -207,6 +207,33 @@ PatternCallSites class >> typeSwitchAnalysis [
 	plot2 inspect
 ]
 
+{ #category : 'switch' }
+PatternCallSites class >> typeSwitchAnalysisHG1 [
+
+	<script>
+	self typeSwitchAnalysisOn: 'waterMap'
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> typeSwitchAnalysisHG2 [
+
+	<script>
+	tracePatternsDir := ''.
+	self typeSwitchAnalysisOn: 'trace-veritaswatershowDots'
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> typeSwitchAnalysisOn: aStonName [
+
+	<script>
+	| program patternsVisualizer |
+	patternsVisualizer := PicPatternVisual new.
+
+	program := self deserializeTracePatternsForFile: (aStonName,'.ston') asString.
+
+	patternsVisualizer plotSwitch: program
+]
+
 { #category : 'accessing' }
 PatternCallSites >> arrowsToParentMessages [
 
