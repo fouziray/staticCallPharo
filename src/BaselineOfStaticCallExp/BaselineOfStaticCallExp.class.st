@@ -87,8 +87,16 @@ BaselineOfStaticCallExp >> baseline: spec [
 			group: 'mintracingmicrodown'
 			with: #( 'PolymorphicCallSites' 'VeritasMicrodown' ).
 		spec
+			group: 'mintracingbloc'
+			with: #( 'PolymorphicCallSites' 'VeritasBloc' ).
+		
+		spec
 			group: 'mintracingremobidyc'
 			with: #( 'PolymorphicCallSites' 'VeritasReMobidyc' ).
+		
+		spec
+			group: 'mintracinghoneyginger'
+			with: #( 'PolymorphicCallSites' 'VeritasHoneyGinger' ).
 
 		spec group: 'buildTests' with: #( 'StaticCallExpBuilder-Tests' ) ]
 ]
