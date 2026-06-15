@@ -16,6 +16,26 @@ Estimator class >> estimate [
 ]
 
 { #category : 'as yet unclassified' }
+Estimator class >> estimateFrom: aFileName [
+<script>
+| files filesStoned |
+files:= (FileSystem disk workingDirectory / aFileName ).
+
+filesStoned := STON fromString: files  contents.
+	^ self new estimateFromModel: filesStoned.
+]
+
+{ #category : 'as yet unclassified' }
+Estimator class >> estimateFromBloc [
+<script>
+| files filesStoned |
+files:= (FileSystem disk workingDirectory / 'trace-veritasbloc.ston' ).
+
+filesStoned :=  STON fromString: files  contents.
+	^ self new estimateFromModel: filesStoned .
+]
+
+{ #category : 'as yet unclassified' }
 Estimator class >> estimateFromHG2 [
 <script>
 | files filesStoned |
