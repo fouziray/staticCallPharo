@@ -34,8 +34,8 @@ PatternCallSites class >> deserializeStonFor: aFileReference [
 { #category : 'as yet unclassified' }
 PatternCallSites class >> deserializeTracePatternsForFile: aFileNameString [	
 
-	^  self deserializeStonFor: tracePatternsDir / aFileNameString 
-	
+	^  self deserializeStonFor: (tracePatternsDir asFileReference / aFileNameString 
+	)
 	
 ]
 
@@ -208,6 +208,14 @@ PatternCallSites class >> typeSwitchAnalysis [
 ]
 
 { #category : 'switch' }
+PatternCallSites class >> typeSwitchAnalysis: aFileName [
+
+	<script>
+	tracePatternsDir := FileSystem workingDirectory .
+	self typeSwitchAnalysisOn: aFileName
+]
+
+{ #category : 'switch' }
 PatternCallSites class >> typeSwitchAnalysisHG1 [
 
 	<script>
@@ -218,7 +226,7 @@ PatternCallSites class >> typeSwitchAnalysisHG1 [
 PatternCallSites class >> typeSwitchAnalysisHG2 [
 
 	<script>
-	tracePatternsDir := ''.
+	tracePatternsDir := FileSystem workingDirectory .
 	self typeSwitchAnalysisOn: 'trace-veritaswatershowDots'
 ]
 

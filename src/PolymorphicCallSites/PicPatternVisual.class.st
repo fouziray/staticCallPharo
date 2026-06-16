@@ -80,16 +80,34 @@ PicPatternVisual >> nbCallsBeforeSecondTypeOccurence: aCallSite [
 	^ index.
 ]
 
+{ #category : 'divide' }
+PicPatternVisual >> partitionIntoSublists: aCollectionOfCallSiteModels usingBins: bins [ 
+
+    ^ bins allButLast collectWithIndex: [ :val1 :index |
+        | val2 condition |
+        val2 := bins at: index + 1.
+        condition := index + 1 = bins size
+            ifTrue: [ [ :value | value switchRatio between: val1 and: val2 ] ]
+            ifFalse: [ [ :value | val1 <= value switchRatio and: [ value switchRatio < val2 ] ] ].
+        aCollectionOfCallSiteModels select: condition
+    ]
+]
+
 { #category : 'as yet unclassified' }
 PicPatternVisual >> plotSwitch: aProgram [
 
-	| ordered plot callSitesPartitions plot2 |
-	ordered := (aProgram callSites do: [ :site |
+	| ordered plot callSitesPartitions plot2 callsites |
+	"remove monos"
+	callsites := aProgram callSites reject:[:c | c numberOfReceiverClasses = 1].
+	
+	"order"
+	ordered := (callsites do: [ :site |
 		            self switchRatioPerSite: site ]) sort: [ :a :b |
 		           a switchRatio > b switchRatio ].
+	
 	plot := self plotSwitchRatio: ordered.
 	plot plots first bins inject: 0 into: [ :prev :cur |  ].
-	callSitesPartitions := self class
+	callSitesPartitions := self 
 		                       partitionIntoSublists: ordered
 		                       usingBins: plot plots first bins.
 	plot2 := self
