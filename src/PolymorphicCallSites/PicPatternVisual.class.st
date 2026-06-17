@@ -98,22 +98,24 @@ PicPatternVisual >> plotSwitch: aProgram [
 
 	| ordered plot callSitesPartitions plot2 callsites |
 	"remove monos"
-	callsites := aProgram callSites reject:[:c | c numberOfReceiverClasses = 1].
-	
+	callsites := aProgram callSites reject: [ :c |
+		             c numberOfReceiverClasses = 1 ].
+
 	"order"
-	ordered := (callsites do: [ :site |
-		            self switchRatioPerSite: site ]) sort: [ :a :b |
-		           a switchRatio > b switchRatio ].
-	
+	ordered := (callsites do: [ :site | self switchRatioPerSite: site ])
+		           sort: [ :a :b | a switchRatio > b switchRatio ].
+
 	plot := self plotSwitchRatio: ordered.
 	plot plots first bins inject: 0 into: [ :prev :cur |  ].
-	callSitesPartitions := self 
+	callSitesPartitions := self
 		                       partitionIntoSublists: ordered
 		                       usingBins: plot plots first bins.
 	plot2 := self
 		         plotSwitchRatioWithCallNum: callSitesPartitions
 		         fromTotalCalls: aProgram numberOfCalls.
-	plot2 exportToPNG
+	plot2 pngExporter
+		fileName: aProgram programName;
+		export
 ]
 
 { #category : 'plot' }
