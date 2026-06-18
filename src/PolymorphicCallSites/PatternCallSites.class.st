@@ -10,7 +10,8 @@ Class {
 		'finished'
 	],
 	#classInstVars : [
-		'tracePatternsDir'
+		'tracePatternsDir',
+		'visualClass'
 	],
 	#category : 'PolymorphicCallSites',
 	#package : 'PolymorphicCallSites'
@@ -108,6 +109,30 @@ PatternCallSites class >> partitionIntoSublists: aCollectionOfCallSiteModels usi
     ]
 ]
 
+{ #category : 'switch' }
+PatternCallSites class >> predomAnalysisStability [
+
+	<script>
+	
+	self visualClass: LongestSequenceFrequentType. "irrelevant now"
+	
+	self predomTypeStableOn: 'trace-veritaswatershowDots'
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> predomTypeStableOn: aStonName [
+
+	<script>
+	| program |
+	tracePatternsDir := FileSystem workingDirectory.
+	program := self deserializeTracePatternsForFile:
+		           ((aStonName endsWith: '.ston')
+			            ifFalse: [ (aStonName , '.ston') asString ]
+			            ifTrue: [ aStonName ]).
+
+	self visualClass new plotPredomTypeStablity: program
+]
+
 { #category : 'Full example' }
 PatternCallSites class >> trace: aBlock outputFileSuffix: suffix [
 
@@ -190,21 +215,38 @@ PatternCallSites class >> tracePatternsOfReMobidyc [
 		outputFileSuffix: 'veritasmobidyc'
 ]
 
-{ #category : 'as yet unclassified' }
-PatternCallSites class >> typeSwitchAnalysis [
-	
+{ #category : 'switch' }
+PatternCallSites class >> typeSequenceStabiliyAnalysis [
+	"a more general version of the frequent type stability analysis.
+If a type is frequent  but only appears once in between sequences, that makes the analysis 
+long sequences are not exclusive to frequent type only "
+
 	<script>
+	self visualClass: LongestSequenceFrequentType. "irrelevant now"
 
-	| program callSitesPartitions patternsVisualizer ordered plot plot2 |
-	patternsVisualizer := PicPatternVisual new.
-	program :=  self deserializeTracePatternsForFile: 'waterMap.ston'.
+	self typeStableSequencesOn: 'trace-veritaswatershowDots'
+]
 
-	ordered := (program callSites do:[:site | patternsVisualizer switchRatioPerSite: site. ]) sort: [ :a :b | a switchRatio > b switchRatio ].
-	plot:= 	(patternsVisualizer plotSwitchRatio: ordered) inspect .	
-	plot plots first bins inject: 0 into:[:prev :cur | ] .
-	callSitesPartitions := self partitionIntoSublists: ordered usingBins: plot plots first bins.
-   plot2:= patternsVisualizer plotSwitchRatioWithCallNum: callSitesPartitions fromTotalCalls: program numberOfCalls .
-	plot2 inspect
+{ #category : 'switch' }
+PatternCallSites class >> typeStableSequencesOn: aStonName [
+
+	<script>
+	| program |
+	tracePatternsDir := FileSystem workingDirectory.
+	program := self deserializeTracePatternsForFile:
+		           ((aStonName endsWith: '.ston')
+			            ifFalse: [ (aStonName , '.ston') asString ]
+			            ifTrue: [ aStonName ]).
+
+	self visualClass new typeStableSequencesOn: program
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> typeSwitchAnalysis [
+
+	<script>
+	tracePatternsDir := FileSystem workingDirectory .
+	self typeSwitchAnalysisOn: 'trace-veritaswatershowDots'
 ]
 
 { #category : 'switch' }
@@ -240,6 +282,18 @@ PatternCallSites class >> typeSwitchAnalysisOn: aStonName [
 	program := self deserializeTracePatternsForFile: (aStonName,'.ston') asString.
 
 	patternsVisualizer plotSwitch: program
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> visualClass [
+
+	^ visualClass ifNil:[ visualClass := PicPatternVisual ]
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> visualClass: aClass [
+
+	visualClass := aClass
 ]
 
 { #category : 'accessing' }

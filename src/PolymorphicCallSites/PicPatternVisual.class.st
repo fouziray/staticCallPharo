@@ -93,6 +93,57 @@ PicPatternVisual >> partitionIntoSublists: aCollectionOfCallSiteModels usingBins
     ]
 ]
 
+{ #category : 'predom' }
+PicPatternVisual >> plotPredomTypeStablity: aProgram [
+
+	| ordered callsites series countLongestChainOfPredomType histo dir |
+	"remove monos"
+	callsites := aProgram callSites reject: [ :c |
+		             c numberOfReceiverClasses = 1 ].
+
+	"order"
+
+	ordered := (callsites do: [ :site | self switchRatioPerSite: site ])
+		           sort: [ :a :b | a switchRatio > b switchRatio ].
+
+
+	countLongestChainOfPredomType := ordered collect: [ :c |
+		                                 c typesPattern do: [ :each |
+			                                 series := OrderedCollection new.
+			                                 (series notEmpty and: [
+				                                  each = c dominantType ])
+				                                 ifTrue: [ series last add: each ]
+				                                 ifFalse: [
+					                                 each = c dominantType
+						                                 ifTrue: [
+						                                 series add:
+							                                 (OrderedCollection with: each) ]
+						                                 ifFalse: [
+						                                 series add:
+							                                 OrderedCollection new ] ] ].
+		                                 (series reject: #isEmpty)
+			                                 ifNotEmpty: [ :r |
+			                                 (r sort: [ :a :b |
+				                                  a size > b size ]) first size ]
+			                                 ifEmpty: [ 0 ] ].
+
+
+	(dir := FileSystem workingDirectory / 'histograms') isDirectory
+		ifFalse: [ dir createDirectory ].
+
+	histo := countLongestChainOfPredomType rsHistogram.
+	histo xlabel: 'length of predominant type sequences'.
+	histo ylabel: 'number of callsites'.
+
+	histo build.
+
+	histo canvas signalUpdate.
+
+	histo canvas pngExporter
+		fileName: 'histograms/predominantTypeSequencesSize_' , aProgram programName;
+		export
+]
+
 { #category : 'as yet unclassified' }
 PicPatternVisual >> plotSwitch: aProgram [
 
@@ -197,6 +248,53 @@ PicPatternVisual >> switchRatioPerSite: aCallSite [
 		Helps us order them from most to least stable.
 		"
 		^ aCallSite switchRatio: (switchCounter / aCallSite numberOfCalls) asFloat 
+]
+
+{ #category : 'switch' }
+PicPatternVisual >> typeStableSequencesOn: aProgram [
+
+	| ordered callsites series countLongestChainOfPredomType histo dir |
+	"remove monos"
+	callsites := aProgram callSites reject: [ :c |
+		             c numberOfReceiverClasses = 1 ].
+
+	"order"
+
+	ordered := (callsites do: [ :site | self switchRatioPerSite: site ])
+		           sort: [ :a :b | a switchRatio > b switchRatio ].
+
+
+	countLongestChainOfPredomType := ordered collect: [ :c |
+		                                 series := OrderedCollection new.
+		                                 c typesPattern do: [ :each |
+			                                 (series notEmpty and: [
+				                                  each = series last last ])
+				                                 ifTrue: [ series last add: each ]
+				                                 ifFalse: [
+				                                 series add:
+					                                 (OrderedCollection with: each) ] ].
+		                                 (series reject: #isEmpty)
+			                                 ifNotEmpty: [ :r |
+			                                 (r sort: [ :a :b |
+				                                  a size > b size ]) first size ]
+			                                 ifEmpty: [ 0 ] ].
+
+
+
+	(dir := FileSystem workingDirectory / 'histograms') isDirectory
+		ifFalse: [ dir createDirectory ].
+
+	histo := countLongestChainOfPredomType rsHistogram.
+	histo xlabel: 'length of type sequences'.
+	histo ylabel: 'number of callsites'.
+
+	histo build.
+
+	histo canvas signalUpdate.
+
+	histo canvas pngExporter
+		fileName: 'histograms/typeSequencesSize_' , aProgram programName;
+		export
 ]
 
 { #category : 'as yet unclassified' }
