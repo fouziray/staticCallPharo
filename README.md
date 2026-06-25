@@ -32,11 +32,23 @@ for bench in "${benches[@]}"; do
 		git clone --quiet --depth=1 https://github.com/SquareBracketAssociates/BuildingApplicationWithSpec2.git Spec2Book
 	fi
 	
-	./pharo Pharo.image eval "PatternCallSites tracePatternsOf${bench}"
-
+	if [ "$bench" = "Bloc" ]; then
+		./pharo-ui Pharo.image eval "PatternCallSites tracePatternsOf${bench}. Smalltalk exitSuccess"
+	else	
+		./pharo Pharo.image eval "PatternCallSites tracePatternsOf${bench}"
+	fi
+	
+	
 	cp *.ston *.csv ..
 	cd ..
 	rm -rf temp
+	
+	for i in *.ston; do          
+		[ -f "$i" ] || break
+		./pharo Pharo.image eval "Estimator estimateFrom: '${i}' "
+		./pharo Pharo.image eval "PatternCallSites predomTypeStableOn: '${i}' "
+	done
+
 done
   ```
   
