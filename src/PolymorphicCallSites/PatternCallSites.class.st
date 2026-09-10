@@ -144,8 +144,8 @@ PatternCallSites class >> trace: aBlock outputFileSuffix: suffix [
 	program := simulator constructProgram.
 
 	"Matrixify - for thourough analysis in python"
-	MatrixSiteType new octaveFormat: program.
-
+"	MatrixSiteType new octaveFormat: program.
+"
 	"export trace into directory local"
 
 	('trace-' , suffix , '.ston') asFileReference
