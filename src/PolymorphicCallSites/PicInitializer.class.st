@@ -15,6 +15,13 @@ PicInitializer class >> pickify: aProgramModel [
 	^ self new pickify: aProgramModel
 ]
 
+{ #category : 'intialization' }
+PicInitializer class >> pickify: aProgramModel numberOfCasses: numberOfCasses [
+
+	^ self new pickify: aProgramModel numberOfCasses: numberOfCasses
+
+]
+
 { #category : 'initialization' }
 PicInitializer >> initialize [
 
