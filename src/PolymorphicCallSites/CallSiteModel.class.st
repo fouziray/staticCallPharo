@@ -194,6 +194,12 @@ CallSiteModel >> firstSwitchIndex [
 	^ firstSwitchIndex
 ]
 
+{ #category : 'accessing' }
+CallSiteModel >> flattenedTypes [
+
+	^ flattenedTypes ifNil: [ ^ self computeTypes ]
+]
+
 { #category : 'instance creation' }
 CallSiteModel >> fromRaw: aCollection [ 
 
@@ -319,6 +325,15 @@ CallSiteModel >> selector [
 { #category : 'accessing' }
 CallSiteModel >> sourceStart [
 	^ sourceStart
+]
+
+{ #category : 'as yet unclassified' }
+CallSiteModel >> stripSelectorFromQuotes [
+
+	^ (self selector includes: $')
+		  ifTrue: [
+		  ((self selector splitOn: $') reject: [ :e | e = '' ]) first ]
+		  ifFalse: [ self selector ]
 ]
 
 { #category : 'accessing' }

@@ -133,6 +133,44 @@ PatternCallSites class >> predomTypeStableOn: aStonName [
 	self visualClass new plotPredomTypeStablity: program
 ]
 
+{ #category : 'switch' }
+PatternCallSites class >> setPIC [
+
+	<script>
+	tracePatternsDir := (SmalltalkImage current imagePath splitOn: '/') allButLast joinUsing: '/'.
+	self setPicsFor: 'trace-veritaswatershowDots' 
+
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setPIC: numberOfCasses [
+
+	<script>
+	tracePatternsDir := (SmalltalkImage current imagePath splitOn: '/') allButLast joinUsing: '/'.
+	self setPicsFor: 'trace-veritaswatershowDots' numberOfCasses: numberOfCasses
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setPicsFor: aStonName [
+	<script>
+	| program |
+	program := self deserializeTracePatternsForFile: (aStonName , '.ston') asString.
+
+	PicInitializer pickify: program .
+	
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setPicsFor: aStonName numberOfCasses: numberOfCasses [
+
+	<script>
+	| program |
+	program := self deserializeTracePatternsForFile: (aStonName , '.ston') asString.
+
+	PicInitializer pickify: program numberOfCasses: numberOfCasses.
+	
+]
+
 { #category : 'Full example' }
 PatternCallSites class >> trace: aBlock outputFileSuffix: suffix [
 
