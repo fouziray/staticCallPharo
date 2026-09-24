@@ -55,6 +55,12 @@ CallSiteModel class >> fromRaw: aCollection [
 ]
 
 { #category : 'accessing' }
+CallSiteModel >> bytecodeEnd [
+
+	^ bytecodeEnd
+]
+
+{ #category : 'accessing' }
 CallSiteModel >> bytecodeStart [
 	^ bytecodeStart
 ]
@@ -92,7 +98,7 @@ CallSiteModel >> compareWithMessageNode: messageNode [
 { #category : 'accessing' }
 CallSiteModel >> computeTypes [
 
-	flattenedTypes := (methodsActivated collect: #receiverTypes )flattened asBag
+	^ flattenedTypes := (methodsActivated collect: #receiverTypes )flattened asBag
 ]
 
 { #category : 'accessing' }
@@ -155,7 +161,7 @@ CallSiteModel >> fetchSelector [
 { #category : 'instance creation' }
 CallSiteModel >> fillKey: aCollection [
 
-	| messageNode |
+	| messageNode theMappedScope pcs |
 	messageNode := aCollection key.
 
 	methodClassName := messageNode methodNode methodClass name.
@@ -165,10 +171,20 @@ CallSiteModel >> fillKey: aCollection [
 	source := messageNode sourceCode.
 	isSelfSend := messageNode receiver isSelfVariable.
 
-	(messageNode methodNode pcsForNode: messageNode) ifNotEmpty: [
-		bytecodeStart := (messageNode methodNode pcsForNode: messageNode)
-			                 first.
-		bytecodeEnd := (messageNode methodNode pcsForNode: messageNode) last ]
+	messageNode scope isMethodScope
+		ifTrue: [ pcs := messageNode methodNode pcsForNode: messageNode ]
+		ifFalse: [
+			theMappedScope := messageNode scope isOptimized
+				                  ifTrue: [
+				                  messageNode scope outerNotOptimizedScope ]
+				                  ifFalse: [ messageNode scope ].
+
+			pcs := theMappedScope node bcToASTCache pcsForNode: messageNode ].
+	pcs
+		ifNotEmpty: [
+			bytecodeStart := pcs first.
+			bytecodeEnd := pcs last ]
+		ifEmpty: [ 1 halt ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -192,6 +208,12 @@ CallSiteModel >> firstSwitchAt: index [
 CallSiteModel >> firstSwitchIndex [
 
 	^ firstSwitchIndex
+]
+
+{ #category : 'accessing' }
+CallSiteModel >> flattenedTypes [
+
+	^ flattenedTypes ifNil: [ ^ self computeTypes ]
 ]
 
 { #category : 'instance creation' }
@@ -316,9 +338,39 @@ CallSiteModel >> selector [
 	^ selector
 ]
 
+{ #category : 'processing' }
+CallSiteModel >> sourceMethod [
+
+	"Return the compield method or compiled block that contains the current send.
+	All computations of bcpc, ast mappings, etc should be done with it and not only the method"
+
+	| theMethod theMatchingNode parent |
+	theMethod := self methodClass lookupSelector: self methodSelector.
+	theMatchingNode := theMethod ast bestNodeFor: (sourceStart to: sourceEnd - 1).
+	
+	parent := theMatchingNode methodOrBlockNode.
+	[ parent scope isMethodScope not and: [ parent scope isOptimized ] ]
+		whileTrue: [ parent := parent parent methodOrBlockNode ].
+
+	"If we found that the parent of the matching node is the method node, go with the method"
+	parent = theMethod ast ifTrue: [ ^ theMethod ].
+	
+	"Otherwise, we need a block inside the method!!"
+	^ theMethod allBlocks detect: [ :b | b ast == parent ]
+]
+
 { #category : 'accessing' }
 CallSiteModel >> sourceStart [
 	^ sourceStart
+]
+
+{ #category : 'processing' }
+CallSiteModel >> stripSelectorFromQuotes [
+
+	^ (self selector includes: $')
+		  ifTrue: [
+		  ((self selector splitOn: $') reject: [ :e | e = '' ]) first ]
+		  ifFalse: [ self selector ]
 ]
 
 { #category : 'accessing' }

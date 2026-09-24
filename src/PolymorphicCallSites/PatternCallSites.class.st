@@ -91,22 +91,17 @@ PatternCallSites class >> initialize [
 	super initialize.
 	tracePatternsDir := FileSystem  workingDirectory /'pharo-local' /'iceberg'/'fouziray'/'staticCallPharo'/'patternTrace'.
 	
-	(tracePatternsDir ) asFileReference exists ifFalse:[self error: 'gotta create a directory named: patternTrace
+	( tracePatternsDir ) asFileReference exists ifFalse:[ self error: 'gotta create a directory named: patternTrace
 	- regenerate the trace using tracePatterns... for all program or copy it from elsewhere']
 
 ]
 
-{ #category : 'divide' }
-PatternCallSites class >> partitionIntoSublists: aCollectionOfCallSiteModels usingBins: bins [ 
+{ #category : 'Full example' }
+PatternCallSites class >> miniWhile [
 
-    ^ bins allButLast collectWithIndex: [ :val1 :index |
-        | val2 condition |
-        val2 := bins at: index + 1.
-        condition := index + 1 = bins size
-            ifTrue: [ [ :value | value switchRatio between: val1 and: val2 ] ]
-            ifFalse: [ [ :value | val1 <= value switchRatio and: [ value switchRatio < val2 ] ] ].
-        aCollectionOfCallSiteModels select: condition
-    ]
+	| a |
+	a := true.
+	[ self returnTrueIf: a ] whileTrue
 ]
 
 { #category : 'switch' }
@@ -134,6 +129,78 @@ PatternCallSites class >> predomTypeStableOn: aStonName [
 ]
 
 { #category : 'Full example' }
+PatternCallSites class >> returnTrueIf: a [
+
+	a yourself.
+	^ false
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setPIC [
+
+	<script>
+	tracePatternsDir := (SmalltalkImage current imagePath splitOn: '/') allButLast joinUsing: '/'.
+	self setPicsFor: 'trace-veritaswatershowDots'
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setPIC: numberOfCasses [
+
+	<script>
+	tracePatternsDir := (SmalltalkImage current imagePath splitOn: '/') allButLast joinUsing: '/'.
+	self setPicsFor: 'trace-veritaswatershowDots' numberOfCasses: numberOfCasses
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setPicsAnInitializedTrace [
+
+	<script>
+	tracePatternsDir := (SmalltalkImage current imagePath splitOn: '/') allButLast joinUsing: '/'.
+	self setPicsFor: 'trace-1008hg'
+	
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setPicsAnInitializedTraceBloc [
+
+	<script>
+	tracePatternsDir := (SmalltalkImage current imagePath splitOn: '/') allButLast joinUsing: '/'.
+	self setPicsFor: 'Dataframebench'
+	
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setPicsFor: aStonName [
+
+	<script>
+	| program |
+	program := self deserializeTracePatternsForFile: (aStonName , '.ston') asString.
+
+	PicInitializer pickify: program.
+	
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setPicsFor: aStonName numberOfCasses: numberOfCasses [
+
+	<script>
+	| program |
+	program := self deserializeTracePatternsForFile: (aStonName , '.ston') asString.
+
+	PicInitializer pickify: program numberOfCasses: numberOfCasses.
+	
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setPicsOn: aFileName [
+
+	<script>
+	tracePatternsDir := (SmalltalkImage current imagePath splitOn: '/') allButLast joinUsing: '/'.
+	tracePatternsDir :='/Users/faouziray/work'.
+	self setPicsFor: aFileName
+]
+
+{ #category : 'Full example' }
 PatternCallSites class >> trace: aBlock outputFileSuffix: suffix [
 
 	| simulator blockReturn program |
@@ -142,10 +209,11 @@ PatternCallSites class >> trace: aBlock outputFileSuffix: suffix [
 	blockReturn := simulator execute.
 
 	program := simulator constructProgram.
-
+"1 halt."
 	"Matrixify - for thourough analysis in python"
-	MatrixSiteType new octaveFormat: program.
-
+	
+	"MatrixSiteType new octaveFormat: program."
+	
 	"export trace into directory local"
 
 	('trace-' , suffix , '.ston') asFileReference
@@ -185,7 +253,7 @@ PatternCallSites class >> tracePatternsOfHoneyGinger [
 	<script>
 	self
 		trace: [ VeritasHoneyGinger new run ]
-		outputFileSuffix: 'veritashg'
+		outputFileSuffix: '1008hg'
 ]
 
 { #category : 'Full example' }
@@ -213,6 +281,15 @@ PatternCallSites class >> tracePatternsOfReMobidyc [
 	self
 		trace: [ VeritasReMobidyc new run ]
 		outputFileSuffix: 'veritasmobidyc'
+]
+
+{ #category : 'Full example' }
+PatternCallSites class >> tracePatternsSmallWhile [
+
+	<script>
+	self
+		trace: [ self miniWhile ]
+		outputFileSuffix: 'veritasmd'
 ]
 
 { #category : 'switch' }
@@ -268,7 +345,7 @@ PatternCallSites class >> typeSwitchAnalysisHG1 [
 PatternCallSites class >> typeSwitchAnalysisHG2 [
 
 	<script>
-	tracePatternsDir := FileSystem workingDirectory .
+	tracePatternsDir := FileSystem workingDirectory.
 	self typeSwitchAnalysisOn: 'trace-veritaswatershowDots'
 ]
 
