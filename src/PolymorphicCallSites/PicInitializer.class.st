@@ -53,7 +53,7 @@ PicInitializer >> linkMethod: sourceMethod numCopiedVars: numCopied atBcpc: bcpc
 PicInitializer >> pickify: aProgramModel [
 	| filteredSites |
 	self setCounter: 0.
-	filteredSites := (aProgramModel callSites allButFirst reject:[ :c| (#( #new. #basicNew . #new: . #DoIt . #initialize . #timesRepeat:  .#collect:) includes: c  selector )or:[ c flattenedTypes asSet size=1] ]).
+	filteredSites := (aProgramModel callSites allButFirst reject:[ :c| (#( #new. #basicNew . #new: . #DoIt . #initialize . #timesRepeat:  .#collect:) includes: c  selector )or:[ (c flattenedTypes asSet size=1) or:[ c bytecodeStart isNil  ] ] ]).
 	( filteredSites ) do: [ :callsite |
 		self sortAndApplyPicInto: callsite ].
 ]
