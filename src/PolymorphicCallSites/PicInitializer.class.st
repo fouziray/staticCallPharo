@@ -51,17 +51,19 @@ PicInitializer >> linkMethod: sourceMethod numCopiedVars: numCopied atBcpc: bcpc
 
 { #category : 'intialization' }
 PicInitializer >> pickify: aProgramModel [
-
-	| block |
+	| filteredSites |
 	self setCounter: 0.
-	block := [ :listOfSites | listOfSites reject: [ :c |
-	((#( #new  #basicNew #new: #DoIt #initialize #timesRepeat: #collect: ) includes: c selector  )
-			   or: [ c flattenedTypes asSet size = 1 ]) or: [ c bytecodeStart isNil or: [ c isSelfSend ] ] ]].
-	
-	(block value: (aProgramModel callSites allButFirst ) ) do: [
-		:callsite |
-		self sortAndApplyPicInto: callsite
-		]
+	filteredSites := (aProgramModel callSites allButFirst reject:[ :c| (#( #new. #basicNew . #new: . #DoIt . #initialize . #timesRepeat:  .#collect:) includes: c  selector )or:[ c flattenedTypes asSet size=1] ]).
+	( filteredSites ) do: [ :callsite |
+		self sortAndApplyPicInto: callsite ].
+]
+
+{ #category : 'intialization' }
+PicInitializer >> pickify: aProgramModel numberOfCasses: numberOfCasses [
+	self setCounter: 0.
+	1 halt.
+	(((aProgramModel callSites allButFirst reject:[ :c| ((#( #new. #basicNew . #new: . #DoIt . #initialize . #timesRepeat:  .#collect:) includes: c  selector )or:[ c flattenedTypes asSet size=1])  and:[ (c bytecodeStart isNil) and: [ c isSelfSend  ] ] ]) ) first: numberOfCasses) do: [ :callsite |
+		self sortAndApplyPicInto: callsite ].
 ]
 
 { #category : 'seraching' }
@@ -107,8 +109,7 @@ PicInitializer >> sortAndApplyPicInto: aCallSiteModel [
 	sourceMethod := aCallSiteModel method.
 	sendNode := sourceMethod ast sourceNodeForPC:
 		            aCallSiteModel bytecodeStart.
-	sendNode isSuperSend ifTrue: [ ^ nil ].
-	
+		
 	messageValidator := 	[ :sendNode :aCallSiteModel | sendNode isMessage and:[ sendNode start = aCallSiteModel sourceStart ] ].
 	(messageValidator value: sendNode value: aCallSiteModel) ifFalse: [
 					sourceMethod := self recollectBlockNodeOf: sendNode from: aCallSiteModel on: messageValidator . 
@@ -135,10 +136,8 @@ PicInitializer >> sortAndApplyPicInto: aCallSiteModel [
 	"xrayBefore := sourceMethod xray.
 	"
 
-	sel := aCallSiteModel stripSelectorFromQuotes asSymbol.
-	targetTypesSortes size > 6 ifTrue: [ 
-		"We do not do mega stuff"
-		^  self ].
+sel := aCallSiteModel stripSelectorFromQuotes asSymbol.	
+	
 "On n'enovie jamais un block avec son bcpcp - fixed"
  targetMethods := (sendNode isSuperSend 
 			ifTrue:[ targetTypesSortes  collect:#superclass  ] 
@@ -146,6 +145,12 @@ PicInitializer >> sortAndApplyPicInto: aCallSiteModel [
 			collect: [ :type |
 				 type lookupSelector: sel asSymbol ].
 			 
+	targetTypesSortes size > 6 ifTrue: [ 
+		"We do not do mega stuff"
+	
+		targetTypesSortes := targetTypesSortes first:6.
+		targetMethods := targetMethods first: 6 ].
+
 	
 	
 	"self halt.
@@ -154,7 +159,7 @@ PicInitializer >> sortAndApplyPicInto: aCallSiteModel [
 		linkMethod: sourceMethod
 		numCopiedVars: (sourceMethod isBlock ifTrue: [ sourceMethod ast scope copiedVars size ] ifFalse:[ -1 ])
 		atBcpc: bcpc
-		isSuper: sendNode isSuperSend
+		isSuper: sendNode isSuperSend 
 		targetSelector: sel
 		tagetTypes: targetTypesSortes
 		targetMethod: targetMethods.
