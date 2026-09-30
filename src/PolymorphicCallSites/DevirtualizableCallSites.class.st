@@ -350,17 +350,6 @@ DevirtualizableCallSites class >> rewriterBenchs [
  }	
 ]
 
-{ #category : 'benchs' }
-DevirtualizableCallSites class >> roassalBenchs [
-
-^ {
-'Roassal RSAlpharoExample example01Basic' ->[  RSAlpharoExample new example01Basic  ].
-'Roassal RSKiviatExample example01Basic'->[  RSKiviatExample new example01Basic   ].
-'Roassal RSLegendExamples example01Basic' -> [  RSLegendExamples new example01Basic   ].
-'Roassal RSPieExamples example01Basic ' -> [  RSPieExamples new example01Basic   ].
- }	
-]
-
 { #category : 'accessing' }
 DevirtualizableCallSites >> block [
 

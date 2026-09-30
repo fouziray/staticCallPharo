@@ -133,6 +133,17 @@ PatternCallSites class >> predomTypeStableOn: aStonName [
 	self visualClass new plotPredomTypeStablity: program
 ]
 
+{ #category : 'benchs' }
+PatternCallSites class >> roassalBenchs [
+
+^ {
+'Roassal RSAlpharoExample example01Basic' ->[  RSAlpharoExample new example01Basic  ].
+'Roassal RSKiviatExample example01Basic'->[  RSKiviatExample new example01Basic   ].
+'Roassal RSLegendExamples example01Basic' -> [  RSLegendExamples new example01Basic   ].
+'Roassal RSPieExamples example01Basic ' -> [  RSPieExamples new example01Basic   ].
+ }	
+]
+
 { #category : 'switch' }
 PatternCallSites class >> setPIC [
 
@@ -251,6 +262,14 @@ PatternCallSites class >> tracePatternsOfReMobidyc [
 	self
 		trace: [ VeritasReMobidyc new run ]
 		outputFileSuffix: 'veritasmobidyc'
+]
+
+{ #category : 'drawing - roassal' }
+PatternCallSites class >> traceRoassal [
+
+	<script>
+	self roassalBenchs do: [ :program |
+		self trace: program value outputFileSuffix: program key ]
 ]
 
 { #category : 'switch' }
