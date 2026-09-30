@@ -98,15 +98,15 @@ PatternCallSites class >> generateCsvFromStons [
 	| stons |
 
 	stons := SmalltalkImage current imageDirectory allFiles select: [ :f |
-		         (f fullName endsWith: '.ston') and: [
-			         f fullName beginsWith: 'trace-' ] ].
+		         (f basename endsWith: '.ston') and: [
+			         f basename beginsWith: 'trace-' ] ].
 	stons := stons collect: [ :file |
 		         PatternCallSites deserializeStonFor: file ].
-		1 halt.
-	self
+	(SmalltalkImage current imageDirectory 
+			/ 'callsAndSpuriousDistribution.csv') asFileReference writeStreamDo:[:ws | self
 		generateCsv: stons
-		in: SmalltalkImage current 
-			/ 'callsAndSpuriousDistribution.csv' asFileReference
+		in: ws ]
+	
 ]
 
 { #category : 'as yet unclassified' }
