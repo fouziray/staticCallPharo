@@ -112,7 +112,7 @@ PicInitializer >> sortAndApplyPicInto: aCallSiteModel [
 		
 	messageValidator := 	[ :sendNode :aCallSiteModel | sendNode isMessage and:[ sendNode start = aCallSiteModel sourceStart ] ].
 	(messageValidator value: sendNode value: aCallSiteModel) ifFalse: [
-					sourceMethod := self recollectBlockNodeOf: sendNode from: aCallSiteModel on: messageValidator . 
+					sourceMethod := self recollectBlockNodeOf: sendNode methodNode from: aCallSiteModel on: messageValidator . 
 					sendNode := sourceMethod ast sourceNodeForPC: aCallSiteModel bytecodeStart.
 					 ].
 	
@@ -155,8 +155,9 @@ sel := aCallSiteModel stripSelectorFromQuotes asSymbol.
 	
 	"self halt.
 	self haltIf: ((sourceMethod = (HGSimulator>>#extent:) ) and:[(sel = #extent:) and:[ bcpc = 109 ]] )."
-	self
-		linkMethod: sourceMethod
+	"avoid super sends"
+	sendNode isSuperSend ifFalse:[
+		self linkMethod: sourceMethod
 		numCopiedVars: (sourceMethod isBlock ifTrue: [ sourceMethod ast scope copiedVars size ] ifFalse:[ -1 ])
 		atBcpc: bcpc
 		isSuper: sendNode isSuperSend 
@@ -164,7 +165,10 @@ sel := aCallSiteModel stripSelectorFromQuotes asSymbol.
 		tagetTypes: targetTypesSortes
 		targetMethod: targetMethods.
 	count := count + 1.
-
+	
+		].
+	
+	
 "
 	xrayAfter add: sourceMethod xray"
 ]

@@ -76,6 +76,39 @@ PatternCallSites class >> firstTypeSwitchAnalysis [
 	1 halt.
 ]
 
+{ #category : 'generate csv' }
+PatternCallSites class >> generateCsv: aListOfPrograms in: aFileReference [
+
+	aListOfPrograms do:[ :aProgram | 	self generateCsvFromProgram: aProgram in: aFileReference ]
+
+		
+]
+
+{ #category : 'generate csv' }
+PatternCallSites class >> generateCsvFromProgram: aProgram in: aFileReference [
+
+	(ProgramResult for: aProgram) generateRowOn: aFileReference 
+		
+]
+
+{ #category : 'generate csv' }
+PatternCallSites class >> generateCsvFromStons [
+	<script>
+	
+	| stons |
+
+	stons := SmalltalkImage current imageDirectory allFiles select: [ :f |
+		         (f fullName endsWith: '.ston') and: [
+			         f fullName beginsWith: 'trace-' ] ].
+	stons := stons collect: [ :file |
+		         PatternCallSites deserializeStonFor: file ].
+		1 halt.
+	self
+		generateCsv: stons
+		in: SmalltalkImage current 
+			/ 'callsAndSpuriousDistribution.csv' asFileReference
+]
+
 { #category : 'as yet unclassified' }
 PatternCallSites class >> generatePositionalTableOfCallSites [
 	<script>

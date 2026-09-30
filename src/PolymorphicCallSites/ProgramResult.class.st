@@ -107,6 +107,18 @@ ProgramResult >> callSites [
 ]
 
 { #category : 'accessing' }
+ProgramResult >> csvRowValues [
+
+	^ { programName.
+		numberCalls.
+		numberOfMonoCalls.
+		numberOfPolyCalls.
+		spuriousPolyCalls.
+		numberOfMegaCalls.
+		spuriousMegaCalls }
+]
+
+{ #category : 'accessing' }
 ProgramResult >> disparities [
 	^ ((self callSites collect:[:e |
 		e -> e disparity ] )select:[:e | e value isNotNil]) sortDescending: #value
@@ -168,6 +180,16 @@ ProgramResult >> generateLatexOn: aStream [
 	self putLatexWithPercentage: spuriousPolyCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
 	self putLatexWithPercentage: spuriousMegaCalls total: numberCalls On: aStream. self nextRowOn: aStream.
 	
+]
+
+{ #category : 'accessing' }
+ProgramResult >> generateRowOn: aStream [ 
+
+	self csvRowValues doWithIndex: [ :each :i |
+		i = 1 ifFalse: [ aStream nextPutAll: ','  ].
+		aStream nextPutAll: each asString ].
+	aStream crlf
+
 ]
 
 { #category : 'as yet unclassified' }
