@@ -76,6 +76,16 @@ PatternCallSites class >> firstTypeSwitchAnalysis [
 	1 halt.
 ]
 
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> genCsvBloc [
+<script>
+
+	(SmalltalkImage current imageDirectory 
+			/ 'callsAndSpuriousDistributionHG1.csv') asFileReference writeStreamDo:[ :ws | self
+		generateCsvFromProgram: (PatternCallSites deserializeStonFor: (	'/Users/faouziray/work/initThenFreeze3/build/trace-2026HGSimulator ramen.ston') asFileReference )
+		in: ws ]
+]
+
 { #category : 'generate csv' }
 PatternCallSites class >> generateCsv: aListOfPrograms in: aFileReference [
 
