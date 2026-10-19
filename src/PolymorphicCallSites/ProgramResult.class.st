@@ -20,7 +20,9 @@ Class {
 		'spuriousMegaCalls',
 		'numberOfSingleImplementationPoly',
 		'numberOfSingleImplementationMega',
-		'disparities'
+		'disparities',
+		'spuriousCallsPolySingleImp',
+		'spuriousCallsMegaSingleImp'
 	],
 	#category : 'PolymorphicCallSites-Objects',
 	#package : 'PolymorphicCallSites',
@@ -91,19 +93,40 @@ ProgramResult >> calculateInlineCacheIndividualCalls [
 { #category : 'as yet unclassified' }
 ProgramResult >> calculateSpurious [
 	
+	| polySp megaSp |
 	spuriousCallSites := self callSites count: [ :e | self isSpurious: e ].
 	spuriousPolySites := self polyCallSites count: [ :e | self isSpurious: e ].
 	spuriousMegaSites := self megaCallSites count: [ :e | self isSpurious: e ].
 	
 	spuriousCalls := (self callSites select: [ :e | self isSpurious: e ]) sum: [ :e | self numberOfCallsFor: e ].
-	spuriousPolyCalls := (self polyCallSites select: [ :e | self isSpurious: e ]) sum: [ :e | self numberOfCallsFor: e ].
-	spuriousMegaCalls := (self megaCallSites select: [ :e | self isSpurious: e ]) sum: [ :e | self numberOfCallsFor: e ].	
+	polySp:= (self polyCallSites select: [ :e | self isSpurious: e ]).
+	spuriousPolyCalls := polySp sum: [ :e | self numberOfCallsFor: e ].
+	megaSp:= (self megaCallSites select: [ :e | self isSpurious: e ]).
+	spuriousMegaCalls := megaSp sum: [ :e | self numberOfCallsFor: e ].
+	spuriousCallsPolySingleImp := (polySp select:[:s | s selector asSymbol implementors size = 1 ] ) size.
+	
+	spuriousCallsMegaSingleImp := (megaSp select:[:s | s selector asSymbol implementors size = 1 ]) size.
 ]
 
 { #category : 'accessing' }
 ProgramResult >> callSites [
 
 	^ originalData callSites
+]
+
+{ #category : 'accessing' }
+ProgramResult >> csvRowValues [
+
+	^ { programName.
+		numberCalls.
+		numberOfMonoCalls.
+		numberOfPolyCalls.
+		spuriousPolyCalls.
+		numberOfMegaCalls.
+		spuriousMegaCalls.
+		spuriousCallsPolySingleImp.
+		spuriousCallsMegaSingleImp
+		 }
 ]
 
 { #category : 'accessing' }
@@ -168,6 +191,16 @@ ProgramResult >> generateLatexOn: aStream [
 	self putLatexWithPercentage: spuriousPolyCalls total: numberCalls On: aStream. self nextFieldOn: aStream.
 	self putLatexWithPercentage: spuriousMegaCalls total: numberCalls On: aStream. self nextRowOn: aStream.
 	
+]
+
+{ #category : 'accessing' }
+ProgramResult >> generateRowOn: aStream [ 
+
+	self csvRowValues doWithIndex: [ :each :i |
+		i = 1 ifFalse: [ aStream nextPutAll: ','  ].
+		aStream nextPutAll: each asString ].
+	aStream crlf
+
 ]
 
 { #category : 'as yet unclassified' }

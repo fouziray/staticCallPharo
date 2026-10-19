@@ -107,6 +107,49 @@ PatternCallSites class >> forgottenListInlinedMethods [
 ]
 
 { #category : 'as yet unclassified' }
+PatternCallSites class >> genCsvBloc [
+<script>
+
+	(SmalltalkImage current imageDirectory 
+			/ 'callsAndSpuriousDistributionHG1.csv') asFileReference writeStreamDo:[ :ws | self
+		generateCsvFromProgram: (PatternCallSites deserializeStonFor: (	'/Users/faouziray/work/initThenFreeze3/build/trace-2026HGSimulator ramen.ston') asFileReference )
+		in: ws ]
+]
+
+{ #category : 'generate csv' }
+PatternCallSites class >> generateCsv: aListOfPrograms in: aFileReference [
+
+	aListOfPrograms do:[ :aProgram | 	self generateCsvFromProgram: aProgram in: aFileReference ]
+
+		
+]
+
+{ #category : 'generate csv' }
+PatternCallSites class >> generateCsvFromProgram: aProgram in: aFileReference [
+
+	(ProgramResult for: aProgram) generateRowOn: aFileReference 
+		
+]
+
+{ #category : 'generate csv' }
+PatternCallSites class >> generateCsvFromStons [
+	<script>
+	
+	| stons |
+
+	stons := SmalltalkImage current imageDirectory allFiles select: [ :f |
+		         (f basename endsWith: '.ston') and: [
+			         f basename beginsWith: 'trace-' ] ].
+	stons := stons collect: [ :file |
+		         PatternCallSites deserializeStonFor: file ].
+	(SmalltalkImage current imageDirectory 
+			/ 'callsAndSpuriousDistribution.csv') asFileReference writeStreamDo:[:ws | self
+		generateCsv: stons
+		in: ws ]
+	
+]
+
+{ #category : 'as yet unclassified' }
 PatternCallSites class >> generatePositionalTableOfCallSites [
 	<script>
 	| traceProgram toExport |
