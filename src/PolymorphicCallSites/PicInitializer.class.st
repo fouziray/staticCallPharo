@@ -155,6 +155,7 @@ sel := aCallSiteModel stripSelectorFromQuotes asSymbol.
 	
 	"self halt.
 	self haltIf: ((sourceMethod = (HGSimulator>>#extent:) ) and:[(sel = #extent:) and:[ bcpc = 109 ]] )."
+	sendNode isSuperSend ifFalse:[
 	self
 		linkMethod: sourceMethod
 		numCopiedVars: (sourceMethod isBlock ifTrue: [ sourceMethod ast scope copiedVars size ] ifFalse:[ -1 ])
@@ -164,7 +165,7 @@ sel := aCallSiteModel stripSelectorFromQuotes asSymbol.
 		tagetTypes: targetTypesSortes
 		targetMethod: targetMethods.
 	count := count + 1.
-
+].
 "
 	xrayAfter add: sourceMethod xray"
 ]

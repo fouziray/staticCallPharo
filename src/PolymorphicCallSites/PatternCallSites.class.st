@@ -29,7 +29,22 @@ PatternCallSites class >> deserializeButterBallAtDie [
 { #category : 'as yet unclassified' }
 PatternCallSites class >> deserializeStonFor: aFileReference [
 
-	^ aFileReference readStreamDo: [ :stream | STON fromStream: stream ]
+	| methodsToFurhterFilter notCompletelyFiltered |
+	methodsToFurhterFilter := self forgottenListInlinedMethods.
+	notCompletelyFiltered := aFileReference readStreamDo: [ :stream |
+		                         STON fromStream: stream ].
+	^ notCompletelyFiltered callSites:
+		  (notCompletelyFiltered callSites reject: [ :c |
+			   methodsToFurhterFilter includes: c selector ])
+]
+
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> deserializeTracePatternsDataframe [
+	<script>
+
+^ (self deserializeStonFor: (tracePatternsDir,'/trace-veritasdf.ston') asFileReference ) inspect . 
+	
+	
 ]
 
 { #category : 'as yet unclassified' }
@@ -74,6 +89,21 @@ PatternCallSites class >> firstTypeSwitchAnalysis [
    plot2:= patternsVisualizer plotSwitchRatioWithCallNum: callSitesPartitions fromTotalCalls: program numberOfCalls .
 	plot2 inspect"
 	1 halt.
+]
+
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> forgottenListInlinedMethods [
+
+	^ #( '<' '>' '<=' '''<=''' '''>=''' 'rounded' 'truncateTo:' '='
+	   '>=' '~=' '''~=''' '''~=''' '~~' '==' 'isNil' 'notNil' 'whileTrue:'
+	   'whileFalse:' 'to:do:' 'repeat' 'ifTrue:' 'ifTrue:ifFalse:'
+	   'ifFalse:ifTrue:' 'ifNotNil:' 'ifNotNil:ifNil:' 'ifNil:ifNotNil:'
+	   'at:' 'at:put:' 'ifNil:' 'basicAt:' 'basicAt:put:' '&' '|' 'abs'
+	   'and:' 'or:' 'not' '-' '*' '+' 'negated' '**' '/' '//' '''//'''
+	   '\\' '''\\''' '''~=''' '<<' '>>' 'min:' 'max:' 'between:and:' 'integerObjectOf:'
+	   'anyMask:' 'asUnsignedInteger' 'asSymbol' 'allMask:' 'noMask:'
+	   'raisedTo:' 'touch:' 'deny:' 'shouldNotImplement'
+	   'shouldBeImplemented' 'subclassResponsibility' )
 ]
 
 { #category : 'as yet unclassified' }
@@ -152,6 +182,14 @@ PatternCallSites class >> setPIC: numberOfCasses [
 ]
 
 { #category : 'switch' }
+PatternCallSites class >> setPICBlock [
+
+	<script>
+	tracePatternsDir := (SmalltalkImage current imagePath splitOn: '/') allButLast joinUsing: '/'.
+	self setPicsFor: 'trace-synthProgramBLock'
+]
+
+{ #category : 'switch' }
 PatternCallSites class >> setPicsAnInitializedTrace [
 
 	<script>
@@ -221,6 +259,23 @@ PatternCallSites class >> trace: aBlock outputFileSuffix: suffix [
 ]
 
 { #category : 'Full example' }
+PatternCallSites class >> traceAllHGPrograms [ 
+
+	<script>
+	| list |
+	list := #( 'HGSimulator nattoViewer' 'HGSimulator lagoonRefractionWorld'
+	           'HGSimulator splashPressureBorderline'
+	           'HGSimulator capuccino' 'HGSimulator sandbox4000'
+	           'HGSimulator sandtrap3D' 'HGSimulator raftingDots'
+	           'HGSimulator arrestingWire5' 'HGSimulator impossibeRiverDots'
+	           'HGSimulator impossibeRiverPressureMap'
+	           'HGSimulator waterImageViewer'
+	           'HGSimulator watershowPressureMap' ).
+	list do: [ :e |
+	self tracePatternsOfHoneyGingerProgram: e  ].
+]
+
+{ #category : 'Full example' }
 PatternCallSites class >> tracePatternsOfBloc [
 
 	<script>
@@ -254,6 +309,15 @@ PatternCallSites class >> tracePatternsOfHoneyGinger [
 	self
 		trace: [ VeritasHoneyGinger new run ]
 		outputFileSuffix: '1008hg'
+]
+
+{ #category : 'Full example' }
+PatternCallSites class >> tracePatternsOfHoneyGingerProgram: aStringCommand [
+
+	<script>
+	self
+		trace: [ VeritasHoneyGinger new run: aStringCommand ]
+		outputFileSuffix: ('2026',aStringCommand)
 ]
 
 { #category : 'Full example' }
