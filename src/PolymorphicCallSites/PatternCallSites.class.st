@@ -111,8 +111,51 @@ PatternCallSites class >> genCsvBloc [
 <script>
 
 	(SmalltalkImage current imageDirectory 
-			/ 'callsAndSpuriousDistributionHG1.csv') asFileReference writeStreamDo:[ :ws | self
-		generateCsvFromProgram: (PatternCallSites deserializeStonFor: (	'/Users/faouziray/work/initThenFreeze3/build/trace-2026HGSimulator ramen.ston') asFileReference )
+			/ 'last-bloc.csv') asFileReference writeStreamDo:[ :ws | self
+		generateCsvFromProgram: (PatternCallSites deserializeStonFor: ( SmalltalkImage  current imageDirectory /	'trace-veritasbloc.ston') asFileReference )
+		in: ws ]
+]
+
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> genCsvCormas [
+<script>
+
+	(SmalltalkImage current imageDirectory 
+			/ 'last-cormas.csv') asFileReference writeStreamDo:[ :ws | self
+		generateCsvFromProgram: (PatternCallSites deserializeStonFor: ( SmalltalkImage  current imageDirectory /	'trace-veritascormas.ston') asFileReference )
+		in: ws ]
+]
+
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> genCsvHoneyGinger [
+<script>
+|files|
+files := '/Users/faouziray/work/initThenFreeze3/build/' asFileReference files select: [ :f |  f basename beginsWith: 'trace-2026HGSimulator' ].
+	files do: [ :f |  
+	(SmalltalkImage current imageDirectory 
+			/ 'last-hg-',((f basename copyFrom: 22) splitOn: '.') first  ,'.csv') asFileReference writeStreamDo:[ :ws | self
+		generateCsvFromProgram: (PatternCallSites deserializeStonFor: f )
+		in: ws ] ]
+]
+
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> genCsvMD [
+<script>
+
+	(SmalltalkImage current imageDirectory 
+			/ 'last-md.csv') asFileReference writeStreamDo:[ :ws | self
+		generateCsvFromProgram: (PatternCallSites deserializeStonFor: ( SmalltalkImage  current imageDirectory /	'trace-veritasmd.ston') asFileReference )
+		in: ws ]
+]
+
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> genCsvMoose [
+<script>
+|files|
+files := '/Users/faouziray/work/initThenFreeze3/build/trace-veritasmoo.ston' asFileReference.
+
+	('last-moose.csv') asFileReference writeStreamDo:[ :ws | self
+		generateCsvFromProgram: (PatternCallSites deserializeStonFor: files )
 		in: ws ]
 ]
 

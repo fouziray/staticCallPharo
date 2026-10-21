@@ -99,9 +99,9 @@ ProgramResult >> calculateSpurious [
 	spuriousMegaSites := self megaCallSites count: [ :e | self isSpurious: e ].
 	
 	spuriousCalls := (self callSites select: [ :e | self isSpurious: e ]) sum: [ :e | self numberOfCallsFor: e ].
-	polySp:= (self polyCallSites select: [ :e | self isSpurious: e ]).
+	polySp:= (self polyCallSites select: [ :e | (self isSpurious: e) and:[e selector isNotNil] ]).
 	spuriousPolyCalls := polySp sum: [ :e | self numberOfCallsFor: e ].
-	megaSp:= (self megaCallSites select: [ :e | self isSpurious: e ]).
+	megaSp:= (self megaCallSites select: [ :e | (self isSpurious: e ) and:[ e selector isNotNil] ] ).
 	spuriousMegaCalls := megaSp sum: [ :e | self numberOfCallsFor: e ].
 	spuriousCallsPolySingleImp := (polySp select:[:s | s selector asSymbol implementors size = 1 ] ) size.
 	
