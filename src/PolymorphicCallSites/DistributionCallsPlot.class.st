@@ -63,7 +63,7 @@ angle := -90.
 entries withIndexDo: [ :assoc :i |
 	| calls  share sweep color poly |
 	calls := assoc value.
-	share := (calls / totalCalls) max: 0.
+	share := ((calls / totalCalls) asFloat round:2) max: 0.
 	sweep := share * 360.
 	color := Color h: (i - 1) * (360 / entries size) s: 0.55 v: 0.9.
 	colors add: color.
