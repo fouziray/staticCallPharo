@@ -51,7 +51,7 @@ CopyDowner >> copyDownMessages: aCollectionOfSites [
 	aCollectionOfSites do: [ :callsite |
 		mostDominantReceiverClass := callsite dominantClass.
 		lookedUp := self lookupMethodContainingTheSite: callsite.
-		lookedUpClass := lookedUp methodClass.
+		
 		((self is: mostDominantReceiverClass possibleTargetFor: callsite ) and: [ self stillUnderLimit ])
 			ifTrue: [ self copyDown: lookedUp into: mostDominantReceiverClass having: callsite  ] ].
 		^ self evaluateProgram 
@@ -101,6 +101,22 @@ CopyDowner >> forProgram: aBlock [
 		          fromRaw: aBlock -> devirtualizableNodes.
 	self nodesToCopyDown: devirtualizableNodes.
 	self rollbackCopiedMethod.
+]
+
+{ #category : 'filtering' }
+CopyDowner >> howManyNodesToCopyDown: aCollection [
+
+	| result sortedCallsFrequent frequentSelfMessages |
+	
+	sortedCallsFrequent := (aCollection select: [ :e |
+		                        (e dominantTypeWithThreshold: 80) isNotNil ])
+		                       sorted: [ :a :b |
+		                       a numberOfCalls > b numberOfCalls ].
+
+	frequentSelfMessages:= sortedCallsFrequent select: [ :c |
+		                       c isSelfSend and:[ c numberOfReceiverClasses > 1]].
+^ 	frequentSelfMessages select:[:callsite|
+		self is: callsite dominantClass possibleTargetFor: callsite ]
 ]
 
 { #category : 'initialization' }

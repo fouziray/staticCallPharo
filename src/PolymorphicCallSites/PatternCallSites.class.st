@@ -159,6 +159,18 @@ files := '/Users/faouziray/work/initThenFreeze3/build/trace-veritasmoo.ston' asF
 		in: ws ]
 ]
 
+{ #category : 'as yet unclassified' }
+PatternCallSites class >> genCsvRoassal [
+<script>
+|files|
+files := ('/Users/faouziray/Documents/XP/Pharo/images/load 23232/pharo-local/iceberg/fouziray/staticCallPharo/' asFileReference files select: [ :f |  f basename beginsWith: 'Roassal RSAlpharoExample ' ]) first.
+
+	(SmalltalkImage current imageDirectory 
+			/ 'last-roassalNotHG-',((files basename copyFrom: 8) splitOn: '.') first  ,'.csv') asFileReference writeStreamDo:[ :ws | self
+		generateCsvFromProgram: (PatternCallSites deserializeStonFor: files )
+		in: ws ] 
+]
+
 { #category : 'generate csv' }
 PatternCallSites class >> generateCsv: aListOfPrograms in: aFileReference [
 
