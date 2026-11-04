@@ -264,6 +264,27 @@ PatternCallSites class >> returnTrueIf: a [
 ]
 
 { #category : 'switch' }
+PatternCallSites class >> setMigsFor: aStonName [
+
+	<script>
+	| program |
+	program := self deserializeTracePatternsForFile: (aStonName , '.ston') asString.
+	program inspect.
+
+	PicInitializer initializeMigs: program.
+	
+]
+
+{ #category : 'switch' }
+PatternCallSites class >> setMigsOn: aFileName [
+
+	<script>
+	tracePatternsDir := (SmalltalkImage current imagePath splitOn: '/') allButLast joinUsing: '/'.
+	tracePatternsDir :='/Users/faouziray/work'.
+	self setMigsFor: aFileName
+]
+
+{ #category : 'switch' }
 PatternCallSites class >> setPIC [
 
 	<script>

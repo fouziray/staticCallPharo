@@ -10,6 +10,12 @@ Class {
 }
 
 { #category : 'intialization' }
+PicInitializer class >> initializeMigs: aProgramModel [
+
+	^ self new initializeMigs: aProgramModel
+]
+
+{ #category : 'intialization' }
 PicInitializer class >> pickify: aProgramModel [
 
 	^ self new pickify: aProgramModel
@@ -26,6 +32,18 @@ PicInitializer class >> pickify: aProgramModel numberOfCasses: numberOfCasses [
 PicInitializer >> initialize [
 
 	xrayAfter := OrderedCollection new
+]
+
+{ #category : 'intialization' }
+PicInitializer >> initializeMigs: aProgramModel [
+	|check filteredSites |
+	self setCounter: 0.
+	filteredSites := (aProgramModel callSites allButFirst reject:[ :c| (#( #new. #basicNew . #new: . #DoIt . #initialize . #timesRepeat:  .#collect:) includes: c  selector )or:[ (c flattenedTypes asSet size=1) or:[ c bytecodeStart isNil  ] ] ]).
+	check := ProgramResult new.
+	filteredSites := aProgramModel callSites allButFirst select:[ :e | check isMegaMorphicCallSite: e  ].
+
+	( filteredSites ) do: [ :callsite |
+		self sortAnTransformMegaToPIC: callsite ].
 ]
 
 { #category : 'as yet unclassified' }
@@ -91,6 +109,78 @@ PicInitializer >> recollectBlockNodeOf: aRBMethodNode from: aCallSiteModel on: a
 PicInitializer >> setCounter: anInteger [
 
 	count := anInteger
+]
+
+{ #category : 'sorting' }
+PicInitializer >> sortAnTransformMegaToPIC: aCallSiteModel [
+
+	| sendNode sourceMethod bcpc targetTypesSortes sel bytecode bytecodeSize messageValidator targetMethods |
+	
+	"self haltIf: [ aCallSiteModel flattenedTypes includes: 'FullBlockClosure' ]."
+"	self haltIf: [ aCallSiteModel stripSelectorFromQuotes = 'value:' ].
+
+"
+	  ({#DoIt. #createReceiverPatternOf: } includes: aCallSiteModel methodSelector) ifTrue: [
+		
+		^ nil ].
+		 ({ 'Rectangle class' . 'Point class' } includes: aCallSiteModel methodClassName ) ifTrue: [^ nil].
+	sourceMethod := aCallSiteModel method.
+	sendNode := sourceMethod ast sourceNodeForPC:
+		            aCallSiteModel bytecodeStart.
+		
+	messageValidator := 	[ :sendNode :aCallSiteModel | sendNode isMessage and:[ sendNode start = aCallSiteModel sourceStart ] ].
+	(messageValidator value: sendNode value: aCallSiteModel) ifFalse: [
+					sourceMethod := self recollectBlockNodeOf: sendNode from: aCallSiteModel on: messageValidator . 
+					sendNode := sourceMethod ast sourceNodeForPC: aCallSiteModel bytecodeStart.
+					 ].
+	
+	"Encodersista est la classe reelement appelee lors de compilation. elle donne le map correct dans le cas d'uun message avec plusieurs bytecodes"
+	bcpc := sourceMethod ast bcToASTCache firstBcOffsetForNode: sendNode.
+	bytecode := sourceMethod byteAt: bcpc.
+	bytecodeSize := EncoderForSistaV1 bytecodeSize: bytecode.
+	bcpc := bcpc + bytecodeSize - 1.
+
+	targetTypesSortes := (((aCallSiteModel flattenedTypes  sortedCounts) first: 6 ) collect: [
+		                      :t |
+		                      | components theClass |
+		                      components := t value substrings.
+		                      theClass := components first
+			                                  asClassInEnvironment:
+			                                  self class environment.
+		                      components size = 2 ifTrue: [
+			                      self assert: components second = 'class'.
+			                      theClass := theClass class ].
+		                      theClass ]) asArray.
+	"xrayBefore := sourceMethod xray.
+	"
+
+sel := aCallSiteModel stripSelectorFromQuotes asSymbol.	
+	
+"On n'enovie jamais un block avec son bcpcp - fixed"
+ targetMethods := (sendNode isSuperSend 
+			ifTrue:[ targetTypesSortes  collect:#superclass  ] 
+			ifFalse: [ targetTypesSortes ]) 
+			collect: [ :type |
+				 type lookupSelector: sel asSymbol ].
+			 
+	
+	
+	
+	"self halt.
+	self haltIf: ((sourceMethod = (HGSimulator>>#extent:) ) and:[(sel = #extent:) and:[ bcpc = 109 ]] )."
+	sendNode isSuperSend ifFalse:[
+	self
+		linkMethod: sourceMethod
+		numCopiedVars: (sourceMethod isBlock ifTrue: [ sourceMethod ast scope copiedVars size ] ifFalse:[ -1 ])
+		atBcpc: bcpc
+		isSuper: sendNode isSuperSend 
+		targetSelector: sel
+		tagetTypes: targetTypesSortes
+		targetMethod: targetMethods.
+	count := count + 1.
+].
+"
+	xrayAfter add: sourceMethod xray"
 ]
 
 { #category : 'sorting' }
