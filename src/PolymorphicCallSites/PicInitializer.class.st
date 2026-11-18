@@ -40,7 +40,7 @@ PicInitializer >> initializeMigs: aProgramModel [
 	self setCounter: 0.
 	filteredSites := (aProgramModel callSites allButFirst reject:[ :c| (#( #new. #basicNew . #new: . #DoIt . #initialize . #timesRepeat:  .#collect:) includes: c  selector )or:[ (c flattenedTypes asSet size=1) or:[ c bytecodeStart isNil  ] ] ]).
 	check := ProgramResult new.
-	filteredSites := aProgramModel callSites allButFirst select:[ :e | check isMegaMorphicCallSite: e  ].
+	filteredSites := filteredSites select:[ :e | check isMegaMorphicCallSite: e  ].
 
 	( filteredSites ) do: [ :callsite |
 		self sortAnTransformMegaToPIC: callsite ].
