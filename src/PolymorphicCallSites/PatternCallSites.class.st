@@ -309,6 +309,14 @@ PatternCallSites class >> setPICBlock [
 ]
 
 { #category : 'switch' }
+PatternCallSites class >> setPICSynth [
+
+	<script>
+	tracePatternsDir := (SmalltalkImage current imagePath splitOn: '/') allButLast joinUsing: '/'.
+	self setPicsFor: 'trace-synthProgramBLock'
+]
+
+{ #category : 'switch' }
 PatternCallSites class >> setPicsAnInitializedTrace [
 
 	<script>
