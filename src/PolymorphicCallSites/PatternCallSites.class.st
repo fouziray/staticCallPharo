@@ -96,11 +96,11 @@ PatternCallSites class >> forgottenListInlinedMethods [
 
 	^ #( '<' '>' '<=' '''<=''' '''>=''' 'rounded' 'truncateTo:' '='
 	   '>=' '~=' '''~=''' '''~=''' '~~' '==' 'isNil' 'notNil' 'whileTrue:'
-	   'whileFalse:' 'to:do:' 'repeat' 'ifTrue:' 'ifTrue:ifFalse:'
+	   'whileFalse:' 'to:do:' 'repeat' 'ifTrue:' 'ifTrue:ifFalse:' 'isNotNil'
 	   'ifFalse:ifTrue:' 'ifNotNil:' 'ifNotNil:ifNil:' 'ifNil:ifNotNil:'
 	   'at:' 'at:put:' 'ifNil:' 'basicAt:' 'basicAt:put:' '&' '|' 'abs'
 	   'and:' 'or:' 'not' '-' '*' '+' 'negated' '**' '/' '//' '''//'''
-	   '\\' '''\\''' '''~=''' '<<' '>>' 'min:' 'max:' 'between:and:' 'integerObjectOf:'
+	   '\\' '''\\''' '''~=''' '<<' '''<<''' '>>' ''>>'' '''>>''' 'min:' 'max:' 'between:and:' 'integerObjectOf:'
 	   'anyMask:' 'asUnsignedInteger' 'asSymbol' 'allMask:' 'noMask:'
 	   'raisedTo:' 'touch:' 'deny:' 'shouldNotImplement'
 	   'shouldBeImplemented' 'subclassResponsibility' )

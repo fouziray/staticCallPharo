@@ -112,7 +112,7 @@ PicInitializer >> setCounter: anInteger [
 ]
 
 { #category : 'sorting' }
-PicInitializer >> sortAnTransformMegaToPIC: aCallSiteModel [
+PicInitializer >> sortAnTransformMegaToPIC2: aCallSiteModel [
 
 	| sendNode sourceMethod bcpc targetTypesSortes sel bytecode bytecodeSize messageValidator targetMethods |
 	
@@ -120,6 +120,8 @@ PicInitializer >> sortAnTransformMegaToPIC: aCallSiteModel [
 "	self haltIf: [ aCallSiteModel stripSelectorFromQuotes = 'value:' ].
 
 "
+
+
 	  ({#DoIt. #createReceiverPatternOf: } includes: aCallSiteModel methodSelector) ifTrue: [
 		
 		^ nil ].
@@ -128,7 +130,7 @@ PicInitializer >> sortAnTransformMegaToPIC: aCallSiteModel [
 	sendNode := sourceMethod ast sourceNodeForPC:
 		            aCallSiteModel bytecodeStart.
 		
-	messageValidator := 	[ :sendNode :aCallSiteModel | sendNode isMessage and:[ sendNode start = aCallSiteModel sourceStart ] ].
+	messageValidator := 	[ :sendNode :aCallSiteModel | ({ #initialize . #basicNew }  includes: sendNode selector ) or:[ sendNode isMessage and:[ sendNode start = aCallSiteModel sourceStart ]  ]].
 	(messageValidator value: sendNode value: aCallSiteModel) ifFalse: [
 					sourceMethod := self recollectBlockNodeOf: sendNode from: aCallSiteModel on: messageValidator . 
 					sendNode := sourceMethod ast sourceNodeForPC: aCallSiteModel bytecodeStart.
@@ -181,6 +183,53 @@ sel := aCallSiteModel stripSelectorFromQuotes asSymbol.
 ].
 "
 	xrayAfter add: sourceMethod xray"
+]
+
+{ #category : 'sorting' }
+PicInitializer >> sortAnTransformMegaToPIC: aCallSiteModel [
+
+| sendNode sourceMethod bcpc targetTypesSortes sel bytecode bytecodeSize targetMethods container |
+	
+	  ({#DoIt. #createReceiverPatternOf: } includes: aCallSiteModel methodSelector) ifTrue: [ ^ nil ].
+	  ({ 'Rectangle class' . 'Point class' } includes: aCallSiteModel methodClassName ) ifTrue: [^ nil].
+	sendNode := aCallSiteModel method ast allChildren detect: [ :n |
+		n isMessage and: [
+			n start = aCallSiteModel sourceStart and: [ n stop = aCallSiteModel sourceEnd ] ] ]
+		ifNone: [ ^ nil ].
+	container := sendNode methodOrBlockNode.
+	[ container scope isMethodScope not and: [ container scope isOptimized ] ]
+		whileTrue: [ container := container parent methodOrBlockNode ].
+	sourceMethod := aCallSiteModel method.
+	container = sourceMethod ast ifFalse: [
+		sourceMethod := sourceMethod allBlocks detect: [ :b | b ast == container ] ifNone: [ ^ nil ] ].
+	bcpc := sourceMethod ast bcToASTCache firstBcOffsetForNode: sendNode.
+	bcpc ifNil: [ ^ nil ].
+	bytecode := sourceMethod byteAt: bcpc.
+	bytecodeSize := EncoderForSistaV1 bytecodeSize: bytecode.
+	bcpc := bcpc + bytecodeSize - 1.
+	targetTypesSortes := (((aCallSiteModel flattenedTypes sortedCounts) first: 6 ) collect: [ :t |
+		| components theClass |
+		components := t value substrings.
+		theClass := components first asClassInEnvironment: self class environment.
+		components size = 2 ifTrue: [
+			self assert: components second = 'class'.
+			theClass := theClass class ].
+		theClass ]) asArray.
+	sel := aCallSiteModel stripSelectorFromQuotes asSymbol.
+	targetMethods := (sendNode isSuperSend
+		ifTrue: [ targetTypesSortes collect: #superclass ]
+		ifFalse: [ targetTypesSortes ])
+		collect: [ :type | type lookupSelector: sel asSymbol ].
+	sendNode isSuperSend ifFalse: [
+		self
+			linkMethod: sourceMethod
+			numCopiedVars: (sourceMethod isCompiledBlock ifTrue: [ sourceMethod ast scope inComingCopiedVarNames size ] ifFalse: [ -1 ])
+			atBcpc: bcpc
+			isSuper: sendNode isSuperSend
+			targetSelector: sel
+			tagetTypes: targetTypesSortes
+			targetMethod: targetMethods.
+		count := count + 1 ]
 ]
 
 { #category : 'sorting' }

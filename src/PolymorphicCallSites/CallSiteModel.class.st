@@ -338,6 +338,11 @@ CallSiteModel >> selector [
 	^ selector
 ]
 
+{ #category : 'accessing' }
+CallSiteModel >> sourceEnd [
+	^ sourceEnd 
+]
+
 { #category : 'processing' }
 CallSiteModel >> sourceMethod [
 
