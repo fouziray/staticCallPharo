@@ -412,6 +412,15 @@ PatternCallSites class >> tracePatternsOfBloc [
 ]
 
 { #category : 'Full example' }
+PatternCallSites class >> tracePatternsOfChess [
+
+	<script>
+	self
+		trace:  [ChessCoachAppElement open ]
+		outputFileSuffix: 'chessAppLaunch'
+]
+
+{ #category : 'Full example' }
 PatternCallSites class >> tracePatternsOfCormas [
 
 	<script>
