@@ -36,14 +36,20 @@ PicInitializer >> initialize [
 
 { #category : 'intialization' }
 PicInitializer >> initializeMigs: aProgramModel [
-	|check filteredSites |
+	|check filteredSites current|
 	self setCounter: 0.
 	filteredSites := (aProgramModel callSites allButFirst reject:[ :c| (#( #new. #basicNew . #new: . #DoIt . #initialize . #timesRepeat:  .#collect:) includes: c  selector )or:[ (c flattenedTypes asSet size=1) or:[ c bytecodeStart isNil  ] ] ]).
 	check := ProgramResult new.
 	filteredSites := filteredSites select:[ :e | check isMegaMorphicCallSite: e  ].
 
-	( filteredSites ) do: [ :callsite |
-		self sortAnTransformMegaToPIC: callsite ].
+	[ filteredSites do: [ :callsite |
+                  current := callsite.
+                  self sortAnTransformMegaToPIC: callsite ] ]
+                  on: PrimitiveFailed
+                  do: [ :ex |
+                          Transcript crShow: 'PIC linking stopped after ', count printString,
+                                  ' sites: ', ex messageText, ' at ', current printString.
+                          ex return: nil ]
 ]
 
 { #category : 'as yet unclassified' }
