@@ -95,7 +95,7 @@ PatternCallSites class >> firstTypeSwitchAnalysis [
 PatternCallSites class >> forgottenListInlinedMethods [
 
 	^ #( '<' '>' '<=' '''<=''' '''>=''' 'rounded' 'truncateTo:' '='
-	   '>=' '~=' '''~=''' '''~=''' '~~' '==' 'isNil' 'notNil' 'whileTrue:'
+	   '>=' '~=' '''~=''' '''~=''' '~~' ''~~'' '''~~''' '==' 'isNil' 'notNil' 'whileTrue:'
 	   'whileFalse:' 'to:do:' 'repeat' 'ifTrue:' 'ifTrue:ifFalse:' 'isNotNil'
 	   'ifFalse:ifTrue:' 'ifNotNil:' 'ifNotNil:ifNil:' 'ifNil:ifNotNil:'
 	   'at:' 'at:put:' 'ifNil:' 'basicAt:' 'basicAt:put:' '&' '|' 'abs'
